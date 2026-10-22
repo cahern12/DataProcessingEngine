@@ -1,0 +1,81 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "created_at": {
+      "format": "date-time",
+      "minLength": 1,
+      "type": "string"
+    },
+    "group_id": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "incident_id": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "priority": {
+      "enum": [
+        "P1",
+        "P2",
+        "P3",
+        "P4",
+        "1",
+        "2",
+        "3",
+        "4"
+      ],
+      "minLength": 1,
+      "type": "string"
+    },
+    "requester_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "service_id": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "source_updated_at": {
+      "format": "date-time",
+      "minLength": 1,
+      "type": "string"
+    },
+    "source_version": {
+      "minimum": 1,
+      "type": "integer"
+    },
+    "status": {
+      "enum": [
+        "new",
+        "in_progress",
+        "on_hold",
+        "resolved",
+        "closed",
+        "New",
+        "In Progress",
+        "On Hold",
+        "Resolved",
+        "Closed"
+      ],
+      "minLength": 1,
+      "type": "string"
+    }
+  },
+  "required": [
+    "incident_id",
+    "source_version",
+    "source_updated_at",
+    "created_at",
+    "priority",
+    "status",
+    "service_id",
+    "group_id",
+    "requester_id"
+  ],
+  "title": "incident_snapshots",
+  "type": "object"
+}

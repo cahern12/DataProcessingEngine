@@ -1,0 +1,27 @@
+{
+  "consistency": "Use one SQLite read transaction for multiple consumer queries.",
+  "datasets": [
+    {
+      "grain": [
+        "incident_id"
+      ],
+      "name": "incident_resolution",
+      "schema": "schemas/incident_resolution.schema.json",
+      "semantics": "Current state at cutoff; elapsed SLA clock; creation priority controls SLA targets."
+    },
+    {
+      "grain": [
+        "date",
+        "service_id",
+        "priority"
+      ],
+      "name": "service_daily_metrics",
+      "schema": "schemas/service_daily_metrics.schema.json",
+      "semantics": "Sparse UTC day-end rows. Attribute creation to creation-time service/priority, final resolutions to resolution-time service/priority, backlog to historical day-end service/priority. SLA counts and average durations use only final resolutions occurring on that date, evaluated at batch cutoff. An incident may contribute to different services after reassignment. Zero SLA denominator yields null rate."
+    }
+  ],
+  "freshness": "On successful local batch completion; production freshness SLO deferred.",
+  "interface": "SQLite SQL views gold_incident_resolution and gold_service_daily_metrics; dpe query pins one publication per query.",
+  "owner": "poc-team",
+  "version": "v1"
+}

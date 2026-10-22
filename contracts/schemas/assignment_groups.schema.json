@@ -1,0 +1,20 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "group_id": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "name": {
+      "minLength": 1,
+      "type": "string"
+    }
+  },
+  "required": [
+    "group_id",
+    "name"
+  ],
+  "title": "assignment_groups",
+  "type": "object"
+}

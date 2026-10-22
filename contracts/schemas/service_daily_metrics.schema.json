@@ -1,0 +1,83 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "avg_resolution_minutes": {
+      "minimum": 0,
+      "type": [
+        "number",
+        "null"
+      ]
+    },
+    "backlog_count": {
+      "minimum": 0,
+      "type": "integer"
+    },
+    "created_count": {
+      "minimum": 0,
+      "type": "integer"
+    },
+    "date": {
+      "format": "date",
+      "minLength": 1,
+      "type": "string"
+    },
+    "priority": {
+      "enum": [
+        "P1",
+        "P2",
+        "P3",
+        "P4"
+      ],
+      "minLength": 1,
+      "type": "string"
+    },
+    "resolution_breached": {
+      "minimum": 0,
+      "type": "integer"
+    },
+    "resolution_pass_rate": {
+      "minimum": 0,
+      "type": [
+        "number",
+        "null"
+      ]
+    },
+    "resolution_passed": {
+      "minimum": 0,
+      "type": "integer"
+    },
+    "resolved_count": {
+      "minimum": 0,
+      "type": "integer"
+    },
+    "response_breached": {
+      "minimum": 0,
+      "type": "integer"
+    },
+    "response_passed": {
+      "minimum": 0,
+      "type": "integer"
+    },
+    "service_id": {
+      "minLength": 1,
+      "type": "string"
+    }
+  },
+  "required": [
+    "date",
+    "service_id",
+    "priority",
+    "created_count",
+    "resolved_count",
+    "backlog_count",
+    "response_passed",
+    "response_breached",
+    "resolution_passed",
+    "resolution_breached",
+    "resolution_pass_rate",
+    "avg_resolution_minutes"
+  ],
+  "title": "service_daily_metrics",
+  "type": "object"
+}

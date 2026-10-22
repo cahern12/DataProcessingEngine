@@ -1,0 +1,72 @@
+{
+  "clock": "elapsed UTC, 24x7",
+  "event_transitions": {
+    "close": {
+      "resolved": "closed"
+    },
+    "comment": {
+      "closed": "closed",
+      "in_progress": "in_progress",
+      "new": "new",
+      "on_hold": "on_hold",
+      "resolved": "resolved"
+    },
+    "hold_end": {
+      "on_hold": "in_progress"
+    },
+    "hold_start": {
+      "in_progress": "on_hold",
+      "new": "on_hold"
+    },
+    "reopen": {
+      "closed": "in_progress",
+      "resolved": "in_progress"
+    },
+    "resolve": {
+      "in_progress": "resolved",
+      "new": "resolved"
+    },
+    "response": {
+      "in_progress": "in_progress",
+      "new": "in_progress"
+    }
+  },
+  "hold_pairing": "Consecutive hold_start/hold_end in incident order; intervals [start,end); zero duration allowed; no nesting.",
+  "invalid_event_policy": "Quarantine entire incident history; report every raw record disposition separately.",
+  "late_event_policy": "Source/event time determines eligibility, batch delivery time does not.",
+  "precision": "Compare unrounded seconds; expose minutes/rates rounded to 6 decimals.",
+  "priority_mapping": {
+    "1": "P1",
+    "2": "P2",
+    "3": "P3",
+    "4": "P4",
+    "P1": "P1",
+    "P2": "P2",
+    "P3": "P3",
+    "P4": "P4"
+  },
+  "response_event": "response with actor_id in users; unknown actor does not stop first-response clock",
+  "rules": {
+    "BR-001": "Normalize whitespace, status variants, priority numbers, timezone offsets. Invalid values quarantine the entire incident history.",
+    "BR-002": "Identical same-key versions/events deduplicate; conflicting identities quarantine all records for affected incidents. Latest snapshot selected by (source_updated_at, source_version) <= cutoff.",
+    "BR-003": "Required service/group must exist in every eligible snapshot. Optional missing users become unknown_user. Reference keys are unique.",
+    "BR-004": "Initial state new. Sort events by (event_time, source_sequence); ambiguous order quarantines incident. Snapshot status must match event state at its source_updated_at. Future records deferred.",
+    "BR-005": "Response clock never pauses; known actor required for response. Resolution clock subtracts hold intervals across all reopen cycles. Unmatched hold starts end at cutoff only while on_hold. Reject overlap, unmatched end, and transitions from on_hold without hold_end.",
+    "BR-006": "Creation-time priority selects versioned targets; equality passes. Open resolution clock ends at cutoff. Pending only while elapsed <= target. Reopened incidents have no final resolved_at until re-resolved.",
+    "BR-007": "Sparse daily UTC rows; cutoff inclusive for source eligibility, day ends exclusive. Creation uses creation dimensions; final resolution uses dimensions at resolution; backlog uses dimensions and state immediately before next midnight. SLA metrics reflect final resolutions only.",
+    "BR-008": "Delta manifests identify exact parent. Local implementation replays all committed raw batches and fully rebuilds; partition-targeted optimization is deferred. Reassigned/date-corrected histories replace old Gold rows atomically."
+  },
+  "status_mapping": {
+    "Closed": "closed",
+    "In Progress": "in_progress",
+    "New": "new",
+    "On Hold": "on_hold",
+    "Resolved": "resolved",
+    "closed": "closed",
+    "in_progress": "in_progress",
+    "new": "new",
+    "on_hold": "on_hold",
+    "resolved": "resolved"
+  },
+  "version": "v1"
+}

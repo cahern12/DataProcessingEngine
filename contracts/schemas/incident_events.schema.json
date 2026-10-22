@@ -1,0 +1,52 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "actor_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "event_id": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "event_time": {
+      "format": "date-time",
+      "minLength": 1,
+      "type": "string"
+    },
+    "event_type": {
+      "enum": [
+        "response",
+        "hold_start",
+        "hold_end",
+        "resolve",
+        "reopen",
+        "close",
+        "comment"
+      ],
+      "minLength": 1,
+      "type": "string"
+    },
+    "incident_id": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "source_sequence": {
+      "minimum": 1,
+      "type": "integer"
+    }
+  },
+  "required": [
+    "event_id",
+    "incident_id",
+    "event_time",
+    "source_sequence",
+    "event_type",
+    "actor_id"
+  ],
+  "title": "incident_events",
+  "type": "object"
+}

@@ -1,0 +1,5 @@
+rule_version,priority,response_minutes,resolution_minutes
+v1,P1,15,240
+v1,P2,60,480
+v1,P3,240,1440
+v1,P4,480,4320

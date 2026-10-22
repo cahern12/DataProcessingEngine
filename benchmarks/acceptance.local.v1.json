@@ -1,0 +1,14 @@
+{
+  "version": "v1",
+  "scope": "Local development only; frozen before initial measured runs",
+  "fixture_mismatches": 0,
+  "unexplained_reconciliation_differences": 0,
+  "duplicate_gold_keys": 0,
+  "smoke_incidents": 1000,
+  "smoke_runtime_seconds": 60,
+  "recovery_seconds": 60,
+  "replay": "Identical logical outputs and publication ID",
+  "failure_visibility": "Previous committed publication remains visible at every failpoint",
+  "cloud_runtime_scale_cost_limits": null,
+  "cloud_limits_status": "Deferred while scope is local; must be finalized before Azure benchmarks"
+}

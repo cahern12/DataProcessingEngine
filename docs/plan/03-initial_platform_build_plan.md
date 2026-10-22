@@ -1,5 +1,7 @@
 # Initial Platform Build Plan
 
+Execution note: the initial implementation is running locally per the user's subsequent direction. See [04 — Local Build Execution Record](04-local_build_execution.md) for completed work, local substitutions, and remaining architecture validation.
+
 This document turns the [POC requirements](01-enterprise_data_processing_poc_validation_plan.md) and [architecture sketch](02-ServiceNow%20Data%20Processing%20Engine%20Architecture.png) into a chronological build sequence. Complete the steps in order; each step has an exit condition that makes the next step possible.
 
 The first milestone is a reproducible batch pipeline that processes **our own synthetic ITSM data and business rules** through Bronze → Silver → Gold on Azure, validates the results, and records execution and cost evidence. We will start with Airflow → dbt → Trino → Iceberg / ADLS, then compare selected workloads with Spark once the first path works.

@@ -1,0 +1,104 @@
+{
+  "classification": "synthetic-public",
+  "datasets": [
+    {
+      "delivery": "file",
+      "extract_mode": "full-reference",
+      "format": "csv",
+      "keys": [
+        "user_id"
+      ],
+      "name": "users",
+      "schema": "schemas/users.schema.json",
+      "source_timestamp": null
+    },
+    {
+      "delivery": "file",
+      "extract_mode": "full-reference",
+      "format": "csv",
+      "keys": [
+        "group_id"
+      ],
+      "name": "assignment_groups",
+      "schema": "schemas/assignment_groups.schema.json",
+      "source_timestamp": null
+    },
+    {
+      "delivery": "file",
+      "extract_mode": "full-reference",
+      "format": "csv",
+      "keys": [
+        "service_id"
+      ],
+      "name": "services",
+      "schema": "schemas/services.schema.json",
+      "source_timestamp": null
+    },
+    {
+      "delivery": "file",
+      "extract_mode": "append-versioned",
+      "format": "jsonl",
+      "keys": [
+        "incident_id",
+        "source_version"
+      ],
+      "name": "incident_snapshots",
+      "schema": "schemas/incident_snapshots.schema.json",
+      "source_timestamp": "source_updated_at"
+    },
+    {
+      "delivery": "mock-rest-or-file",
+      "extract_mode": "append-versioned",
+      "format": "jsonl",
+      "keys": [
+        "event_id"
+      ],
+      "name": "incident_events",
+      "schema": "schemas/incident_events.schema.json",
+      "source_timestamp": "event_time"
+    },
+    {
+      "delivery": "file",
+      "extract_mode": "full-reference",
+      "format": "csv",
+      "keys": [
+        "rule_version",
+        "priority"
+      ],
+      "name": "sla_targets",
+      "schema": "schemas/sla_targets.schema.json",
+      "source_timestamp": null
+    }
+  ],
+  "frequency": "on-demand batch",
+  "manifest_file_fields": [
+    "dataset",
+    "path",
+    "format",
+    "rows",
+    "bytes",
+    "sha256",
+    "min_source_time",
+    "max_source_time"
+  ],
+  "manifest_required": [
+    "batch_id",
+    "batch_kind",
+    "parent_batch_id",
+    "cutoff",
+    "report_start",
+    "dataset_version",
+    "rule_version",
+    "generator_version",
+    "seed",
+    "configuration",
+    "files",
+    "defects"
+  ],
+  "owner": "poc-team",
+  "raw_retention": "Local artifacts retained until explicit workspace deletion; Azure policy deferred.",
+  "schema_change_policy": "Reject unversioned columns/types; new contract version required.",
+  "source": "fictional-itsm",
+  "version": "v1",
+  "volume_profiles": "synthetic/configs/default.json"
+}

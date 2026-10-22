@@ -1,0 +1,5236 @@
+{
+  "cases": [
+    {
+      "cutoff": "2026-01-08T00:00:00Z",
+      "datasets": {
+        "assignment_groups": [
+          {
+            "group_id": "G1",
+            "name": "Fictional Support"
+          }
+        ],
+        "incident_events": [
+          {
+            "actor_id": "U1",
+            "event_id": "E1",
+            "event_time": "2026-01-01T00:10:00Z",
+            "event_type": "response",
+            "incident_id": "I1",
+            "source_sequence": 1
+          },
+          {
+            "actor_id": "U1",
+            "event_id": "E2",
+            "event_time": "2026-01-01T01:00:00Z",
+            "event_type": "resolve",
+            "incident_id": "I1",
+            "source_sequence": 2
+          }
+        ],
+        "incident_snapshots": [
+          {
+            "created_at": "2026-01-01T00:00:00Z",
+            "group_id": "G1",
+            "incident_id": "I1",
+            "priority": "P1",
+            "requester_id": "U1",
+            "service_id": "S1",
+            "source_updated_at": "2026-01-01T00:00:00Z",
+            "source_version": 1,
+            "status": "new"
+          }
+        ],
+        "services": [
+          {
+            "name": "Fictional Service",
+            "service_id": "S1"
+          },
+          {
+            "name": "Another Fictional Service",
+            "service_id": "S2"
+          }
+        ],
+        "sla_targets": [
+          {
+            "priority": "P1",
+            "resolution_minutes": 240,
+            "response_minutes": 15,
+            "rule_version": "v1"
+          },
+          {
+            "priority": "P2",
+            "resolution_minutes": 480,
+            "response_minutes": 60,
+            "rule_version": "v1"
+          },
+          {
+            "priority": "P3",
+            "resolution_minutes": 1440,
+            "response_minutes": 240,
+            "rule_version": "v1"
+          },
+          {
+            "priority": "P4",
+            "resolution_minutes": 4320,
+            "response_minutes": 480,
+            "rule_version": "v1"
+          }
+        ],
+        "users": [
+          {
+            "display_name": "Fictional Agent",
+            "user_id": "U1"
+          }
+        ]
+      },
+      "expected_incident": {
+        "created_at": "2026-01-01T00:00:00Z",
+        "current_priority": "P1",
+        "first_response_at": "2026-01-01T00:10:00Z",
+        "group_id": "G1",
+        "incident_id": "I1",
+        "priority_at_creation": "P1",
+        "quality_flags": [],
+        "requester_id": "U1",
+        "resolution_minutes": 60,
+        "resolution_sla": "passed",
+        "resolved_at": "2026-01-01T01:00:00Z",
+        "response_minutes": 10,
+        "response_sla": "passed",
+        "service_id": "S1",
+        "state": "resolved"
+      },
+      "name": "ordinary-resolved",
+      "report_start": "2026-01-01T00:00:00Z"
+    },
+    {
+      "cutoff": "2026-01-08T00:00:00Z",
+      "datasets": {
+        "assignment_groups": [
+          {
+            "group_id": "G1",
+            "name": "Fictional Support"
+          }
+        ],
+        "incident_events": [
+          {
+            "actor_id": "U1",
+            "event_id": "E1",
+            "event_time": "2026-01-01T00:14:59Z",
+            "event_type": "response",
+            "incident_id": "I1",
+            "source_sequence": 1
+          },
+          {
+            "actor_id": "U1",
+            "event_id": "E2",
+            "event_time": "2026-01-05T04:00:00Z",
+            "event_type": "resolve",
+            "incident_id": "I1",
+            "source_sequence": 2
+          }
+        ],
+        "incident_snapshots": [
+          {
+            "created_at": "2026-01-01T00:00:00Z",
+            "group_id": "G1",
+            "incident_id": "I1",
+            "priority": "P1",
+            "requester_id": "U1",
+            "service_id": "S1",
+            "source_updated_at": "2026-01-01T00:00:00Z",
+            "source_version": 1,
+            "status": "new"
+          }
+        ],
+        "services": [
+          {
+            "name": "Fictional Service",
+            "service_id": "S1"
+          },
+          {
+            "name": "Another Fictional Service",
+            "service_id": "S2"
+          }
+        ],
+        "sla_targets": [
+          {
+            "priority": "P1",
+            "resolution_minutes": 240,
+            "response_minutes": 15,
+            "rule_version": "v1"
+          },
+          {
+            "priority": "P2",
+            "resolution_minutes": 480,
+            "response_minutes": 60,
+            "rule_version": "v1"
+          },
+          {
+            "priority": "P3",
+            "resolution_minutes": 1440,
+            "response_minutes": 240,
+            "rule_version": "v1"
+          },
+          {
+            "priority": "P4",
+            "resolution_minutes": 4320,
+            "response_minutes": 480,
+            "rule_version": "v1"
+          }
+        ],
+        "users": [
+          {
+            "display_name": "Fictional Agent",
+            "user_id": "U1"
+          }
+        ]
+      },
+      "expected_incident": {
+        "created_at": "2026-01-01T00:00:00Z",
+        "current_priority": "P1",
+        "first_response_at": "2026-01-01T00:14:59Z",
+        "group_id": "G1",
+        "incident_id": "I1",
+        "priority_at_creation": "P1",
+        "quality_flags": [],
+        "requester_id": "U1",
+        "resolution_minutes": 6000,
+        "resolution_sla": "breached",
+        "resolved_at": "2026-01-05T04:00:00Z",
+        "response_minutes": 14.983333,
+        "response_sla": "passed",
+        "service_id": "S1",
+        "state": "resolved"
+      },
+      "name": "response-P1-below",
+      "report_start": "2026-01-01T00:00:00Z"
+    },
+    {
+      "cutoff": "2026-01-08T00:00:00Z",
+      "datasets": {
+        "assignment_groups": [
+          {
+            "group_id": "G1",
+            "name": "Fictional Support"
+          }
+        ],
+        "incident_events": [
+          {
+            "actor_id": "U1",
+            "event_id": "E1",
+            "event_time": "2026-01-01T00:15:00Z",
+            "event_type": "response",
+            "incident_id": "I1",
+            "source_sequence": 1
+          },
+          {
+            "actor_id": "U1",
+            "event_id": "E2",
+            "event_time": "2026-01-05T04:00:00Z",
+            "event_type": "resolve",
+            "incident_id": "I1",
+            "source_sequence": 2
+          }
+        ],
+        "incident_snapshots": [
+          {
+            "created_at": "2026-01-01T00:00:00Z",
+            "group_id": "G1",
+            "incident_id": "I1",
+            "priority": "P1",
+            "requester_id": "U1",
+            "service_id": "S1",
+            "source_updated_at": "2026-01-01T00:00:00Z",
+            "source_version": 1,
+            "status": "new"
+          }
+        ],
+        "services": [
+          {
+            "name": "Fictional Service",
+            "service_id": "S1"
+          },
+          {
+            "name": "Another Fictional Service",
+            "service_id": "S2"
+          }
+        ],
+        "sla_targets": [
+          {
+            "priority": "P1",
+            "resolution_minutes": 240,
+            "response_minutes": 15,
+            "rule_version": "v1"
+          },
+          {
+            "priority": "P2",
+            "resolution_minutes": 480,
+            "response_minutes": 60,
+            "rule_version": "v1"
+          },
+          {
+            "priority": "P3",
+            "resolution_minutes": 1440,
+            "response_minutes": 240,
+            "rule_version": "v1"
+          },
+          {
+            "priority": "P4",
+            "resolution_minutes": 4320,
+            "response_minutes": 480,
+            "rule_version": "v1"
+          }
+        ],
+        "users": [
+          {
+            "display_name": "Fictional Agent",
+            "user_id": "U1"
+          }
+        ]
+      },
+      "expected_incident": {
+        "created_at": "2026-01-01T00:00:00Z",
+        "current_priority": "P1",
+        "first_response_at": "2026-01-01T00:15:00Z",
+        "group_id": "G1",
+        "incident_id": "I1",
+        "priority_at_creation": "P1",
+        "quality_flags": [],
+        "requester_id": "U1",
+        "resolution_minutes": 6000,
+        "resolution_sla": "breached",
+        "resolved_at": "2026-01-05T04:00:00Z",
+        "response_minutes": 15.0,
+        "response_sla": "passed",
+        "service_id": "S1",
+        "state": "resolved"
+      },
+      "name": "response-P1-equal",
+      "report_start": "2026-01-01T00:00:00Z"
+    },
+    {
+      "cutoff": "2026-01-08T00:00:00Z",
+      "datasets": {
+        "assignment_groups": [
+          {
+            "group_id": "G1",
+            "name": "Fictional Support"
+          }
+        ],
+        "incident_events": [
+          {
+            "actor_id": "U1",
+            "event_id": "E1",
+            "event_time": "2026-01-01T00:15:01Z",
+            "event_type": "response",
+            "incident_id": "I1",
+            "source_sequence": 1
+          },
+          {
+            "actor_id": "U1",
+            "event_id": "E2",
+            "event_time": "2026-01-05T04:00:00Z",
+            "event_type": "resolve",
+            "incident_id": "I1",
+            "source_sequence": 2
+          }
+        ],
+        "incident_snapshots": [
+          {
+            "created_at": "2026-01-01T00:00:00Z",
+            "group_id": "G1",
+            "incident_id": "I1",
+            "priority": "P1",
+            "requester_id": "U1",
+            "service_id": "S1",
+            "source_updated_at": "2026-01-01T00:00:00Z",
+            "source_version": 1,
+            "status": "new"
+          }
+        ],
+        "services": [
+          {
+            "name": "Fictional Service",
+            "service_id": "S1"
+          },
+          {
+            "name": "Another Fictional Service",
+            "service_id": "S2"
+          }
+        ],
+        "sla_targets": [
+          {
+            "priority": "P1",
+            "resolution_minutes": 240,
+            "response_minutes": 15,
+            "rule_version": "v1"
+          },
+          {
+            "priority": "P2",
+            "resolution_minutes": 480,
+            "response_minutes": 60,
+            "rule_version": "v1"
+          },
+          {
+            "priority": "P3",
+            "resolution_minutes": 1440,
+            "response_minutes": 240,
+            "rule_version": "v1"
+          },
+          {
+            "priority": "P4",
+            "resolution_minutes": 4320,
+            "response_minutes": 480,
+            "rule_version": "v1"
+          }
+        ],
+        "users": [
+          {
+            "display_name": "Fictional Agent",
+            "user_id": "U1"
+          }
+        ]
+      },
+      "expected_incident": {
+        "created_at": "2026-01-01T00:00:00Z",
+        "current_priority": "P1",
+        "first_response_at": "2026-01-01T00:15:01Z",
+        "group_id": "G1",
+        "incident_id": "I1",
+        "priority_at_creation": "P1",
+        "quality_flags": [],
+        "requester_id": "U1",
+        "resolution_minutes": 6000,
+        "resolution_sla": "breached",
+        "resolved_at": "2026-01-05T04:00:00Z",
+        "response_minutes": 15.016667,
+        "response_sla": "breached",
+        "service_id": "S1",
+        "state": "resolved"
+      },
+      "name": "response-P1-above",
+      "report_start": "2026-01-01T00:00:00Z"
+    },
+    {
+      "cutoff": "2026-01-08T00:00:00Z",
+      "datasets": {
+        "assignment_groups": [
+          {
+            "group_id": "G1",
+            "name": "Fictional Support"
+          }
+        ],
+        "incident_events": [
+          {
+            "actor_id": "U1",
+            "event_id": "E1",
+            "event_time": "2026-01-01T00:59:59Z",
+            "event_type": "response",
+            "incident_id": "I1",
+            "source_sequence": 1
+          },
+          {
+            "actor_id": "U1",
+            "event_id": "E2",
+            "event_time": "2026-01-05T04:00:00Z",
+            "event_type": "resolve",
+            "incident_id": "I1",
+            "source_sequence": 2
+          }
+        ],
+        "incident_snapshots": [
+          {
+            "created_at": "2026-01-01T00:00:00Z",
+            "group_id": "G1",
+            "incident_id": "I1",
+            "priority": "P2",
+            "requester_id": "U1",
+            "service_id": "S1",
+            "source_updated_at": "2026-01-01T00:00:00Z",
+            "source_version": 1,
+            "status": "new"
+          }
+        ],
+        "services": [
+          {
+            "name": "Fictional Service",
+            "service_id": "S1"
+          },
+          {
+            "name": "Another Fictional Service",
+            "service_id": "S2"
+          }
+        ],
+        "sla_targets": [
+          {
+            "priority": "P1",
+            "resolution_minutes": 240,
+            "response_minutes": 15,
+            "rule_version": "v1"
+          },
+          {
+            "priority": "P2",
+            "resolution_minutes": 480,
+            "response_minutes": 60,
+            "rule_version": "v1"
+          },
+          {
+            "priority": "P3",
+            "resolution_minutes": 1440,
+            "response_minutes": 240,
+            "rule_version": "v1"
+          },
+          {
+            "priority": "P4",
+            "resolution_minutes": 4320,
+            "response_minutes": 480,
+            "rule_version": "v1"
+          }
+        ],
+        "users": [
+          {
+            "display_name": "Fictional Agent",
+            "user_id": "U1"
+          }
+        ]
+      },
+      "expected_incident": {
+        "created_at": "2026-01-01T00:00:00Z",
+        "current_priority": "P2",
+        "first_response_at": "2026-01-01T00:59:59Z",
+        "group_id": "G1",
+        "incident_id": "I1",
+        "priority_at_creation": "P2",
+        "quality_flags": [],
+        "requester_id": "U1",
+        "resolution_minutes": 6000,
+        "resolution_sla": "breached",
+        "resolved_at": "2026-01-05T04:00:00Z",
+        "response_minutes": 59.983333,
+        "response_sla": "passed",
+        "service_id": "S1",
+        "state": "resolved"
+      },
+      "name": "response-P2-below",
+      "report_start": "2026-01-01T00:00:00Z"
+    },
+    {
+      "cutoff": "2026-01-08T00:00:00Z",
+      "datasets": {
+        "assignment_groups": [
+          {
+            "group_id": "G1",
+            "name": "Fictional Support"
+          }
+        ],
+        "incident_events": [
+          {
+            "actor_id": "U1",
+            "event_id": "E1",
+            "event_time": "2026-01-01T01:00:00Z",
+            "event_type": "response",
+            "incident_id": "I1",
+            "source_sequence": 1
+          },
+          {
+            "actor_id": "U1",
+            "event_id": "E2",
+            "event_time": "2026-01-05T04:00:00Z",
+            "event_type": "resolve",
+            "incident_id": "I1",
+            "source_sequence": 2
+          }
+        ],
+        "incident_snapshots": [
+          {
+            "created_at": "2026-01-01T00:00:00Z",
+            "group_id": "G1",
+            "incident_id": "I1",
+            "priority": "P2",
+            "requester_id": "U1",
+            "service_id": "S1",
+            "source_updated_at": "2026-01-01T00:00:00Z",
+            "source_version": 1,
+            "status": "new"
+          }
+        ],
+        "services": [
+          {
+            "name": "Fictional Service",
+            "service_id": "S1"
+          },
+          {
+            "name": "Another Fictional Service",
+            "service_id": "S2"
+          }
+        ],
+        "sla_targets": [
+          {
+            "priority": "P1",
+            "resolution_minutes": 240,
+            "response_minutes": 15,
+            "rule_version": "v1"
+          },
+          {
+            "priority": "P2",
+            "resolution_minutes": 480,
+            "response_minutes": 60,
+            "rule_version": "v1"
+          },
+          {
+            "priority": "P3",
+            "resolution_minutes": 1440,
+            "response_minutes": 240,
+            "rule_version": "v1"
+          },
+          {
+            "priority": "P4",
+            "resolution_minutes": 4320,
+            "response_minutes": 480,
+            "rule_version": "v1"
+          }
+        ],
+        "users": [
+          {
+            "display_name": "Fictional Agent",
+            "user_id": "U1"
+          }
+        ]
+      },
+      "expected_incident": {
+        "created_at": "2026-01-01T00:00:00Z",
+        "current_priority": "P2",
+        "first_response_at": "2026-01-01T01:00:00Z",
+        "group_id": "G1",
+        "incident_id": "I1",
+        "priority_at_creation": "P2",
+        "quality_flags": [],
+        "requester_id": "U1",
+        "resolution_minutes": 6000,
+        "resolution_sla": "breached",
+        "resolved_at": "2026-01-05T04:00:00Z",
+        "response_minutes": 60.0,
+        "response_sla": "passed",
+        "service_id": "S1",
+        "state": "resolved"
+      },
+      "name": "response-P2-equal",
+      "report_start": "2026-01-01T00:00:00Z"
+    },
+    {
+      "cutoff": "2026-01-08T00:00:00Z",
+      "datasets": {
+        "assignment_groups": [
+          {
+            "group_id": "G1",
+            "name": "Fictional Support"
+          }
+        ],
+        "incident_events": [
+          {
+            "actor_id": "U1",
+            "event_id": "E1",
+            "event_time": "2026-01-01T01:00:01Z",
+            "event_type": "response",
+            "incident_id": "I1",
+            "source_sequence": 1
+          },
+          {
+            "actor_id": "U1",
+            "event_id": "E2",
+            "event_time": "2026-01-05T04:00:00Z",
+            "event_type": "resolve",
+            "incident_id": "I1",
+            "source_sequence": 2
+          }
+        ],
+        "incident_snapshots": [
+          {
+            "created_at": "2026-01-01T00:00:00Z",
+            "group_id": "G1",
+            "incident_id": "I1",
+            "priority": "P2",
+            "requester_id": "U1",
+            "service_id": "S1",
+            "source_updated_at": "2026-01-01T00:00:00Z",
+            "source_version": 1,
+            "status": "new"
+          }
+        ],
+        "services": [
+          {
+            "name": "Fictional Service",
+            "service_id": "S1"
+          },
+          {
+            "name": "Another Fictional Service",
+            "service_id": "S2"
+          }
+        ],
+        "sla_targets": [
+          {
+            "priority": "P1",
+            "resolution_minutes": 240,
+            "response_minutes": 15,
+            "rule_version": "v1"
+          },
+          {
+            "priority": "P2",
+            "resolution_minutes": 480,
+            "response_minutes": 60,
+            "rule_version": "v1"
+          },
+          {
+            "priority": "P3",
+            "resolution_minutes": 1440,
+            "response_minutes": 240,
+            "rule_version": "v1"
+          },
+          {
+            "priority": "P4",
+            "resolution_minutes": 4320,
+            "response_minutes": 480,
+            "rule_version": "v1"
+          }
+        ],
+        "users": [
+          {
+            "display_name": "Fictional Agent",
+            "user_id": "U1"
+          }
+        ]
+      },
+      "expected_incident": {
+        "created_at": "2026-01-01T00:00:00Z",
+        "current_priority": "P2",
+        "first_response_at": "2026-01-01T01:00:01Z",
+        "group_id": "G1",
+        "incident_id": "I1",
+        "priority_at_creation": "P2",
+        "quality_flags": [],
+        "requester_id": "U1",
+        "resolution_minutes": 6000,
+        "resolution_sla": "breached",
+        "resolved_at": "2026-01-05T04:00:00Z",
+        "response_minutes": 60.016667,
+        "response_sla": "breached",
+        "service_id": "S1",
+        "state": "resolved"
+      },
+      "name": "response-P2-above",
+      "report_start": "2026-01-01T00:00:00Z"
+    },
+    {
+      "cutoff": "2026-01-08T00:00:00Z",
+      "datasets": {
+        "assignment_groups": [
+          {
+            "group_id": "G1",
+            "name": "Fictional Support"
+          }
+        ],
+        "incident_events": [
+          {
+            "actor_id": "U1",
+            "event_id": "E1",
+            "event_time": "2026-01-01T03:59:59Z",
+            "event_type": "response",
+            "incident_id": "I1",
+            "source_sequence": 1
+          },
+          {
+            "actor_id": "U1",
+            "event_id": "E2",
+            "event_time": "2026-01-05T04:00:00Z",
+            "event_type": "resolve",
+            "incident_id": "I1",
+            "source_sequence": 2
+          }
+        ],
+        "incident_snapshots": [
+          {
+            "created_at": "2026-01-01T00:00:00Z",
+            "group_id": "G1",
+            "incident_id": "I1",
+            "priority": "P3",
+            "requester_id": "U1",
+            "service_id": "S1",
+            "source_updated_at": "2026-01-01T00:00:00Z",
+            "source_version": 1,
+            "status": "new"
+          }
+        ],
+        "services": [
+          {
+            "name": "Fictional Service",
+            "service_id": "S1"
+          },
+          {
+            "name": "Another Fictional Service",
+            "service_id": "S2"
+          }
+        ],
+        "sla_targets": [
+          {
+            "priority": "P1",
+            "resolution_minutes": 240,
+            "response_minutes": 15,
+            "rule_version": "v1"
+          },
+          {
+            "priority": "P2",
+            "resolution_minutes": 480,
+            "response_minutes": 60,
+            "rule_version": "v1"
+          },
+          {
+            "priority": "P3",
+            "resolution_minutes": 1440,
+            "response_minutes": 240,
+            "rule_version": "v1"
+          },
+          {
+            "priority": "P4",
+            "resolution_minutes": 4320,
+            "response_minutes": 480,
+            "rule_version": "v1"
+          }
+        ],
+        "users": [
+          {
+            "display_name": "Fictional Agent",
+            "user_id": "U1"
+          }
+        ]
+      },
+      "expected_incident": {
+        "created_at": "2026-01-01T00:00:00Z",
+        "current_priority": "P3",
+        "first_response_at": "2026-01-01T03:59:59Z",
+        "group_id": "G1",
+        "incident_id": "I1",
+        "priority_at_creation": "P3",
+        "quality_flags": [],
+        "requester_id": "U1",
+        "resolution_minutes": 6000,
+        "resolution_sla": "breached",
+        "resolved_at": "2026-01-05T04:00:00Z",
+        "response_minutes": 239.983333,
+        "response_sla": "passed",
+        "service_id": "S1",
+        "state": "resolved"
+      },
+      "name": "response-P3-below",
+      "report_start": "2026-01-01T00:00:00Z"
+    },
+    {
+      "cutoff": "2026-01-08T00:00:00Z",
+      "datasets": {
+        "assignment_groups": [
+          {
+            "group_id": "G1",
+            "name": "Fictional Support"
+          }
+        ],
+        "incident_events": [
+          {
+            "actor_id": "U1",
+            "event_id": "E1",
+            "event_time": "2026-01-01T04:00:00Z",
+            "event_type": "response",
+            "incident_id": "I1",
+            "source_sequence": 1
+          },
+          {
+            "actor_id": "U1",
+            "event_id": "E2",
+            "event_time": "2026-01-05T04:00:00Z",
+            "event_type": "resolve",
+            "incident_id": "I1",
+            "source_sequence": 2
+          }
+        ],
+        "incident_snapshots": [
+          {
+            "created_at": "2026-01-01T00:00:00Z",
+            "group_id": "G1",
+            "incident_id": "I1",
+            "priority": "P3",
+            "requester_id": "U1",
+            "service_id": "S1",
+            "source_updated_at": "2026-01-01T00:00:00Z",
+            "source_version": 1,
+            "status": "new"
+          }
+        ],
+        "services": [
+          {
+            "name": "Fictional Service",
+            "service_id": "S1"
+          },
+          {
+            "name": "Another Fictional Service",
+            "service_id": "S2"
+          }
+        ],
+        "sla_targets": [
+          {
+            "priority": "P1",
+            "resolution_minutes": 240,
+            "response_minutes": 15,
+            "rule_version": "v1"
+          },
+          {
+            "priority": "P2",
+            "resolution_minutes": 480,
+            "response_minutes": 60,
+            "rule_version": "v1"
+          },
+          {
+            "priority": "P3",
+            "resolution_minutes": 1440,
+            "response_minutes": 240,
+            "rule_version": "v1"
+          },
+          {
+            "priority": "P4",
+            "resolution_minutes": 4320,
+            "response_minutes": 480,
+            "rule_version": "v1"
+          }
+        ],
+        "users": [
+          {
+            "display_name": "Fictional Agent",
+            "user_id": "U1"
+          }
+        ]
+      },
+      "expected_incident": {
+        "created_at": "2026-01-01T00:00:00Z",
+        "current_priority": "P3",
+        "first_response_at": "2026-01-01T04:00:00Z",
+        "group_id": "G1",
+        "incident_id": "I1",
+        "priority_at_creation": "P3",
+        "quality_flags": [],
+        "requester_id": "U1",
+        "resolution_minutes": 6000,
+        "resolution_sla": "breached",
+        "resolved_at": "2026-01-05T04:00:00Z",
+        "response_minutes": 240.0,
+        "response_sla": "passed",
+        "service_id": "S1",
+        "state": "resolved"
+      },
+      "name": "response-P3-equal",
+      "report_start": "2026-01-01T00:00:00Z"
+    },
+    {
+      "cutoff": "2026-01-08T00:00:00Z",
+      "datasets": {
+        "assignment_groups": [
+          {
+            "group_id": "G1",
+            "name": "Fictional Support"
+          }
+        ],
+        "incident_events": [
+          {
+            "actor_id": "U1",
+            "event_id": "E1",
+            "event_time": "2026-01-01T04:00:01Z",
+            "event_type": "response",
+            "incident_id": "I1",
+            "source_sequence": 1
+          },
+          {
+            "actor_id": "U1",
+            "event_id": "E2",
+            "event_time": "2026-01-05T04:00:00Z",
+            "event_type": "resolve",
+            "incident_id": "I1",
+            "source_sequence": 2
+          }
+        ],
+        "incident_snapshots": [
+          {
+            "created_at": "2026-01-01T00:00:00Z",
+            "group_id": "G1",
+            "incident_id": "I1",
+            "priority": "P3",
+            "requester_id": "U1",
+            "service_id": "S1",
+            "source_updated_at": "2026-01-01T00:00:00Z",
+            "source_version": 1,
+            "status": "new"
+          }
+        ],
+        "services": [
+          {
+            "name": "Fictional Service",
+            "service_id": "S1"
+          },
+          {
+            "name": "Another Fictional Service",
+            "service_id": "S2"
+          }
+        ],
+        "sla_targets": [
+          {
+            "priority": "P1",
+            "resolution_minutes": 240,
+            "response_minutes": 15,
+            "rule_version": "v1"
+          },
+          {
+            "priority": "P2",
+            "resolution_minutes": 480,
+            "response_minutes": 60,
+            "rule_version": "v1"
+          },
+          {
+            "priority": "P3",
+            "resolution_minutes": 1440,
+            "response_minutes": 240,
+            "rule_version": "v1"
+          },
+          {
+            "priority": "P4",
+            "resolution_minutes": 4320,
+            "response_minutes": 480,
+            "rule_version": "v1"
+          }
+        ],
+        "users": [
+          {
+            "display_name": "Fictional Agent",
+            "user_id": "U1"
+          }
+        ]
+      },
+      "expected_incident": {
+        "created_at": "2026-01-01T00:00:00Z",
+        "current_priority": "P3",
+        "first_response_at": "2026-01-01T04:00:01Z",
+        "group_id": "G1",
+        "incident_id": "I1",
+        "priority_at_creation": "P3",
+        "quality_flags": [],
+        "requester_id": "U1",
+        "resolution_minutes": 6000,
+        "resolution_sla": "breached",
+        "resolved_at": "2026-01-05T04:00:00Z",
+        "response_minutes": 240.016667,
+        "response_sla": "breached",
+        "service_id": "S1",
+        "state": "resolved"
+      },
+      "name": "response-P3-above",
+      "report_start": "2026-01-01T00:00:00Z"
+    },
+    {
+      "cutoff": "2026-01-08T00:00:00Z",
+      "datasets": {
+        "assignment_groups": [
+          {
+            "group_id": "G1",
+            "name": "Fictional Support"
+          }
+        ],
+        "incident_events": [
+          {
+            "actor_id": "U1",
+            "event_id": "E1",
+            "event_time": "2026-01-01T07:59:59Z",
+            "event_type": "response",
+            "incident_id": "I1",
+            "source_sequence": 1
+          },
+          {
+            "actor_id": "U1",
+            "event_id": "E2",
+            "event_time": "2026-01-05T04:00:00Z",
+            "event_type": "resolve",
+            "incident_id": "I1",
+            "source_sequence": 2
+          }
+        ],
+        "incident_snapshots": [
+          {
+            "created_at": "2026-01-01T00:00:00Z",
+            "group_id": "G1",
+            "incident_id": "I1",
+            "priority": "P4",
+            "requester_id": "U1",
+            "service_id": "S1",
+            "source_updated_at": "2026-01-01T00:00:00Z",
+            "source_version": 1,
+            "status": "new"
+          }
+        ],
+        "services": [
+          {
+            "name": "Fictional Service",
+            "service_id": "S1"
+          },
+          {
+            "name": "Another Fictional Service",
+            "service_id": "S2"
+          }
+        ],
+        "sla_targets": [
+          {
+            "priority": "P1",
+            "resolution_minutes": 240,
+            "response_minutes": 15,
+            "rule_version": "v1"
+          },
+          {
+            "priority": "P2",
+            "resolution_minutes": 480,
+            "response_minutes": 60,
+            "rule_version": "v1"
+          },
+          {
+            "priority": "P3",
+            "resolution_minutes": 1440,
+            "response_minutes": 240,
+            "rule_version": "v1"
+          },
+          {
+            "priority": "P4",
+            "resolution_minutes": 4320,
+            "response_minutes": 480,
+            "rule_version": "v1"
+          }
+        ],
+        "users": [
+          {
+            "display_name": "Fictional Agent",
+            "user_id": "U1"
+          }
+        ]
+      },
+      "expected_incident": {
+        "created_at": "2026-01-01T00:00:00Z",
+        "current_priority": "P4",
+        "first_response_at": "2026-01-01T07:59:59Z",
+        "group_id": "G1",
+        "incident_id": "I1",
+        "priority_at_creation": "P4",
+        "quality_flags": [],
+        "requester_id": "U1",
+        "resolution_minutes": 6000,
+        "resolution_sla": "breached",
+        "resolved_at": "2026-01-05T04:00:00Z",
+        "response_minutes": 479.983333,
+        "response_sla": "passed",
+        "service_id": "S1",
+        "state": "resolved"
+      },
+      "name": "response-P4-below",
+      "report_start": "2026-01-01T00:00:00Z"
+    },
+    {
+      "cutoff": "2026-01-08T00:00:00Z",
+      "datasets": {
+        "assignment_groups": [
+          {
+            "group_id": "G1",
+            "name": "Fictional Support"
+          }
+        ],
+        "incident_events": [
+          {
+            "actor_id": "U1",
+            "event_id": "E1",
+            "event_time": "2026-01-01T08:00:00Z",
+            "event_type": "response",
+            "incident_id": "I1",
+            "source_sequence": 1
+          },
+          {
+            "actor_id": "U1",
+            "event_id": "E2",
+            "event_time": "2026-01-05T04:00:00Z",
+            "event_type": "resolve",
+            "incident_id": "I1",
+            "source_sequence": 2
+          }
+        ],
+        "incident_snapshots": [
+          {
+            "created_at": "2026-01-01T00:00:00Z",
+            "group_id": "G1",
+            "incident_id": "I1",
+            "priority": "P4",
+            "requester_id": "U1",
+            "service_id": "S1",
+            "source_updated_at": "2026-01-01T00:00:00Z",
+            "source_version": 1,
+            "status": "new"
+          }
+        ],
+        "services": [
+          {
+            "name": "Fictional Service",
+            "service_id": "S1"
+          },
+          {
+            "name": "Another Fictional Service",
+            "service_id": "S2"
+          }
+        ],
+        "sla_targets": [
+          {
+            "priority": "P1",
+            "resolution_minutes": 240,
+            "response_minutes": 15,
+            "rule_version": "v1"
+          },
+          {
+            "priority": "P2",
+            "resolution_minutes": 480,
+            "response_minutes": 60,
+            "rule_version": "v1"
+          },
+          {
+            "priority": "P3",
+            "resolution_minutes": 1440,
+            "response_minutes": 240,
+            "rule_version": "v1"
+          },
+          {
+            "priority": "P4",
+            "resolution_minutes": 4320,
+            "response_minutes": 480,
+            "rule_version": "v1"
+          }
+        ],
+        "users": [
+          {
+            "display_name": "Fictional Agent",
+            "user_id": "U1"
+          }
+        ]
+      },
+      "expected_incident": {
+        "created_at": "2026-01-01T00:00:00Z",
+        "current_priority": "P4",
+        "first_response_at": "2026-01-01T08:00:00Z",
+        "group_id": "G1",
+        "incident_id": "I1",
+        "priority_at_creation": "P4",
+        "quality_flags": [],
+        "requester_id": "U1",
+        "resolution_minutes": 6000,
+        "resolution_sla": "breached",
+        "resolved_at": "2026-01-05T04:00:00Z",
+        "response_minutes": 480.0,
+        "response_sla": "passed",
+        "service_id": "S1",
+        "state": "resolved"
+      },
+      "name": "response-P4-equal",
+      "report_start": "2026-01-01T00:00:00Z"
+    },
+    {
+      "cutoff": "2026-01-08T00:00:00Z",
+      "datasets": {
+        "assignment_groups": [
+          {
+            "group_id": "G1",
+            "name": "Fictional Support"
+          }
+        ],
+        "incident_events": [
+          {
+            "actor_id": "U1",
+            "event_id": "E1",
+            "event_time": "2026-01-01T08:00:01Z",
+            "event_type": "response",
+            "incident_id": "I1",
+            "source_sequence": 1
+          },
+          {
+            "actor_id": "U1",
+            "event_id": "E2",
+            "event_time": "2026-01-05T04:00:00Z",
+            "event_type": "resolve",
+            "incident_id": "I1",
+            "source_sequence": 2
+          }
+        ],
+        "incident_snapshots": [
+          {
+            "created_at": "2026-01-01T00:00:00Z",
+            "group_id": "G1",
+            "incident_id": "I1",
+            "priority": "P4",
+            "requester_id": "U1",
+            "service_id": "S1",
+            "source_updated_at": "2026-01-01T00:00:00Z",
+            "source_version": 1,
+            "status": "new"
+          }
+        ],
+        "services": [
+          {
+            "name": "Fictional Service",
+            "service_id": "S1"
+          },
+          {
+            "name": "Another Fictional Service",
+            "service_id": "S2"
+          }
+        ],
+        "sla_targets": [
+          {
+            "priority": "P1",
+            "resolution_minutes": 240,
+            "response_minutes": 15,
+            "rule_version": "v1"
+          },
+          {
+            "priority": "P2",
+            "resolution_minutes": 480,
+            "response_minutes": 60,
+            "rule_version": "v1"
+          },
+          {
+            "priority": "P3",
+            "resolution_minutes": 1440,
+            "response_minutes": 240,
+            "rule_version": "v1"
+          },
+          {
+            "priority": "P4",
+            "resolution_minutes": 4320,
+            "response_minutes": 480,
+            "rule_version": "v1"
+          }
+        ],
+        "users": [
+          {
+            "display_name": "Fictional Agent",
+            "user_id": "U1"
+          }
+        ]
+      },
+      "expected_incident": {
+        "created_at": "2026-01-01T00:00:00Z",
+        "current_priority": "P4",
+        "first_response_at": "2026-01-01T08:00:01Z",
+        "group_id": "G1",
+        "incident_id": "I1",
+        "priority_at_creation": "P4",
+        "quality_flags": [],
+        "requester_id": "U1",
+        "resolution_minutes": 6000,
+        "resolution_sla": "breached",
+        "resolved_at": "2026-01-05T04:00:00Z",
+        "response_minutes": 480.016667,
+        "response_sla": "breached",
+        "service_id": "S1",
+        "state": "resolved"
+      },
+      "name": "response-P4-above",
+      "report_start": "2026-01-01T00:00:00Z"
+    },
+    {
+      "cutoff": "2026-01-08T00:00:00Z",
+      "datasets": {
+        "assignment_groups": [
+          {
+            "group_id": "G1",
+            "name": "Fictional Support"
+          }
+        ],
+        "incident_events": [
+          {
+            "actor_id": "U1",
+            "event_id": "E1",
+            "event_time": "2026-01-01T00:01:00Z",
+            "event_type": "response",
+            "incident_id": "I1",
+            "source_sequence": 1
+          },
+          {
+            "actor_id": "U1",
+            "event_id": "E2",
+            "event_time": "2026-01-01T03:59:59Z",
+            "event_type": "resolve",
+            "incident_id": "I1",
+            "source_sequence": 2
+          }
+        ],
+        "incident_snapshots": [
+          {
+            "created_at": "2026-01-01T00:00:00Z",
+            "group_id": "G1",
+            "incident_id": "I1",
+            "priority": "P1",
+            "requester_id": "U1",
+            "service_id": "S1",
+            "source_updated_at": "2026-01-01T00:00:00Z",
+            "source_version": 1,
+            "status": "new"
+          }
+        ],
+        "services": [
+          {
+            "name": "Fictional Service",
+            "service_id": "S1"
+          },
+          {
+            "name": "Another Fictional Service",
+            "service_id": "S2"
+          }
+        ],
+        "sla_targets": [
+          {
+            "priority": "P1",
+            "resolution_minutes": 240,
+            "response_minutes": 15,
+            "rule_version": "v1"
+          },
+          {
+            "priority": "P2",
+            "resolution_minutes": 480,
+            "response_minutes": 60,
+            "rule_version": "v1"
+          },
+          {
+            "priority": "P3",
+            "resolution_minutes": 1440,
+            "response_minutes": 240,
+            "rule_version": "v1"
+          },
+          {
+            "priority": "P4",
+            "resolution_minutes": 4320,
+            "response_minutes": 480,
+            "rule_version": "v1"
+          }
+        ],
+        "users": [
+          {
+            "display_name": "Fictional Agent",
+            "user_id": "U1"
+          }
+        ]
+      },
+      "expected_incident": {
+        "created_at": "2026-01-01T00:00:00Z",
+        "current_priority": "P1",
+        "first_response_at": "2026-01-01T00:01:00Z",
+        "group_id": "G1",
+        "incident_id": "I1",
+        "priority_at_creation": "P1",
+        "quality_flags": [],
+        "requester_id": "U1",
+        "resolution_minutes": 239.983333,
+        "resolution_sla": "passed",
+        "resolved_at": "2026-01-01T03:59:59Z",
+        "response_minutes": 1,
+        "response_sla": "passed",
+        "service_id": "S1",
+        "state": "resolved"
+      },
+      "name": "resolution-P1-below",
+      "report_start": "2026-01-01T00:00:00Z"
+    },
+    {
+      "cutoff": "2026-01-08T00:00:00Z",
+      "datasets": {
+        "assignment_groups": [
+          {
+            "group_id": "G1",
+            "name": "Fictional Support"
+          }
+        ],
+        "incident_events": [
+          {
+            "actor_id": "U1",
+            "event_id": "E1",
+            "event_time": "2026-01-01T00:01:00Z",
+            "event_type": "response",
+            "incident_id": "I1",
+            "source_sequence": 1
+          },
+          {
+            "actor_id": "U1",
+            "event_id": "E2",
+            "event_time": "2026-01-01T04:00:00Z",
+            "event_type": "resolve",
+            "incident_id": "I1",
+            "source_sequence": 2
+          }
+        ],
+        "incident_snapshots": [
+          {
+            "created_at": "2026-01-01T00:00:00Z",
+            "group_id": "G1",
+            "incident_id": "I1",
+            "priority": "P1",
+            "requester_id": "U1",
+            "service_id": "S1",
+            "source_updated_at": "2026-01-01T00:00:00Z",
+            "source_version": 1,
+            "status": "new"
+          }
+        ],
+        "services": [
+          {
+            "name": "Fictional Service",
+            "service_id": "S1"
+          },
+          {
+            "name": "Another Fictional Service",
+            "service_id": "S2"
+          }
+        ],
+        "sla_targets": [
+          {
+            "priority": "P1",
+            "resolution_minutes": 240,
+            "response_minutes": 15,
+            "rule_version": "v1"
+          },
+          {
+            "priority": "P2",
+            "resolution_minutes": 480,
+            "response_minutes": 60,
+            "rule_version": "v1"
+          },
+          {
+            "priority": "P3",
+            "resolution_minutes": 1440,
+            "response_minutes": 240,
+            "rule_version": "v1"
+          },
+          {
+            "priority": "P4",
+            "resolution_minutes": 4320,
+            "response_minutes": 480,
+            "rule_version": "v1"
+          }
+        ],
+        "users": [
+          {
+            "display_name": "Fictional Agent",
+            "user_id": "U1"
+          }
+        ]
+      },
+      "expected_incident": {
+        "created_at": "2026-01-01T00:00:00Z",
+        "current_priority": "P1",
+        "first_response_at": "2026-01-01T00:01:00Z",
+        "group_id": "G1",
+        "incident_id": "I1",
+        "priority_at_creation": "P1",
+        "quality_flags": [],
+        "requester_id": "U1",
+        "resolution_minutes": 240.0,
+        "resolution_sla": "passed",
+        "resolved_at": "2026-01-01T04:00:00Z",
+        "response_minutes": 1,
+        "response_sla": "passed",
+        "service_id": "S1",
+        "state": "resolved"
+      },
+      "name": "resolution-P1-equal",
+      "report_start": "2026-01-01T00:00:00Z"
+    },
+    {
+      "cutoff": "2026-01-08T00:00:00Z",
+      "datasets": {
+        "assignment_groups": [
+          {
+            "group_id": "G1",
+            "name": "Fictional Support"
+          }
+        ],
+        "incident_events": [
+          {
+            "actor_id": "U1",
+            "event_id": "E1",
+            "event_time": "2026-01-01T00:01:00Z",
+            "event_type": "response",
+            "incident_id": "I1",
+            "source_sequence": 1
+          },
+          {
+            "actor_id": "U1",
+            "event_id": "E2",
+            "event_time": "2026-01-01T04:00:01Z",
+            "event_type": "resolve",
+            "incident_id": "I1",
+            "source_sequence": 2
+          }
+        ],
+        "incident_snapshots": [
+          {
+            "created_at": "2026-01-01T00:00:00Z",
+            "group_id": "G1",
+            "incident_id": "I1",
+            "priority": "P1",
+            "requester_id": "U1",
+            "service_id": "S1",
+            "source_updated_at": "2026-01-01T00:00:00Z",
+            "source_version": 1,
+            "status": "new"
+          }
+        ],
+        "services": [
+          {
+            "name": "Fictional Service",
+            "service_id": "S1"
+          },
+          {
+            "name": "Another Fictional Service",
+            "service_id": "S2"
+          }
+        ],
+        "sla_targets": [
+          {
+            "priority": "P1",
+            "resolution_minutes": 240,
+            "response_minutes": 15,
+            "rule_version": "v1"
+          },
+          {
+            "priority": "P2",
+            "resolution_minutes": 480,
+            "response_minutes": 60,
+            "rule_version": "v1"
+          },
+          {
+            "priority": "P3",
+            "resolution_minutes": 1440,
+            "response_minutes": 240,
+            "rule_version": "v1"
+          },
+          {
+            "priority": "P4",
+            "resolution_minutes": 4320,
+            "response_minutes": 480,
+            "rule_version": "v1"
+          }
+        ],
+        "users": [
+          {
+            "display_name": "Fictional Agent",
+            "user_id": "U1"
+          }
+        ]
+      },
+      "expected_incident": {
+        "created_at": "2026-01-01T00:00:00Z",
+        "current_priority": "P1",
+        "first_response_at": "2026-01-01T00:01:00Z",
+        "group_id": "G1",
+        "incident_id": "I1",
+        "priority_at_creation": "P1",
+        "quality_flags": [],
+        "requester_id": "U1",
+        "resolution_minutes": 240.016667,
+        "resolution_sla": "breached",
+        "resolved_at": "2026-01-01T04:00:01Z",
+        "response_minutes": 1,
+        "response_sla": "passed",
+        "service_id": "S1",
+        "state": "resolved"
+      },
+      "name": "resolution-P1-above",
+      "report_start": "2026-01-01T00:00:00Z"
+    },
+    {
+      "cutoff": "2026-01-08T00:00:00Z",
+      "datasets": {
+        "assignment_groups": [
+          {
+            "group_id": "G1",
+            "name": "Fictional Support"
+          }
+        ],
+        "incident_events": [
+          {
+            "actor_id": "U1",
+            "event_id": "E1",
+            "event_time": "2026-01-01T00:01:00Z",
+            "event_type": "response",
+            "incident_id": "I1",
+            "source_sequence": 1
+          },
+          {
+            "actor_id": "U1",
+            "event_id": "E2",
+            "event_time": "2026-01-01T07:59:59Z",
+            "event_type": "resolve",
+            "incident_id": "I1",
+            "source_sequence": 2
+          }
+        ],
+        "incident_snapshots": [
+          {
+            "created_at": "2026-01-01T00:00:00Z",
+            "group_id": "G1",
+            "incident_id": "I1",
+            "priority": "P2",
+            "requester_id": "U1",
+            "service_id": "S1",
+            "source_updated_at": "2026-01-01T00:00:00Z",
+            "source_version": 1,
+            "status": "new"
+          }
+        ],
+        "services": [
+          {
+            "name": "Fictional Service",
+            "service_id": "S1"
+          },
+          {
+            "name": "Another Fictional Service",
+            "service_id": "S2"
+          }
+        ],
+        "sla_targets": [
+          {
+            "priority": "P1",
+            "resolution_minutes": 240,
+            "response_minutes": 15,
+            "rule_version": "v1"
+          },
+          {
+            "priority": "P2",
+            "resolution_minutes": 480,
+            "response_minutes": 60,
+            "rule_version": "v1"
+          },
+          {
+            "priority": "P3",
+            "resolution_minutes": 1440,
+            "response_minutes": 240,
+            "rule_version": "v1"
+          },
+          {
+            "priority": "P4",
+            "resolution_minutes": 4320,
+            "response_minutes": 480,
+            "rule_version": "v1"
+          }
+        ],
+        "users": [
+          {
+            "display_name": "Fictional Agent",
+            "user_id": "U1"
+          }
+        ]
+      },
+      "expected_incident": {
+        "created_at": "2026-01-01T00:00:00Z",
+        "current_priority": "P2",
+        "first_response_at": "2026-01-01T00:01:00Z",
+        "group_id": "G1",
+        "incident_id": "I1",
+        "priority_at_creation": "P2",
+        "quality_flags": [],
+        "requester_id": "U1",
+        "resolution_minutes": 479.983333,
+        "resolution_sla": "passed",
+        "resolved_at": "2026-01-01T07:59:59Z",
+        "response_minutes": 1,
+        "response_sla": "passed",
+        "service_id": "S1",
+        "state": "resolved"
+      },
+      "name": "resolution-P2-below",
+      "report_start": "2026-01-01T00:00:00Z"
+    },
+    {
+      "cutoff": "2026-01-08T00:00:00Z",
+      "datasets": {
+        "assignment_groups": [
+          {
+            "group_id": "G1",
+            "name": "Fictional Support"
+          }
+        ],
+        "incident_events": [
+          {
+            "actor_id": "U1",
+            "event_id": "E1",
+            "event_time": "2026-01-01T00:01:00Z",
+            "event_type": "response",
+            "incident_id": "I1",
+            "source_sequence": 1
+          },
+          {
+            "actor_id": "U1",
+            "event_id": "E2",
+            "event_time": "2026-01-01T08:00:00Z",
+            "event_type": "resolve",
+            "incident_id": "I1",
+            "source_sequence": 2
+          }
+        ],
+        "incident_snapshots": [
+          {
+            "created_at": "2026-01-01T00:00:00Z",
+            "group_id": "G1",
+            "incident_id": "I1",
+            "priority": "P2",
+            "requester_id": "U1",
+            "service_id": "S1",
+            "source_updated_at": "2026-01-01T00:00:00Z",
+            "source_version": 1,
+            "status": "new"
+          }
+        ],
+        "services": [
+          {
+            "name": "Fictional Service",
+            "service_id": "S1"
+          },
+          {
+            "name": "Another Fictional Service",
+            "service_id": "S2"
+          }
+        ],
+        "sla_targets": [
+          {
+            "priority": "P1",
+            "resolution_minutes": 240,
+            "response_minutes": 15,
+            "rule_version": "v1"
+          },
+          {
+            "priority": "P2",
+            "resolution_minutes": 480,
+            "response_minutes": 60,
+            "rule_version": "v1"
+          },
+          {
+            "priority": "P3",
+            "resolution_minutes": 1440,
+            "response_minutes": 240,
+            "rule_version": "v1"
+          },
+          {
+            "priority": "P4",
+            "resolution_minutes": 4320,
+            "response_minutes": 480,
+            "rule_version": "v1"
+          }
+        ],
+        "users": [
+          {
+            "display_name": "Fictional Agent",
+            "user_id": "U1"
+          }
+        ]
+      },
+      "expected_incident": {
+        "created_at": "2026-01-01T00:00:00Z",
+        "current_priority": "P2",
+        "first_response_at": "2026-01-01T00:01:00Z",
+        "group_id": "G1",
+        "incident_id": "I1",
+        "priority_at_creation": "P2",
+        "quality_flags": [],
+        "requester_id": "U1",
+        "resolution_minutes": 480.0,
+        "resolution_sla": "passed",
+        "resolved_at": "2026-01-01T08:00:00Z",
+        "response_minutes": 1,
+        "response_sla": "passed",
+        "service_id": "S1",
+        "state": "resolved"
+      },
+      "name": "resolution-P2-equal",
+      "report_start": "2026-01-01T00:00:00Z"
+    },
+    {
+      "cutoff": "2026-01-08T00:00:00Z",
+      "datasets": {
+        "assignment_groups": [
+          {
+            "group_id": "G1",
+            "name": "Fictional Support"
+          }
+        ],
+        "incident_events": [
+          {
+            "actor_id": "U1",
+            "event_id": "E1",
+            "event_time": "2026-01-01T00:01:00Z",
+            "event_type": "response",
+            "incident_id": "I1",
+            "source_sequence": 1
+          },
+          {
+            "actor_id": "U1",
+            "event_id": "E2",
+            "event_time": "2026-01-01T08:00:01Z",
+            "event_type": "resolve",
+            "incident_id": "I1",
+            "source_sequence": 2
+          }
+        ],
+        "incident_snapshots": [
+          {
+            "created_at": "2026-01-01T00:00:00Z",
+            "group_id": "G1",
+            "incident_id": "I1",
+            "priority": "P2",
+            "requester_id": "U1",
+            "service_id": "S1",
+            "source_updated_at": "2026-01-01T00:00:00Z",
+            "source_version": 1,
+            "status": "new"
+          }
+        ],
+        "services": [
+          {
+            "name": "Fictional Service",
+            "service_id": "S1"
+          },
+          {
+            "name": "Another Fictional Service",
+            "service_id": "S2"
+          }
+        ],
+        "sla_targets": [
+          {
+            "priority": "P1",
+            "resolution_minutes": 240,
+            "response_minutes": 15,
+            "rule_version": "v1"
+          },
+          {
+            "priority": "P2",
+            "resolution_minutes": 480,
+            "response_minutes": 60,
+            "rule_version": "v1"
+          },
+          {
+            "priority": "P3",
+            "resolution_minutes": 1440,
+            "response_minutes": 240,
+            "rule_version": "v1"
+          },
+          {
+            "priority": "P4",
+            "resolution_minutes": 4320,
+            "response_minutes": 480,
+            "rule_version": "v1"
+          }
+        ],
+        "users": [
+          {
+            "display_name": "Fictional Agent",
+            "user_id": "U1"
+          }
+        ]
+      },
+      "expected_incident": {
+        "created_at": "2026-01-01T00:00:00Z",
+        "current_priority": "P2",
+        "first_response_at": "2026-01-01T00:01:00Z",
+        "group_id": "G1",
+        "incident_id": "I1",
+        "priority_at_creation": "P2",
+        "quality_flags": [],
+        "requester_id": "U1",
+        "resolution_minutes": 480.016667,
+        "resolution_sla": "breached",
+        "resolved_at": "2026-01-01T08:00:01Z",
+        "response_minutes": 1,
+        "response_sla": "passed",
+        "service_id": "S1",
+        "state": "resolved"
+      },
+      "name": "resolution-P2-above",
+      "report_start": "2026-01-01T00:00:00Z"
+    },
+    {
+      "cutoff": "2026-01-08T00:00:00Z",
+      "datasets": {
+        "assignment_groups": [
+          {
+            "group_id": "G1",
+            "name": "Fictional Support"
+          }
+        ],
+        "incident_events": [
+          {
+            "actor_id": "U1",
+            "event_id": "E1",
+            "event_time": "2026-01-01T00:01:00Z",
+            "event_type": "response",
+            "incident_id": "I1",
+            "source_sequence": 1
+          },
+          {
+            "actor_id": "U1",
+            "event_id": "E2",
+            "event_time": "2026-01-01T23:59:59Z",
+            "event_type": "resolve",
+            "incident_id": "I1",
+            "source_sequence": 2
+          }
+        ],
+        "incident_snapshots": [
+          {
+            "created_at": "2026-01-01T00:00:00Z",
+            "group_id": "G1",
+            "incident_id": "I1",
+            "priority": "P3",
+            "requester_id": "U1",
+            "service_id": "S1",
+            "source_updated_at": "2026-01-01T00:00:00Z",
+            "source_version": 1,
+            "status": "new"
+          }
+        ],
+        "services": [
+          {
+            "name": "Fictional Service",
+            "service_id": "S1"
+          },
+          {
+            "name": "Another Fictional Service",
+            "service_id": "S2"
+          }
+        ],
+        "sla_targets": [
+          {
+            "priority": "P1",
+            "resolution_minutes": 240,
+            "response_minutes": 15,
+            "rule_version": "v1"
+          },
+          {
+            "priority": "P2",
+            "resolution_minutes": 480,
+            "response_minutes": 60,
+            "rule_version": "v1"
+          },
+          {
+            "priority": "P3",
+            "resolution_minutes": 1440,
+            "response_minutes": 240,
+            "rule_version": "v1"
+          },
+          {
+            "priority": "P4",
+            "resolution_minutes": 4320,
+            "response_minutes": 480,
+            "rule_version": "v1"
+          }
+        ],
+        "users": [
+          {
+            "display_name": "Fictional Agent",
+            "user_id": "U1"
+          }
+        ]
+      },
+      "expected_incident": {
+        "created_at": "2026-01-01T00:00:00Z",
+        "current_priority": "P3",
+        "first_response_at": "2026-01-01T00:01:00Z",
+        "group_id": "G1",
+        "incident_id": "I1",
+        "priority_at_creation": "P3",
+        "quality_flags": [],
+        "requester_id": "U1",
+        "resolution_minutes": 1439.983333,
+        "resolution_sla": "passed",
+        "resolved_at": "2026-01-01T23:59:59Z",
+        "response_minutes": 1,
+        "response_sla": "passed",
+        "service_id": "S1",
+        "state": "resolved"
+      },
+      "name": "resolution-P3-below",
+      "report_start": "2026-01-01T00:00:00Z"
+    },
+    {
+      "cutoff": "2026-01-08T00:00:00Z",
+      "datasets": {
+        "assignment_groups": [
+          {
+            "group_id": "G1",
+            "name": "Fictional Support"
+          }
+        ],
+        "incident_events": [
+          {
+            "actor_id": "U1",
+            "event_id": "E1",
+            "event_time": "2026-01-01T00:01:00Z",
+            "event_type": "response",
+            "incident_id": "I1",
+            "source_sequence": 1
+          },
+          {
+            "actor_id": "U1",
+            "event_id": "E2",
+            "event_time": "2026-01-02T00:00:00Z",
+            "event_type": "resolve",
+            "incident_id": "I1",
+            "source_sequence": 2
+          }
+        ],
+        "incident_snapshots": [
+          {
+            "created_at": "2026-01-01T00:00:00Z",
+            "group_id": "G1",
+            "incident_id": "I1",
+            "priority": "P3",
+            "requester_id": "U1",
+            "service_id": "S1",
+            "source_updated_at": "2026-01-01T00:00:00Z",
+            "source_version": 1,
+            "status": "new"
+          }
+        ],
+        "services": [
+          {
+            "name": "Fictional Service",
+            "service_id": "S1"
+          },
+          {
+            "name": "Another Fictional Service",
+            "service_id": "S2"
+          }
+        ],
+        "sla_targets": [
+          {
+            "priority": "P1",
+            "resolution_minutes": 240,
+            "response_minutes": 15,
+            "rule_version": "v1"
+          },
+          {
+            "priority": "P2",
+            "resolution_minutes": 480,
+            "response_minutes": 60,
+            "rule_version": "v1"
+          },
+          {
+            "priority": "P3",
+            "resolution_minutes": 1440,
+            "response_minutes": 240,
+            "rule_version": "v1"
+          },
+          {
+            "priority": "P4",
+            "resolution_minutes": 4320,
+            "response_minutes": 480,
+            "rule_version": "v1"
+          }
+        ],
+        "users": [
+          {
+            "display_name": "Fictional Agent",
+            "user_id": "U1"
+          }
+        ]
+      },
+      "expected_incident": {
+        "created_at": "2026-01-01T00:00:00Z",
+        "current_priority": "P3",
+        "first_response_at": "2026-01-01T00:01:00Z",
+        "group_id": "G1",
+        "incident_id": "I1",
+        "priority_at_creation": "P3",
+        "quality_flags": [],
+        "requester_id": "U1",
+        "resolution_minutes": 1440.0,
+        "resolution_sla": "passed",
+        "resolved_at": "2026-01-02T00:00:00Z",
+        "response_minutes": 1,
+        "response_sla": "passed",
+        "service_id": "S1",
+        "state": "resolved"
+      },
+      "name": "resolution-P3-equal",
+      "report_start": "2026-01-01T00:00:00Z"
+    },
+    {
+      "cutoff": "2026-01-08T00:00:00Z",
+      "datasets": {
+        "assignment_groups": [
+          {
+            "group_id": "G1",
+            "name": "Fictional Support"
+          }
+        ],
+        "incident_events": [
+          {
+            "actor_id": "U1",
+            "event_id": "E1",
+            "event_time": "2026-01-01T00:01:00Z",
+            "event_type": "response",
+            "incident_id": "I1",
+            "source_sequence": 1
+          },
+          {
+            "actor_id": "U1",
+            "event_id": "E2",
+            "event_time": "2026-01-02T00:00:01Z",
+            "event_type": "resolve",
+            "incident_id": "I1",
+            "source_sequence": 2
+          }
+        ],
+        "incident_snapshots": [
+          {
+            "created_at": "2026-01-01T00:00:00Z",
+            "group_id": "G1",
+            "incident_id": "I1",
+            "priority": "P3",
+            "requester_id": "U1",
+            "service_id": "S1",
+            "source_updated_at": "2026-01-01T00:00:00Z",
+            "source_version": 1,
+            "status": "new"
+          }
+        ],
+        "services": [
+          {
+            "name": "Fictional Service",
+            "service_id": "S1"
+          },
+          {
+            "name": "Another Fictional Service",
+            "service_id": "S2"
+          }
+        ],
+        "sla_targets": [
+          {
+            "priority": "P1",
+            "resolution_minutes": 240,
+            "response_minutes": 15,
+            "rule_version": "v1"
+          },
+          {
+            "priority": "P2",
+            "resolution_minutes": 480,
+            "response_minutes": 60,
+            "rule_version": "v1"
+          },
+          {
+            "priority": "P3",
+            "resolution_minutes": 1440,
+            "response_minutes": 240,
+            "rule_version": "v1"
+          },
+          {
+            "priority": "P4",
+            "resolution_minutes": 4320,
+            "response_minutes": 480,
+            "rule_version": "v1"
+          }
+        ],
+        "users": [
+          {
+            "display_name": "Fictional Agent",
+            "user_id": "U1"
+          }
+        ]
+      },
+      "expected_incident": {
+        "created_at": "2026-01-01T00:00:00Z",
+        "current_priority": "P3",
+        "first_response_at": "2026-01-01T00:01:00Z",
+        "group_id": "G1",
+        "incident_id": "I1",
+        "priority_at_creation": "P3",
+        "quality_flags": [],
+        "requester_id": "U1",
+        "resolution_minutes": 1440.016667,
+        "resolution_sla": "breached",
+        "resolved_at": "2026-01-02T00:00:01Z",
+        "response_minutes": 1,
+        "response_sla": "passed",
+        "service_id": "S1",
+        "state": "resolved"
+      },
+      "name": "resolution-P3-above",
+      "report_start": "2026-01-01T00:00:00Z"
+    },
+    {
+      "cutoff": "2026-01-08T00:00:00Z",
+      "datasets": {
+        "assignment_groups": [
+          {
+            "group_id": "G1",
+            "name": "Fictional Support"
+          }
+        ],
+        "incident_events": [
+          {
+            "actor_id": "U1",
+            "event_id": "E1",
+            "event_time": "2026-01-01T00:01:00Z",
+            "event_type": "response",
+            "incident_id": "I1",
+            "source_sequence": 1
+          },
+          {
+            "actor_id": "U1",
+            "event_id": "E2",
+            "event_time": "2026-01-03T23:59:59Z",
+            "event_type": "resolve",
+            "incident_id": "I1",
+            "source_sequence": 2
+          }
+        ],
+        "incident_snapshots": [
+          {
+            "created_at": "2026-01-01T00:00:00Z",
+            "group_id": "G1",
+            "incident_id": "I1",
+            "priority": "P4",
+            "requester_id": "U1",
+            "service_id": "S1",
+            "source_updated_at": "2026-01-01T00:00:00Z",
+            "source_version": 1,
+            "status": "new"
+          }
+        ],
+        "services": [
+          {
+            "name": "Fictional Service",
+            "service_id": "S1"
+          },
+          {
+            "name": "Another Fictional Service",
+            "service_id": "S2"
+          }
+        ],
+        "sla_targets": [
+          {
+            "priority": "P1",
+            "resolution_minutes": 240,
+            "response_minutes": 15,
+            "rule_version": "v1"
+          },
+          {
+            "priority": "P2",
+            "resolution_minutes": 480,
+            "response_minutes": 60,
+            "rule_version": "v1"
+          },
+          {
+            "priority": "P3",
+            "resolution_minutes": 1440,
+            "response_minutes": 240,
+            "rule_version": "v1"
+          },
+          {
+            "priority": "P4",
+            "resolution_minutes": 4320,
+            "response_minutes": 480,
+            "rule_version": "v1"
+          }
+        ],
+        "users": [
+          {
+            "display_name": "Fictional Agent",
+            "user_id": "U1"
+          }
+        ]
+      },
+      "expected_incident": {
+        "created_at": "2026-01-01T00:00:00Z",
+        "current_priority": "P4",
+        "first_response_at": "2026-01-01T00:01:00Z",
+        "group_id": "G1",
+        "incident_id": "I1",
+        "priority_at_creation": "P4",
+        "quality_flags": [],
+        "requester_id": "U1",
+        "resolution_minutes": 4319.983333,
+        "resolution_sla": "passed",
+        "resolved_at": "2026-01-03T23:59:59Z",
+        "response_minutes": 1,
+        "response_sla": "passed",
+        "service_id": "S1",
+        "state": "resolved"
+      },
+      "name": "resolution-P4-below",
+      "report_start": "2026-01-01T00:00:00Z"
+    },
+    {
+      "cutoff": "2026-01-08T00:00:00Z",
+      "datasets": {
+        "assignment_groups": [
+          {
+            "group_id": "G1",
+            "name": "Fictional Support"
+          }
+        ],
+        "incident_events": [
+          {
+            "actor_id": "U1",
+            "event_id": "E1",
+            "event_time": "2026-01-01T00:01:00Z",
+            "event_type": "response",
+            "incident_id": "I1",
+            "source_sequence": 1
+          },
+          {
+            "actor_id": "U1",
+            "event_id": "E2",
+            "event_time": "2026-01-04T00:00:00Z",
+            "event_type": "resolve",
+            "incident_id": "I1",
+            "source_sequence": 2
+          }
+        ],
+        "incident_snapshots": [
+          {
+            "created_at": "2026-01-01T00:00:00Z",
+            "group_id": "G1",
+            "incident_id": "I1",
+            "priority": "P4",
+            "requester_id": "U1",
+            "service_id": "S1",
+            "source_updated_at": "2026-01-01T00:00:00Z",
+            "source_version": 1,
+            "status": "new"
+          }
+        ],
+        "services": [
+          {
+            "name": "Fictional Service",
+            "service_id": "S1"
+          },
+          {
+            "name": "Another Fictional Service",
+            "service_id": "S2"
+          }
+        ],
+        "sla_targets": [
+          {
+            "priority": "P1",
+            "resolution_minutes": 240,
+            "response_minutes": 15,
+            "rule_version": "v1"
+          },
+          {
+            "priority": "P2",
+            "resolution_minutes": 480,
+            "response_minutes": 60,
+            "rule_version": "v1"
+          },
+          {
+            "priority": "P3",
+            "resolution_minutes": 1440,
+            "response_minutes": 240,
+            "rule_version": "v1"
+          },
+          {
+            "priority": "P4",
+            "resolution_minutes": 4320,
+            "response_minutes": 480,
+            "rule_version": "v1"
+          }
+        ],
+        "users": [
+          {
+            "display_name": "Fictional Agent",
+            "user_id": "U1"
+          }
+        ]
+      },
+      "expected_incident": {
+        "created_at": "2026-01-01T00:00:00Z",
+        "current_priority": "P4",
+        "first_response_at": "2026-01-01T00:01:00Z",
+        "group_id": "G1",
+        "incident_id": "I1",
+        "priority_at_creation": "P4",
+        "quality_flags": [],
+        "requester_id": "U1",
+        "resolution_minutes": 4320.0,
+        "resolution_sla": "passed",
+        "resolved_at": "2026-01-04T00:00:00Z",
+        "response_minutes": 1,
+        "response_sla": "passed",
+        "service_id": "S1",
+        "state": "resolved"
+      },
+      "name": "resolution-P4-equal",
+      "report_start": "2026-01-01T00:00:00Z"
+    },
+    {
+      "cutoff": "2026-01-08T00:00:00Z",
+      "datasets": {
+        "assignment_groups": [
+          {
+            "group_id": "G1",
+            "name": "Fictional Support"
+          }
+        ],
+        "incident_events": [
+          {
+            "actor_id": "U1",
+            "event_id": "E1",
+            "event_time": "2026-01-01T00:01:00Z",
+            "event_type": "response",
+            "incident_id": "I1",
+            "source_sequence": 1
+          },
+          {
+            "actor_id": "U1",
+            "event_id": "E2",
+            "event_time": "2026-01-04T00:00:01Z",
+            "event_type": "resolve",
+            "incident_id": "I1",
+            "source_sequence": 2
+          }
+        ],
+        "incident_snapshots": [
+          {
+            "created_at": "2026-01-01T00:00:00Z",
+            "group_id": "G1",
+            "incident_id": "I1",
+            "priority": "P4",
+            "requester_id": "U1",
+            "service_id": "S1",
+            "source_updated_at": "2026-01-01T00:00:00Z",
+            "source_version": 1,
+            "status": "new"
+          }
+        ],
+        "services": [
+          {
+            "name": "Fictional Service",
+            "service_id": "S1"
+          },
+          {
+            "name": "Another Fictional Service",
+            "service_id": "S2"
+          }
+        ],
+        "sla_targets": [
+          {
+            "priority": "P1",
+            "resolution_minutes": 240,
+            "response_minutes": 15,
+            "rule_version": "v1"
+          },
+          {
+            "priority": "P2",
+            "resolution_minutes": 480,
+            "response_minutes": 60,
+            "rule_version": "v1"
+          },
+          {
+            "priority": "P3",
+            "resolution_minutes": 1440,
+            "response_minutes": 240,
+            "rule_version": "v1"
+          },
+          {
+            "priority": "P4",
+            "resolution_minutes": 4320,
+            "response_minutes": 480,
+            "rule_version": "v1"
+          }
+        ],
+        "users": [
+          {
+            "display_name": "Fictional Agent",
+            "user_id": "U1"
+          }
+        ]
+      },
+      "expected_incident": {
+        "created_at": "2026-01-01T00:00:00Z",
+        "current_priority": "P4",
+        "first_response_at": "2026-01-01T00:01:00Z",
+        "group_id": "G1",
+        "incident_id": "I1",
+        "priority_at_creation": "P4",
+        "quality_flags": [],
+        "requester_id": "U1",
+        "resolution_minutes": 4320.016667,
+        "resolution_sla": "breached",
+        "resolved_at": "2026-01-04T00:00:01Z",
+        "response_minutes": 1,
+        "response_sla": "passed",
+        "service_id": "S1",
+        "state": "resolved"
+      },
+      "name": "resolution-P4-above",
+      "report_start": "2026-01-01T00:00:00Z"
+    },
+    {
+      "cutoff": "2026-01-08T00:00:00Z",
+      "datasets": {
+        "assignment_groups": [
+          {
+            "group_id": "G1",
+            "name": "Fictional Support"
+          }
+        ],
+        "incident_events": [
+          {
+            "actor_id": "U1",
+            "event_id": "E1",
+            "event_time": "2026-01-01T00:10:00Z",
+            "event_type": "response",
+            "incident_id": "I1",
+            "source_sequence": 1
+          },
+          {
+            "actor_id": "U1",
+            "event_id": "E2",
+            "event_time": "2026-01-01T01:00:00Z",
+            "event_type": "resolve",
+            "incident_id": "I1",
+            "source_sequence": 2
+          }
+        ],
+        "incident_snapshots": [
+          {
+            "created_at": "2026-01-01T00:00:00Z",
+            "group_id": "G1",
+            "incident_id": "I1",
+            "priority": "P1",
+            "requester_id": null,
+            "service_id": "S1",
+            "source_updated_at": "2026-01-01T00:00:00Z",
+            "source_version": 1,
+            "status": "new"
+          }
+        ],
+        "services": [
+          {
+            "name": "Fictional Service",
+            "service_id": "S1"
+          },
+          {
+            "name": "Another Fictional Service",
+            "service_id": "S2"
+          }
+        ],
+        "sla_targets": [
+          {
+            "priority": "P1",
+            "resolution_minutes": 240,
+            "response_minutes": 15,
+            "rule_version": "v1"
+          },
+          {
+            "priority": "P2",
+            "resolution_minutes": 480,
+            "response_minutes": 60,
+            "rule_version": "v1"
+          },
+          {
+            "priority": "P3",
+            "resolution_minutes": 1440,
+            "response_minutes": 240,
+            "rule_version": "v1"
+          },
+          {
+            "priority": "P4",
+            "resolution_minutes": 4320,
+            "response_minutes": 480,
+            "rule_version": "v1"
+          }
+        ],
+        "users": [
+          {
+            "display_name": "Fictional Agent",
+            "user_id": "U1"
+          }
+        ]
+      },
+      "expected_incident": {
+        "created_at": "2026-01-01T00:00:00Z",
+        "current_priority": "P1",
+        "first_response_at": "2026-01-01T00:10:00Z",
+        "group_id": "G1",
+        "incident_id": "I1",
+        "priority_at_creation": "P1",
+        "quality_flags": [
+          "unknown_requester"
+        ],
+        "requester_id": "unknown_user",
+        "resolution_minutes": 60,
+        "resolution_sla": "passed",
+        "resolved_at": "2026-01-01T01:00:00Z",
+        "response_minutes": 10,
+        "response_sla": "passed",
+        "service_id": "S1",
+        "state": "resolved"
+      },
+      "name": "optional-missing-requester",
+      "report_start": "2026-01-01T00:00:00Z"
+    },
+    {
+      "cutoff": "2026-01-08T00:00:00Z",
+      "datasets": {
+        "assignment_groups": [
+          {
+            "group_id": "G1",
+            "name": "Fictional Support"
+          }
+        ],
+        "incident_events": [
+          {
+            "actor_id": "MISSING",
+            "event_id": "E1",
+            "event_time": "2026-01-01T00:10:00Z",
+            "event_type": "response",
+            "incident_id": "I1",
+            "source_sequence": 1
+          },
+          {
+            "actor_id": "U1",
+            "event_id": "E2",
+            "event_time": "2026-01-01T01:00:00Z",
+            "event_type": "resolve",
+            "incident_id": "I1",
+            "source_sequence": 2
+          }
+        ],
+        "incident_snapshots": [
+          {
+            "created_at": "2026-01-01T00:00:00Z",
+            "group_id": "G1",
+            "incident_id": "I1",
+            "priority": "P1",
+            "requester_id": "U1",
+            "service_id": "S1",
+            "source_updated_at": "2026-01-01T00:00:00Z",
+            "source_version": 1,
+            "status": "new"
+          }
+        ],
+        "services": [
+          {
+            "name": "Fictional Service",
+            "service_id": "S1"
+          },
+          {
+            "name": "Another Fictional Service",
+            "service_id": "S2"
+          }
+        ],
+        "sla_targets": [
+          {
+            "priority": "P1",
+            "resolution_minutes": 240,
+            "response_minutes": 15,
+            "rule_version": "v1"
+          },
+          {
+            "priority": "P2",
+            "resolution_minutes": 480,
+            "response_minutes": 60,
+            "rule_version": "v1"
+          },
+          {
+            "priority": "P3",
+            "resolution_minutes": 1440,
+            "response_minutes": 240,
+            "rule_version": "v1"
+          },
+          {
+            "priority": "P4",
+            "resolution_minutes": 4320,
+            "response_minutes": 480,
+            "rule_version": "v1"
+          }
+        ],
+        "users": [
+          {
+            "display_name": "Fictional Agent",
+            "user_id": "U1"
+          }
+        ]
+      },
+      "expected_incident": {
+        "created_at": "2026-01-01T00:00:00Z",
+        "current_priority": "P1",
+        "first_response_at": null,
+        "group_id": "G1",
+        "incident_id": "I1",
+        "priority_at_creation": "P1",
+        "quality_flags": [
+          "unknown_actor"
+        ],
+        "requester_id": "U1",
+        "resolution_minutes": 60,
+        "resolution_sla": "passed",
+        "resolved_at": "2026-01-01T01:00:00Z",
+        "response_minutes": null,
+        "response_sla": "breached",
+        "service_id": "S1",
+        "state": "resolved"
+      },
+      "name": "unknown-response-actor",
+      "report_start": "2026-01-01T00:00:00Z"
+    },
+    {
+      "cutoff": "2026-01-08T00:00:00Z",
+      "datasets": {
+        "assignment_groups": [
+          {
+            "group_id": "G1",
+            "name": "Fictional Support"
+          }
+        ],
+        "incident_events": [
+          {
+            "actor_id": "U1",
+            "event_id": "E1",
+            "event_time": "2026-01-01T00:10:00Z",
+            "event_type": "response",
+            "incident_id": "I1",
+            "source_sequence": 1
+          },
+          {
+            "actor_id": "U1",
+            "event_id": "E2",
+            "event_time": "2026-01-01T01:00:00Z",
+            "event_type": "resolve",
+            "incident_id": "I1",
+            "source_sequence": 2
+          },
+          {
+            "actor_id": "U1",
+            "event_id": "E1",
+            "event_time": "2026-01-01T00:10:00Z",
+            "event_type": "response",
+            "incident_id": "I1",
+            "source_sequence": 1
+          },
+          {
+            "actor_id": "U1",
+            "event_id": "E2",
+            "event_time": "2026-01-01T01:00:00Z",
+            "event_type": "resolve",
+            "incident_id": "I1",
+            "source_sequence": 2
+          }
+        ],
+        "incident_snapshots": [
+          {
+            "created_at": "2026-01-01T00:00:00Z",
+            "group_id": "G1",
+            "incident_id": "I1",
+            "priority": "P1",
+            "requester_id": "U1",
+            "service_id": "S1",
+            "source_updated_at": "2026-01-01T00:00:00Z",
+            "source_version": 1,
+            "status": "new"
+          },
+          {
+            "created_at": "2026-01-01T00:00:00Z",
+            "group_id": "G1",
+            "incident_id": "I1",
+            "priority": "P1",
+            "requester_id": "U1",
+            "service_id": "S1",
+            "source_updated_at": "2026-01-01T00:00:00Z",
+            "source_version": 1,
+            "status": "new"
+          }
+        ],
+        "services": [
+          {
+            "name": "Fictional Service",
+            "service_id": "S1"
+          },
+          {
+            "name": "Another Fictional Service",
+            "service_id": "S2"
+          }
+        ],
+        "sla_targets": [
+          {
+            "priority": "P1",
+            "resolution_minutes": 240,
+            "response_minutes": 15,
+            "rule_version": "v1"
+          },
+          {
+            "priority": "P2",
+            "resolution_minutes": 480,
+            "response_minutes": 60,
+            "rule_version": "v1"
+          },
+          {
+            "priority": "P3",
+            "resolution_minutes": 1440,
+            "response_minutes": 240,
+            "rule_version": "v1"
+          },
+          {
+            "priority": "P4",
+            "resolution_minutes": 4320,
+            "response_minutes": 480,
+            "rule_version": "v1"
+          }
+        ],
+        "users": [
+          {
+            "display_name": "Fictional Agent",
+            "user_id": "U1"
+          }
+        ]
+      },
+      "expected_duplicate_count": 3,
+      "expected_incident": {
+        "created_at": "2026-01-01T00:00:00Z",
+        "current_priority": "P1",
+        "first_response_at": "2026-01-01T00:10:00Z",
+        "group_id": "G1",
+        "incident_id": "I1",
+        "priority_at_creation": "P1",
+        "quality_flags": [],
+        "requester_id": "U1",
+        "resolution_minutes": 60,
+        "resolution_sla": "passed",
+        "resolved_at": "2026-01-01T01:00:00Z",
+        "response_minutes": 10,
+        "response_sla": "passed",
+        "service_id": "S1",
+        "state": "resolved"
+      },
+      "name": "identical-deliveries",
+      "report_start": "2026-01-01T00:00:00Z"
+    },
+    {
+      "cutoff": "2026-01-08T00:00:00Z",
+      "datasets": {
+        "assignment_groups": [
+          {
+            "group_id": "G1",
+            "name": "Fictional Support"
+          }
+        ],
+        "incident_events": [
+          {
+            "actor_id": "U1",
+            "event_id": "E1",
+            "event_time": "2026-01-01T00:10:00Z",
+            "event_type": "response",
+            "incident_id": "I1",
+            "source_sequence": 1
+          },
+          {
+            "actor_id": "U1",
+            "event_id": "E2",
+            "event_time": "2026-01-01T01:00:00Z",
+            "event_type": "resolve",
+            "incident_id": "I1",
+            "source_sequence": 2
+          }
+        ],
+        "incident_snapshots": [
+          {
+            "created_at": "2026-01-01T00:00:00Z",
+            "group_id": "G1",
+            "incident_id": "I1",
+            "priority": "P1",
+            "requester_id": "U1",
+            "service_id": "S1",
+            "source_updated_at": "2026-01-01T00:00:00Z",
+            "source_version": 1,
+            "status": "new"
+          },
+          {
+            "created_at": "2026-01-01T00:00:00Z",
+            "group_id": "G1",
+            "incident_id": "I1",
+            "priority": "P2",
+            "requester_id": "U1",
+            "service_id": "S1",
+            "source_updated_at": "2026-01-01T00:00:00Z",
+            "source_version": 1,
+            "status": "new"
+          }
+        ],
+        "services": [
+          {
+            "name": "Fictional Service",
+            "service_id": "S1"
+          },
+          {
+            "name": "Another Fictional Service",
+            "service_id": "S2"
+          }
+        ],
+        "sla_targets": [
+          {
+            "priority": "P1",
+            "resolution_minutes": 240,
+            "response_minutes": 15,
+            "rule_version": "v1"
+          },
+          {
+            "priority": "P2",
+            "resolution_minutes": 480,
+            "response_minutes": 60,
+            "rule_version": "v1"
+          },
+          {
+            "priority": "P3",
+            "resolution_minutes": 1440,
+            "response_minutes": 240,
+            "rule_version": "v1"
+          },
+          {
+            "priority": "P4",
+            "resolution_minutes": 4320,
+            "response_minutes": 480,
+            "rule_version": "v1"
+          }
+        ],
+        "users": [
+          {
+            "display_name": "Fictional Agent",
+            "user_id": "U1"
+          }
+        ]
+      },
+      "expected_quarantine_rule": "BR-002",
+      "name": "conflicting-version",
+      "report_start": "2026-01-01T00:00:00Z"
+    },
+    {
+      "cutoff": "2026-01-08T00:00:00Z",
+      "datasets": {
+        "assignment_groups": [
+          {
+            "group_id": "G1",
+            "name": "Fictional Support"
+          }
+        ],
+        "incident_events": [
+          {
+            "actor_id": "U1",
+            "event_id": "E1",
+            "event_time": "2026-01-01T00:10:00Z",
+            "event_type": "response",
+            "incident_id": "I1",
+            "source_sequence": 1
+          },
+          {
+            "actor_id": "U1",
+            "event_id": "E2",
+            "event_time": "2026-01-01T01:00:00Z",
+            "event_type": "resolve",
+            "incident_id": "I1",
+            "source_sequence": 2
+          },
+          {
+            "actor_id": "U1",
+            "event_id": "E1",
+            "event_time": "2026-01-01T00:10:00Z",
+            "event_type": "comment",
+            "incident_id": "I1",
+            "source_sequence": 1
+          }
+        ],
+        "incident_snapshots": [
+          {
+            "created_at": "2026-01-01T00:00:00Z",
+            "group_id": "G1",
+            "incident_id": "I1",
+            "priority": "P1",
+            "requester_id": "U1",
+            "service_id": "S1",
+            "source_updated_at": "2026-01-01T00:00:00Z",
+            "source_version": 1,
+            "status": "new"
+          }
+        ],
+        "services": [
+          {
+            "name": "Fictional Service",
+            "service_id": "S1"
+          },
+          {
+            "name": "Another Fictional Service",
+            "service_id": "S2"
+          }
+        ],
+        "sla_targets": [
+          {
+            "priority": "P1",
+            "resolution_minutes": 240,
+            "response_minutes": 15,
+            "rule_version": "v1"
+          },
+          {
+            "priority": "P2",
+            "resolution_minutes": 480,
+            "response_minutes": 60,
+            "rule_version": "v1"
+          },
+          {
+            "priority": "P3",
+            "resolution_minutes": 1440,
+            "response_minutes": 240,
+            "rule_version": "v1"
+          },
+          {
+            "priority": "P4",
+            "resolution_minutes": 4320,
+            "response_minutes": 480,
+            "rule_version": "v1"
+          }
+        ],
+        "users": [
+          {
+            "display_name": "Fictional Agent",
+            "user_id": "U1"
+          }
+        ]
+      },
+      "expected_quarantine_rule": "BR-002",
+      "name": "conflicting-event",
+      "report_start": "2026-01-01T00:00:00Z"
+    },
+    {
+      "cutoff": "2026-01-08T00:00:00Z",
+      "datasets": {
+        "assignment_groups": [
+          {
+            "group_id": "G1",
+            "name": "Fictional Support"
+          }
+        ],
+        "incident_events": [
+          {
+            "actor_id": "U1",
+            "event_id": "E1",
+            "event_time": "2026-01-01T00:10:00Z",
+            "event_type": "response",
+            "incident_id": "I1",
+            "source_sequence": 1
+          },
+          {
+            "actor_id": "U1",
+            "event_id": "E2",
+            "event_time": "2026-01-01T01:00:00Z",
+            "event_type": "resolve",
+            "incident_id": "I1",
+            "source_sequence": 2
+          }
+        ],
+        "incident_snapshots": [
+          {
+            "created_at": "2026-01-01T00:00:00Z",
+            "group_id": "G1",
+            "incident_id": "I1",
+            "priority": "P1",
+            "requester_id": "U1",
+            "service_id": "MISSING",
+            "source_updated_at": "2026-01-01T00:00:00Z",
+            "source_version": 1,
+            "status": "new"
+          }
+        ],
+        "services": [
+          {
+            "name": "Fictional Service",
+            "service_id": "S1"
+          },
+          {
+            "name": "Another Fictional Service",
+            "service_id": "S2"
+          }
+        ],
+        "sla_targets": [
+          {
+            "priority": "P1",
+            "resolution_minutes": 240,
+            "response_minutes": 15,
+            "rule_version": "v1"
+          },
+          {
+            "priority": "P2",
+            "resolution_minutes": 480,
+            "response_minutes": 60,
+            "rule_version": "v1"
+          },
+          {
+            "priority": "P3",
+            "resolution_minutes": 1440,
+            "response_minutes": 240,
+            "rule_version": "v1"
+          },
+          {
+            "priority": "P4",
+            "resolution_minutes": 4320,
+            "response_minutes": 480,
+            "rule_version": "v1"
+          }
+        ],
+        "users": [
+          {
+            "display_name": "Fictional Agent",
+            "user_id": "U1"
+          }
+        ]
+      },
+      "expected_quarantine_rule": "BR-003",
+      "name": "required-missing-service",
+      "report_start": "2026-01-01T00:00:00Z"
+    },
+    {
+      "cutoff": "2026-01-08T00:00:00Z",
+      "datasets": {
+        "assignment_groups": [
+          {
+            "group_id": "G1",
+            "name": "Fictional Support"
+          }
+        ],
+        "incident_events": [
+          {
+            "actor_id": "U1",
+            "event_id": "E1",
+            "event_time": "2026-01-01T00:10:00Z",
+            "event_type": "response",
+            "incident_id": "I1",
+            "source_sequence": 1
+          },
+          {
+            "actor_id": "U1",
+            "event_id": "E2",
+            "event_time": "2026-01-01T01:00:00Z",
+            "event_type": "resolve",
+            "incident_id": "I1",
+            "source_sequence": 2
+          }
+        ],
+        "incident_snapshots": [
+          {
+            "created_at": "2026-01-01T00:00:00Z",
+            "group_id": "G1",
+            "incident_id": "I1",
+            "priority": "urgent",
+            "requester_id": "U1",
+            "service_id": "S1",
+            "source_updated_at": "2026-01-01T00:00:00Z",
+            "source_version": 1,
+            "status": "new"
+          }
+        ],
+        "services": [
+          {
+            "name": "Fictional Service",
+            "service_id": "S1"
+          },
+          {
+            "name": "Another Fictional Service",
+            "service_id": "S2"
+          }
+        ],
+        "sla_targets": [
+          {
+            "priority": "P1",
+            "resolution_minutes": 240,
+            "response_minutes": 15,
+            "rule_version": "v1"
+          },
+          {
+            "priority": "P2",
+            "resolution_minutes": 480,
+            "response_minutes": 60,
+            "rule_version": "v1"
+          },
+          {
+            "priority": "P3",
+            "resolution_minutes": 1440,
+            "response_minutes": 240,
+            "rule_version": "v1"
+          },
+          {
+            "priority": "P4",
+            "resolution_minutes": 4320,
+            "response_minutes": 480,
+            "rule_version": "v1"
+          }
+        ],
+        "users": [
+          {
+            "display_name": "Fictional Agent",
+            "user_id": "U1"
+          }
+        ]
+      },
+      "expected_quarantine_rule": "BR-001",
+      "name": "invalid-priority",
+      "report_start": "2026-01-01T00:00:00Z"
+    },
+    {
+      "cutoff": "2026-01-08T00:00:00Z",
+      "datasets": {
+        "assignment_groups": [
+          {
+            "group_id": "G1",
+            "name": "Fictional Support"
+          }
+        ],
+        "incident_events": [
+          {
+            "actor_id": "U1",
+            "event_id": "E1",
+            "event_time": "2026-01-01T00:10:00Z",
+            "event_type": "response",
+            "incident_id": "I1",
+            "source_sequence": 1
+          },
+          {
+            "actor_id": "U1",
+            "event_id": "E2",
+            "event_time": "2026-01-01T01:00:00Z",
+            "event_type": "resolve",
+            "incident_id": "I1",
+            "source_sequence": 2
+          }
+        ],
+        "incident_snapshots": [
+          {
+            "created_at": "2026-01-01T00:00:00",
+            "group_id": "G1",
+            "incident_id": "I1",
+            "priority": "P1",
+            "requester_id": "U1",
+            "service_id": "S1",
+            "source_updated_at": "2026-01-01T00:00:00Z",
+            "source_version": 1,
+            "status": "new"
+          }
+        ],
+        "services": [
+          {
+            "name": "Fictional Service",
+            "service_id": "S1"
+          },
+          {
+            "name": "Another Fictional Service",
+            "service_id": "S2"
+          }
+        ],
+        "sla_targets": [
+          {
+            "priority": "P1",
+            "resolution_minutes": 240,
+            "response_minutes": 15,
+            "rule_version": "v1"
+          },
+          {
+            "priority": "P2",
+            "resolution_minutes": 480,
+            "response_minutes": 60,
+            "rule_version": "v1"
+          },
+          {
+            "priority": "P3",
+            "resolution_minutes": 1440,
+            "response_minutes": 240,
+            "rule_version": "v1"
+          },
+          {
+            "priority": "P4",
+            "resolution_minutes": 4320,
+            "response_minutes": 480,
+            "rule_version": "v1"
+          }
+        ],
+        "users": [
+          {
+            "display_name": "Fictional Agent",
+            "user_id": "U1"
+          }
+        ]
+      },
+      "expected_quarantine_rule": "BR-001",
+      "name": "timestamp-without-offset",
+      "report_start": "2026-01-01T00:00:00Z"
+    },
+    {
+      "cutoff": "2026-01-08T00:00:00Z",
+      "datasets": {
+        "assignment_groups": [
+          {
+            "group_id": "G1",
+            "name": "Fictional Support"
+          }
+        ],
+        "incident_events": [
+          {
+            "actor_id": "U1",
+            "event_id": "E1",
+            "event_time": "2026-01-01T00:10:00Z",
+            "event_type": "response",
+            "incident_id": "I1",
+            "source_sequence": 1
+          },
+          {
+            "actor_id": "U1",
+            "event_id": "E2",
+            "event_time": "2026-01-01T01:00:00Z",
+            "event_type": "resolve",
+            "incident_id": "I1",
+            "source_sequence": 2
+          },
+          {
+            "actor_id": "U1",
+            "event_id": "E3",
+            "event_time": "2026-01-09T00:00:00Z",
+            "event_type": "close",
+            "incident_id": "I1",
+            "source_sequence": 3
+          }
+        ],
+        "incident_snapshots": [
+          {
+            "created_at": "2026-01-01T00:00:00Z",
+            "group_id": "G1",
+            "incident_id": "I1",
+            "priority": "P1",
+            "requester_id": "U1",
+            "service_id": "S1",
+            "source_updated_at": "2026-01-01T00:00:00Z",
+            "source_version": 1,
+            "status": "new"
+          },
+          {
+            "created_at": "2026-01-01T00:00:00Z",
+            "group_id": "G1",
+            "incident_id": "I1",
+            "priority": "P1",
+            "requester_id": "U1",
+            "service_id": "S1",
+            "source_updated_at": "2026-01-09T00:00:00Z",
+            "source_version": 2,
+            "status": "closed"
+          }
+        ],
+        "services": [
+          {
+            "name": "Fictional Service",
+            "service_id": "S1"
+          },
+          {
+            "name": "Another Fictional Service",
+            "service_id": "S2"
+          }
+        ],
+        "sla_targets": [
+          {
+            "priority": "P1",
+            "resolution_minutes": 240,
+            "response_minutes": 15,
+            "rule_version": "v1"
+          },
+          {
+            "priority": "P2",
+            "resolution_minutes": 480,
+            "response_minutes": 60,
+            "rule_version": "v1"
+          },
+          {
+            "priority": "P3",
+            "resolution_minutes": 1440,
+            "response_minutes": 240,
+            "rule_version": "v1"
+          },
+          {
+            "priority": "P4",
+            "resolution_minutes": 4320,
+            "response_minutes": 480,
+            "rule_version": "v1"
+          }
+        ],
+        "users": [
+          {
+            "display_name": "Fictional Agent",
+            "user_id": "U1"
+          }
+        ]
+      },
+      "expected_deferred_count": 2,
+      "expected_incident": {
+        "created_at": "2026-01-01T00:00:00Z",
+        "current_priority": "P1",
+        "first_response_at": "2026-01-01T00:10:00Z",
+        "group_id": "G1",
+        "incident_id": "I1",
+        "priority_at_creation": "P1",
+        "quality_flags": [],
+        "requester_id": "U1",
+        "resolution_minutes": 60,
+        "resolution_sla": "passed",
+        "resolved_at": "2026-01-01T01:00:00Z",
+        "response_minutes": 10,
+        "response_sla": "passed",
+        "service_id": "S1",
+        "state": "resolved"
+      },
+      "name": "future-records-deferred",
+      "report_start": "2026-01-01T00:00:00Z"
+    },
+    {
+      "cutoff": "2026-01-08T00:00:00Z",
+      "datasets": {
+        "assignment_groups": [
+          {
+            "group_id": "G1",
+            "name": "Fictional Support"
+          }
+        ],
+        "incident_events": [
+          {
+            "actor_id": "U1",
+            "event_id": "E1",
+            "event_time": "2026-01-01T00:10:00Z",
+            "event_type": "response",
+            "incident_id": "I1",
+            "source_sequence": 1
+          },
+          {
+            "actor_id": "U1",
+            "event_id": "E2",
+            "event_time": "2026-01-01T01:00:00Z",
+            "event_type": "resolve",
+            "incident_id": "I1",
+            "source_sequence": 2
+          },
+          {
+            "actor_id": "U1",
+            "event_id": "E3",
+            "event_time": "2026-01-01T02:00:00Z",
+            "event_type": "reopen",
+            "incident_id": "I1",
+            "source_sequence": 3
+          }
+        ],
+        "incident_snapshots": [
+          {
+            "created_at": "2026-01-01T00:00:00Z",
+            "group_id": "G1",
+            "incident_id": "I1",
+            "priority": "P1",
+            "requester_id": "U1",
+            "service_id": "S1",
+            "source_updated_at": "2026-01-01T00:00:00Z",
+            "source_version": 1,
+            "status": "new"
+          }
+        ],
+        "services": [
+          {
+            "name": "Fictional Service",
+            "service_id": "S1"
+          },
+          {
+            "name": "Another Fictional Service",
+            "service_id": "S2"
+          }
+        ],
+        "sla_targets": [
+          {
+            "priority": "P1",
+            "resolution_minutes": 240,
+            "response_minutes": 15,
+            "rule_version": "v1"
+          },
+          {
+            "priority": "P2",
+            "resolution_minutes": 480,
+            "response_minutes": 60,
+            "rule_version": "v1"
+          },
+          {
+            "priority": "P3",
+            "resolution_minutes": 1440,
+            "response_minutes": 240,
+            "rule_version": "v1"
+          },
+          {
+            "priority": "P4",
+            "resolution_minutes": 4320,
+            "response_minutes": 480,
+            "rule_version": "v1"
+          }
+        ],
+        "users": [
+          {
+            "display_name": "Fictional Agent",
+            "user_id": "U1"
+          }
+        ]
+      },
+      "expected_incident": {
+        "created_at": "2026-01-01T00:00:00Z",
+        "current_priority": "P1",
+        "first_response_at": "2026-01-01T00:10:00Z",
+        "group_id": "G1",
+        "incident_id": "I1",
+        "priority_at_creation": "P1",
+        "quality_flags": [],
+        "requester_id": "U1",
+        "resolution_minutes": null,
+        "resolution_sla": "breached",
+        "resolved_at": null,
+        "response_minutes": 10,
+        "response_sla": "passed",
+        "service_id": "S1",
+        "state": "in_progress"
+      },
+      "name": "reopened",
+      "report_start": "2026-01-01T00:00:00Z"
+    },
+    {
+      "cutoff": "2026-01-08T00:00:00Z",
+      "datasets": {
+        "assignment_groups": [
+          {
+            "group_id": "G1",
+            "name": "Fictional Support"
+          }
+        ],
+        "incident_events": [
+          {
+            "actor_id": "U1",
+            "event_id": "E1",
+            "event_time": "2026-01-01T00:10:00Z",
+            "event_type": "response",
+            "incident_id": "I1",
+            "source_sequence": 1
+          },
+          {
+            "actor_id": "U1",
+            "event_id": "E2",
+            "event_time": "2026-01-01T01:00:00Z",
+            "event_type": "resolve",
+            "incident_id": "I1",
+            "source_sequence": 2
+          },
+          {
+            "actor_id": "U1",
+            "event_id": "E3",
+            "event_time": "2026-01-01T02:00:00Z",
+            "event_type": "reopen",
+            "incident_id": "I1",
+            "source_sequence": 3
+          },
+          {
+            "actor_id": "U1",
+            "event_id": "E4",
+            "event_time": "2026-01-01T03:00:00Z",
+            "event_type": "resolve",
+            "incident_id": "I1",
+            "source_sequence": 4
+          }
+        ],
+        "incident_snapshots": [
+          {
+            "created_at": "2026-01-01T00:00:00Z",
+            "group_id": "G1",
+            "incident_id": "I1",
+            "priority": "P1",
+            "requester_id": "U1",
+            "service_id": "S1",
+            "source_updated_at": "2026-01-01T00:00:00Z",
+            "source_version": 1,
+            "status": "new"
+          }
+        ],
+        "services": [
+          {
+            "name": "Fictional Service",
+            "service_id": "S1"
+          },
+          {
+            "name": "Another Fictional Service",
+            "service_id": "S2"
+          }
+        ],
+        "sla_targets": [
+          {
+            "priority": "P1",
+            "resolution_minutes": 240,
+            "response_minutes": 15,
+            "rule_version": "v1"
+          },
+          {
+            "priority": "P2",
+            "resolution_minutes": 480,
+            "response_minutes": 60,
+            "rule_version": "v1"
+          },
+          {
+            "priority": "P3",
+            "resolution_minutes": 1440,
+            "response_minutes": 240,
+            "rule_version": "v1"
+          },
+          {
+            "priority": "P4",
+            "resolution_minutes": 4320,
+            "response_minutes": 480,
+            "rule_version": "v1"
+          }
+        ],
+        "users": [
+          {
+            "display_name": "Fictional Agent",
+            "user_id": "U1"
+          }
+        ]
+      },
+      "expected_incident": {
+        "created_at": "2026-01-01T00:00:00Z",
+        "current_priority": "P1",
+        "first_response_at": "2026-01-01T00:10:00Z",
+        "group_id": "G1",
+        "incident_id": "I1",
+        "priority_at_creation": "P1",
+        "quality_flags": [],
+        "requester_id": "U1",
+        "resolution_minutes": 180,
+        "resolution_sla": "passed",
+        "resolved_at": "2026-01-01T03:00:00Z",
+        "response_minutes": 10,
+        "response_sla": "passed",
+        "service_id": "S1",
+        "state": "resolved"
+      },
+      "name": "reopened-then-resolved",
+      "report_start": "2026-01-01T00:00:00Z"
+    },
+    {
+      "cutoff": "2026-01-08T00:00:00Z",
+      "datasets": {
+        "assignment_groups": [
+          {
+            "group_id": "G1",
+            "name": "Fictional Support"
+          }
+        ],
+        "incident_events": [
+          {
+            "actor_id": "U1",
+            "event_id": "E1",
+            "event_time": "2026-01-01T00:10:00Z",
+            "event_type": "response",
+            "incident_id": "I1",
+            "source_sequence": 1
+          },
+          {
+            "actor_id": "U1",
+            "event_id": "E2",
+            "event_time": "2026-01-01T00:20:00Z",
+            "event_type": "hold_start",
+            "incident_id": "I1",
+            "source_sequence": 2
+          },
+          {
+            "actor_id": "U1",
+            "event_id": "E3",
+            "event_time": "2026-01-01T00:30:00Z",
+            "event_type": "hold_end",
+            "incident_id": "I1",
+            "source_sequence": 3
+          },
+          {
+            "actor_id": "U1",
+            "event_id": "E4",
+            "event_time": "2026-01-01T00:40:00Z",
+            "event_type": "hold_start",
+            "incident_id": "I1",
+            "source_sequence": 4
+          },
+          {
+            "actor_id": "U1",
+            "event_id": "E5",
+            "event_time": "2026-01-01T00:50:00Z",
+            "event_type": "hold_end",
+            "incident_id": "I1",
+            "source_sequence": 5
+          },
+          {
+            "actor_id": "U1",
+            "event_id": "E6",
+            "event_time": "2026-01-01T01:30:00Z",
+            "event_type": "resolve",
+            "incident_id": "I1",
+            "source_sequence": 6
+          }
+        ],
+        "incident_snapshots": [
+          {
+            "created_at": "2026-01-01T00:00:00Z",
+            "group_id": "G1",
+            "incident_id": "I1",
+            "priority": "P1",
+            "requester_id": "U1",
+            "service_id": "S1",
+            "source_updated_at": "2026-01-01T00:00:00Z",
+            "source_version": 1,
+            "status": "new"
+          }
+        ],
+        "services": [
+          {
+            "name": "Fictional Service",
+            "service_id": "S1"
+          },
+          {
+            "name": "Another Fictional Service",
+            "service_id": "S2"
+          }
+        ],
+        "sla_targets": [
+          {
+            "priority": "P1",
+            "resolution_minutes": 240,
+            "response_minutes": 15,
+            "rule_version": "v1"
+          },
+          {
+            "priority": "P2",
+            "resolution_minutes": 480,
+            "response_minutes": 60,
+            "rule_version": "v1"
+          },
+          {
+            "priority": "P3",
+            "resolution_minutes": 1440,
+            "response_minutes": 240,
+            "rule_version": "v1"
+          },
+          {
+            "priority": "P4",
+            "resolution_minutes": 4320,
+            "response_minutes": 480,
+            "rule_version": "v1"
+          }
+        ],
+        "users": [
+          {
+            "display_name": "Fictional Agent",
+            "user_id": "U1"
+          }
+        ]
+      },
+      "expected_incident": {
+        "created_at": "2026-01-01T00:00:00Z",
+        "current_priority": "P1",
+        "first_response_at": "2026-01-01T00:10:00Z",
+        "group_id": "G1",
+        "incident_id": "I1",
+        "priority_at_creation": "P1",
+        "quality_flags": [],
+        "requester_id": "U1",
+        "resolution_minutes": 70,
+        "resolution_sla": "passed",
+        "resolved_at": "2026-01-01T01:30:00Z",
+        "response_minutes": 10,
+        "response_sla": "passed",
+        "service_id": "S1",
+        "state": "resolved"
+      },
+      "name": "multiple-holds",
+      "report_start": "2026-01-01T00:00:00Z"
+    },
+    {
+      "cutoff": "2026-01-01T01:00:00Z",
+      "datasets": {
+        "assignment_groups": [
+          {
+            "group_id": "G1",
+            "name": "Fictional Support"
+          }
+        ],
+        "incident_events": [
+          {
+            "actor_id": "U1",
+            "event_id": "E1",
+            "event_time": "2026-01-01T00:10:00Z",
+            "event_type": "response",
+            "incident_id": "I1",
+            "source_sequence": 1
+          },
+          {
+            "actor_id": "U1",
+            "event_id": "E2",
+            "event_time": "2026-01-01T00:20:00Z",
+            "event_type": "hold_start",
+            "incident_id": "I1",
+            "source_sequence": 2
+          }
+        ],
+        "incident_snapshots": [
+          {
+            "created_at": "2026-01-01T00:00:00Z",
+            "group_id": "G1",
+            "incident_id": "I1",
+            "priority": "P1",
+            "requester_id": "U1",
+            "service_id": "S1",
+            "source_updated_at": "2026-01-01T00:00:00Z",
+            "source_version": 1,
+            "status": "new"
+          }
+        ],
+        "services": [
+          {
+            "name": "Fictional Service",
+            "service_id": "S1"
+          },
+          {
+            "name": "Another Fictional Service",
+            "service_id": "S2"
+          }
+        ],
+        "sla_targets": [
+          {
+            "priority": "P1",
+            "resolution_minutes": 240,
+            "response_minutes": 15,
+            "rule_version": "v1"
+          },
+          {
+            "priority": "P2",
+            "resolution_minutes": 480,
+            "response_minutes": 60,
+            "rule_version": "v1"
+          },
+          {
+            "priority": "P3",
+            "resolution_minutes": 1440,
+            "response_minutes": 240,
+            "rule_version": "v1"
+          },
+          {
+            "priority": "P4",
+            "resolution_minutes": 4320,
+            "response_minutes": 480,
+            "rule_version": "v1"
+          }
+        ],
+        "users": [
+          {
+            "display_name": "Fictional Agent",
+            "user_id": "U1"
+          }
+        ]
+      },
+      "expected_incident": {
+        "created_at": "2026-01-01T00:00:00Z",
+        "current_priority": "P1",
+        "first_response_at": "2026-01-01T00:10:00Z",
+        "group_id": "G1",
+        "incident_id": "I1",
+        "priority_at_creation": "P1",
+        "quality_flags": [],
+        "requester_id": "U1",
+        "resolution_minutes": null,
+        "resolution_sla": "pending",
+        "resolved_at": null,
+        "response_minutes": 10,
+        "response_sla": "passed",
+        "service_id": "S1",
+        "state": "on_hold"
+      },
+      "name": "open-hold",
+      "report_start": "2026-01-01T00:00:00Z"
+    },
+    {
+      "cutoff": "2026-01-08T00:00:00Z",
+      "datasets": {
+        "assignment_groups": [
+          {
+            "group_id": "G1",
+            "name": "Fictional Support"
+          }
+        ],
+        "incident_events": [
+          {
+            "actor_id": "U1",
+            "event_id": "E1",
+            "event_time": "2026-01-01T00:10:00Z",
+            "event_type": "response",
+            "incident_id": "I1",
+            "source_sequence": 1
+          },
+          {
+            "actor_id": "U1",
+            "event_id": "E2",
+            "event_time": "2026-01-01T00:20:00Z",
+            "event_type": "hold_start",
+            "incident_id": "I1",
+            "source_sequence": 2
+          },
+          {
+            "actor_id": "U1",
+            "event_id": "E3",
+            "event_time": "2026-01-01T00:30:00Z",
+            "event_type": "hold_start",
+            "incident_id": "I1",
+            "source_sequence": 3
+          }
+        ],
+        "incident_snapshots": [
+          {
+            "created_at": "2026-01-01T00:00:00Z",
+            "group_id": "G1",
+            "incident_id": "I1",
+            "priority": "P1",
+            "requester_id": "U1",
+            "service_id": "S1",
+            "source_updated_at": "2026-01-01T00:00:00Z",
+            "source_version": 1,
+            "status": "new"
+          }
+        ],
+        "services": [
+          {
+            "name": "Fictional Service",
+            "service_id": "S1"
+          },
+          {
+            "name": "Another Fictional Service",
+            "service_id": "S2"
+          }
+        ],
+        "sla_targets": [
+          {
+            "priority": "P1",
+            "resolution_minutes": 240,
+            "response_minutes": 15,
+            "rule_version": "v1"
+          },
+          {
+            "priority": "P2",
+            "resolution_minutes": 480,
+            "response_minutes": 60,
+            "rule_version": "v1"
+          },
+          {
+            "priority": "P3",
+            "resolution_minutes": 1440,
+            "response_minutes": 240,
+            "rule_version": "v1"
+          },
+          {
+            "priority": "P4",
+            "resolution_minutes": 4320,
+            "response_minutes": 480,
+            "rule_version": "v1"
+          }
+        ],
+        "users": [
+          {
+            "display_name": "Fictional Agent",
+            "user_id": "U1"
+          }
+        ]
+      },
+      "expected_quarantine_rule": "BR-005",
+      "name": "overlapping-holds",
+      "report_start": "2026-01-01T00:00:00Z"
+    },
+    {
+      "cutoff": "2026-01-08T00:00:00Z",
+      "datasets": {
+        "assignment_groups": [
+          {
+            "group_id": "G1",
+            "name": "Fictional Support"
+          }
+        ],
+        "incident_events": [
+          {
+            "actor_id": "U1",
+            "event_id": "E1",
+            "event_time": "2026-01-01T00:10:00Z",
+            "event_type": "response",
+            "incident_id": "I1",
+            "source_sequence": 1
+          },
+          {
+            "actor_id": "U1",
+            "event_id": "E2",
+            "event_time": "2026-01-01T00:20:00Z",
+            "event_type": "hold_end",
+            "incident_id": "I1",
+            "source_sequence": 2
+          }
+        ],
+        "incident_snapshots": [
+          {
+            "created_at": "2026-01-01T00:00:00Z",
+            "group_id": "G1",
+            "incident_id": "I1",
+            "priority": "P1",
+            "requester_id": "U1",
+            "service_id": "S1",
+            "source_updated_at": "2026-01-01T00:00:00Z",
+            "source_version": 1,
+            "status": "new"
+          }
+        ],
+        "services": [
+          {
+            "name": "Fictional Service",
+            "service_id": "S1"
+          },
+          {
+            "name": "Another Fictional Service",
+            "service_id": "S2"
+          }
+        ],
+        "sla_targets": [
+          {
+            "priority": "P1",
+            "resolution_minutes": 240,
+            "response_minutes": 15,
+            "rule_version": "v1"
+          },
+          {
+            "priority": "P2",
+            "resolution_minutes": 480,
+            "response_minutes": 60,
+            "rule_version": "v1"
+          },
+          {
+            "priority": "P3",
+            "resolution_minutes": 1440,
+            "response_minutes": 240,
+            "rule_version": "v1"
+          },
+          {
+            "priority": "P4",
+            "resolution_minutes": 4320,
+            "response_minutes": 480,
+            "rule_version": "v1"
+          }
+        ],
+        "users": [
+          {
+            "display_name": "Fictional Agent",
+            "user_id": "U1"
+          }
+        ]
+      },
+      "expected_quarantine_rule": "BR-005",
+      "name": "unmatched-hold-end",
+      "report_start": "2026-01-01T00:00:00Z"
+    },
+    {
+      "cutoff": "2026-01-08T00:00:00Z",
+      "datasets": {
+        "assignment_groups": [
+          {
+            "group_id": "G1",
+            "name": "Fictional Support"
+          }
+        ],
+        "incident_events": [
+          {
+            "actor_id": "U1",
+            "event_id": "E1",
+            "event_time": "2026-01-01T00:10:00Z",
+            "event_type": "close",
+            "incident_id": "I1",
+            "source_sequence": 1
+          }
+        ],
+        "incident_snapshots": [
+          {
+            "created_at": "2026-01-01T00:00:00Z",
+            "group_id": "G1",
+            "incident_id": "I1",
+            "priority": "P1",
+            "requester_id": "U1",
+            "service_id": "S1",
+            "source_updated_at": "2026-01-01T00:00:00Z",
+            "source_version": 1,
+            "status": "new"
+          }
+        ],
+        "services": [
+          {
+            "name": "Fictional Service",
+            "service_id": "S1"
+          },
+          {
+            "name": "Another Fictional Service",
+            "service_id": "S2"
+          }
+        ],
+        "sla_targets": [
+          {
+            "priority": "P1",
+            "resolution_minutes": 240,
+            "response_minutes": 15,
+            "rule_version": "v1"
+          },
+          {
+            "priority": "P2",
+            "resolution_minutes": 480,
+            "response_minutes": 60,
+            "rule_version": "v1"
+          },
+          {
+            "priority": "P3",
+            "resolution_minutes": 1440,
+            "response_minutes": 240,
+            "rule_version": "v1"
+          },
+          {
+            "priority": "P4",
+            "resolution_minutes": 4320,
+            "response_minutes": 480,
+            "rule_version": "v1"
+          }
+        ],
+        "users": [
+          {
+            "display_name": "Fictional Agent",
+            "user_id": "U1"
+          }
+        ]
+      },
+      "expected_quarantine_rule": "BR-004",
+      "name": "impossible-close",
+      "report_start": "2026-01-01T00:00:00Z"
+    },
+    {
+      "cutoff": "2026-01-08T00:00:00Z",
+      "datasets": {
+        "assignment_groups": [
+          {
+            "group_id": "G1",
+            "name": "Fictional Support"
+          }
+        ],
+        "incident_events": [
+          {
+            "actor_id": "U1",
+            "event_id": "E1",
+            "event_time": "2025-12-31T23:59:00Z",
+            "event_type": "response",
+            "incident_id": "I1",
+            "source_sequence": 1
+          },
+          {
+            "actor_id": "U1",
+            "event_id": "E2",
+            "event_time": "2026-01-01T01:00:00Z",
+            "event_type": "resolve",
+            "incident_id": "I1",
+            "source_sequence": 2
+          }
+        ],
+        "incident_snapshots": [
+          {
+            "created_at": "2026-01-01T00:00:00Z",
+            "group_id": "G1",
+            "incident_id": "I1",
+            "priority": "P1",
+            "requester_id": "U1",
+            "service_id": "S1",
+            "source_updated_at": "2026-01-01T00:00:00Z",
+            "source_version": 1,
+            "status": "new"
+          }
+        ],
+        "services": [
+          {
+            "name": "Fictional Service",
+            "service_id": "S1"
+          },
+          {
+            "name": "Another Fictional Service",
+            "service_id": "S2"
+          }
+        ],
+        "sla_targets": [
+          {
+            "priority": "P1",
+            "resolution_minutes": 240,
+            "response_minutes": 15,
+            "rule_version": "v1"
+          },
+          {
+            "priority": "P2",
+            "resolution_minutes": 480,
+            "response_minutes": 60,
+            "rule_version": "v1"
+          },
+          {
+            "priority": "P3",
+            "resolution_minutes": 1440,
+            "response_minutes": 240,
+            "rule_version": "v1"
+          },
+          {
+            "priority": "P4",
+            "resolution_minutes": 4320,
+            "response_minutes": 480,
+            "rule_version": "v1"
+          }
+        ],
+        "users": [
+          {
+            "display_name": "Fictional Agent",
+            "user_id": "U1"
+          }
+        ]
+      },
+      "expected_quarantine_rule": "BR-004",
+      "name": "event-before-creation",
+      "report_start": "2026-01-01T00:00:00Z"
+    },
+    {
+      "cutoff": "2026-01-08T00:00:00Z",
+      "datasets": {
+        "assignment_groups": [
+          {
+            "group_id": "G1",
+            "name": "Fictional Support"
+          }
+        ],
+        "incident_events": [
+          {
+            "actor_id": "U1",
+            "event_id": "E1",
+            "event_time": "2026-01-01T00:10:00Z",
+            "event_type": "response",
+            "incident_id": "I1",
+            "source_sequence": 1
+          },
+          {
+            "actor_id": "U1",
+            "event_id": "E2",
+            "event_time": "2026-01-01T00:10:00Z",
+            "event_type": "resolve",
+            "incident_id": "I1",
+            "source_sequence": 1
+          }
+        ],
+        "incident_snapshots": [
+          {
+            "created_at": "2026-01-01T00:00:00Z",
+            "group_id": "G1",
+            "incident_id": "I1",
+            "priority": "P1",
+            "requester_id": "U1",
+            "service_id": "S1",
+            "source_updated_at": "2026-01-01T00:00:00Z",
+            "source_version": 1,
+            "status": "new"
+          }
+        ],
+        "services": [
+          {
+            "name": "Fictional Service",
+            "service_id": "S1"
+          },
+          {
+            "name": "Another Fictional Service",
+            "service_id": "S2"
+          }
+        ],
+        "sla_targets": [
+          {
+            "priority": "P1",
+            "resolution_minutes": 240,
+            "response_minutes": 15,
+            "rule_version": "v1"
+          },
+          {
+            "priority": "P2",
+            "resolution_minutes": 480,
+            "response_minutes": 60,
+            "rule_version": "v1"
+          },
+          {
+            "priority": "P3",
+            "resolution_minutes": 1440,
+            "response_minutes": 240,
+            "rule_version": "v1"
+          },
+          {
+            "priority": "P4",
+            "resolution_minutes": 4320,
+            "response_minutes": 480,
+            "rule_version": "v1"
+          }
+        ],
+        "users": [
+          {
+            "display_name": "Fictional Agent",
+            "user_id": "U1"
+          }
+        ]
+      },
+      "expected_quarantine_rule": "BR-004",
+      "name": "ambiguous-event-order",
+      "report_start": "2026-01-01T00:00:00Z"
+    },
+    {
+      "cutoff": "2026-01-08T00:00:00Z",
+      "datasets": {
+        "assignment_groups": [
+          {
+            "group_id": "G1",
+            "name": "Fictional Support"
+          }
+        ],
+        "incident_events": [
+          {
+            "actor_id": "U1",
+            "event_id": "E2",
+            "event_time": "2026-01-01T01:00:00Z",
+            "event_type": "resolve",
+            "incident_id": "I1",
+            "source_sequence": 2
+          },
+          {
+            "actor_id": "U1",
+            "event_id": "E1",
+            "event_time": "2026-01-01T00:10:00Z",
+            "event_type": "response",
+            "incident_id": "I1",
+            "source_sequence": 1
+          }
+        ],
+        "incident_snapshots": [
+          {
+            "created_at": "2026-01-01T00:00:00Z",
+            "group_id": "G1",
+            "incident_id": "I1",
+            "priority": "P1",
+            "requester_id": "U1",
+            "service_id": "S1",
+            "source_updated_at": "2026-01-01T00:00:00Z",
+            "source_version": 1,
+            "status": "new"
+          }
+        ],
+        "services": [
+          {
+            "name": "Fictional Service",
+            "service_id": "S1"
+          },
+          {
+            "name": "Another Fictional Service",
+            "service_id": "S2"
+          }
+        ],
+        "sla_targets": [
+          {
+            "priority": "P1",
+            "resolution_minutes": 240,
+            "response_minutes": 15,
+            "rule_version": "v1"
+          },
+          {
+            "priority": "P2",
+            "resolution_minutes": 480,
+            "response_minutes": 60,
+            "rule_version": "v1"
+          },
+          {
+            "priority": "P3",
+            "resolution_minutes": 1440,
+            "response_minutes": 240,
+            "rule_version": "v1"
+          },
+          {
+            "priority": "P4",
+            "resolution_minutes": 4320,
+            "response_minutes": 480,
+            "rule_version": "v1"
+          }
+        ],
+        "users": [
+          {
+            "display_name": "Fictional Agent",
+            "user_id": "U1"
+          }
+        ]
+      },
+      "expected_incident": {
+        "created_at": "2026-01-01T00:00:00Z",
+        "current_priority": "P1",
+        "first_response_at": "2026-01-01T00:10:00Z",
+        "group_id": "G1",
+        "incident_id": "I1",
+        "priority_at_creation": "P1",
+        "quality_flags": [],
+        "requester_id": "U1",
+        "resolution_minutes": 60,
+        "resolution_sla": "passed",
+        "resolved_at": "2026-01-01T01:00:00Z",
+        "response_minutes": 10,
+        "response_sla": "passed",
+        "service_id": "S1",
+        "state": "resolved"
+      },
+      "name": "out-of-order-delivery",
+      "report_start": "2026-01-01T00:00:00Z"
+    },
+    {
+      "cutoff": "2026-01-01T00:15:00Z",
+      "datasets": {
+        "assignment_groups": [
+          {
+            "group_id": "G1",
+            "name": "Fictional Support"
+          }
+        ],
+        "incident_events": [],
+        "incident_snapshots": [
+          {
+            "created_at": "2026-01-01T00:00:00Z",
+            "group_id": "G1",
+            "incident_id": "I1",
+            "priority": "P1",
+            "requester_id": "U1",
+            "service_id": "S1",
+            "source_updated_at": "2026-01-01T00:00:00Z",
+            "source_version": 1,
+            "status": "new"
+          }
+        ],
+        "services": [
+          {
+            "name": "Fictional Service",
+            "service_id": "S1"
+          },
+          {
+            "name": "Another Fictional Service",
+            "service_id": "S2"
+          }
+        ],
+        "sla_targets": [
+          {
+            "priority": "P1",
+            "resolution_minutes": 240,
+            "response_minutes": 15,
+            "rule_version": "v1"
+          },
+          {
+            "priority": "P2",
+            "resolution_minutes": 480,
+            "response_minutes": 60,
+            "rule_version": "v1"
+          },
+          {
+            "priority": "P3",
+            "resolution_minutes": 1440,
+            "response_minutes": 240,
+            "rule_version": "v1"
+          },
+          {
+            "priority": "P4",
+            "resolution_minutes": 4320,
+            "response_minutes": 480,
+            "rule_version": "v1"
+          }
+        ],
+        "users": [
+          {
+            "display_name": "Fictional Agent",
+            "user_id": "U1"
+          }
+        ]
+      },
+      "expected_incident": {
+        "created_at": "2026-01-01T00:00:00Z",
+        "current_priority": "P1",
+        "first_response_at": null,
+        "group_id": "G1",
+        "incident_id": "I1",
+        "priority_at_creation": "P1",
+        "quality_flags": [],
+        "requester_id": "U1",
+        "resolution_minutes": null,
+        "resolution_sla": "pending",
+        "resolved_at": null,
+        "response_minutes": null,
+        "response_sla": "pending",
+        "service_id": "S1",
+        "state": "new"
+      },
+      "name": "open-exact-response-limit",
+      "report_start": "2026-01-01T00:00:00Z"
+    },
+    {
+      "cutoff": "2026-01-01T00:16:00Z",
+      "datasets": {
+        "assignment_groups": [
+          {
+            "group_id": "G1",
+            "name": "Fictional Support"
+          }
+        ],
+        "incident_events": [],
+        "incident_snapshots": [
+          {
+            "created_at": "2026-01-01T00:00:00Z",
+            "group_id": "G1",
+            "incident_id": "I1",
+            "priority": "P1",
+            "requester_id": "U1",
+            "service_id": "S1",
+            "source_updated_at": "2026-01-01T00:00:00Z",
+            "source_version": 1,
+            "status": "new"
+          }
+        ],
+        "services": [
+          {
+            "name": "Fictional Service",
+            "service_id": "S1"
+          },
+          {
+            "name": "Another Fictional Service",
+            "service_id": "S2"
+          }
+        ],
+        "sla_targets": [
+          {
+            "priority": "P1",
+            "resolution_minutes": 240,
+            "response_minutes": 15,
+            "rule_version": "v1"
+          },
+          {
+            "priority": "P2",
+            "resolution_minutes": 480,
+            "response_minutes": 60,
+            "rule_version": "v1"
+          },
+          {
+            "priority": "P3",
+            "resolution_minutes": 1440,
+            "response_minutes": 240,
+            "rule_version": "v1"
+          },
+          {
+            "priority": "P4",
+            "resolution_minutes": 4320,
+            "response_minutes": 480,
+            "rule_version": "v1"
+          }
+        ],
+        "users": [
+          {
+            "display_name": "Fictional Agent",
+            "user_id": "U1"
+          }
+        ]
+      },
+      "expected_incident": {
+        "created_at": "2026-01-01T00:00:00Z",
+        "current_priority": "P1",
+        "first_response_at": null,
+        "group_id": "G1",
+        "incident_id": "I1",
+        "priority_at_creation": "P1",
+        "quality_flags": [],
+        "requester_id": "U1",
+        "resolution_minutes": null,
+        "resolution_sla": "pending",
+        "resolved_at": null,
+        "response_minutes": null,
+        "response_sla": "breached",
+        "service_id": "S1",
+        "state": "new"
+      },
+      "name": "open-over-response-limit",
+      "report_start": "2026-01-01T00:00:00Z"
+    },
+    {
+      "cutoff": "2026-01-08T00:00:00Z",
+      "datasets": {
+        "assignment_groups": [
+          {
+            "group_id": "G1",
+            "name": "Fictional Support"
+          }
+        ],
+        "incident_events": [
+          {
+            "actor_id": "U1",
+            "event_id": "E1",
+            "event_time": "2026-01-01T01:00:00Z",
+            "event_type": "resolve",
+            "incident_id": "I1",
+            "source_sequence": 1
+          }
+        ],
+        "incident_snapshots": [
+          {
+            "created_at": "2026-01-01T00:00:00Z",
+            "group_id": "G1",
+            "incident_id": "I1",
+            "priority": "P1",
+            "requester_id": "U1",
+            "service_id": "S1",
+            "source_updated_at": "2026-01-01T00:00:00Z",
+            "source_version": 1,
+            "status": "new"
+          }
+        ],
+        "services": [
+          {
+            "name": "Fictional Service",
+            "service_id": "S1"
+          },
+          {
+            "name": "Another Fictional Service",
+            "service_id": "S2"
+          }
+        ],
+        "sla_targets": [
+          {
+            "priority": "P1",
+            "resolution_minutes": 240,
+            "response_minutes": 15,
+            "rule_version": "v1"
+          },
+          {
+            "priority": "P2",
+            "resolution_minutes": 480,
+            "response_minutes": 60,
+            "rule_version": "v1"
+          },
+          {
+            "priority": "P3",
+            "resolution_minutes": 1440,
+            "response_minutes": 240,
+            "rule_version": "v1"
+          },
+          {
+            "priority": "P4",
+            "resolution_minutes": 4320,
+            "response_minutes": 480,
+            "rule_version": "v1"
+          }
+        ],
+        "users": [
+          {
+            "display_name": "Fictional Agent",
+            "user_id": "U1"
+          }
+        ]
+      },
+      "expected_incident": {
+        "created_at": "2026-01-01T00:00:00Z",
+        "current_priority": "P1",
+        "first_response_at": null,
+        "group_id": "G1",
+        "incident_id": "I1",
+        "priority_at_creation": "P1",
+        "quality_flags": [],
+        "requester_id": "U1",
+        "resolution_minutes": 60,
+        "resolution_sla": "passed",
+        "resolved_at": "2026-01-01T01:00:00Z",
+        "response_minutes": null,
+        "response_sla": "breached",
+        "service_id": "S1",
+        "state": "resolved"
+      },
+      "name": "missing-response",
+      "report_start": "2026-01-01T00:00:00Z"
+    },
+    {
+      "cutoff": "2026-01-08T00:00:00Z",
+      "datasets": {
+        "assignment_groups": [
+          {
+            "group_id": "G1",
+            "name": "Fictional Support"
+          }
+        ],
+        "incident_events": [
+          {
+            "actor_id": "U1",
+            "event_id": "E1",
+            "event_time": "2026-01-01T00:10:00Z",
+            "event_type": "response",
+            "incident_id": "I1",
+            "source_sequence": 1
+          },
+          {
+            "actor_id": "U1",
+            "event_id": "E2",
+            "event_time": "2026-01-01T01:00:00Z",
+            "event_type": "resolve",
+            "incident_id": "I1",
+            "source_sequence": 2
+          }
+        ],
+        "incident_snapshots": [
+          {
+            "created_at": "2026-01-01T00:00:00Z",
+            "group_id": "G1",
+            "incident_id": "I1",
+            "priority": "P1",
+            "requester_id": "U1",
+            "service_id": "S1",
+            "source_updated_at": "2026-01-01T00:00:00Z",
+            "source_version": 1,
+            "status": "new"
+          },
+          {
+            "created_at": "2026-01-01T00:00:00Z",
+            "group_id": "G1",
+            "incident_id": "I1",
+            "priority": "P2",
+            "requester_id": "U1",
+            "service_id": "S1",
+            "source_updated_at": "2026-01-01T01:00:00Z",
+            "source_version": 2,
+            "status": "resolved"
+          }
+        ],
+        "services": [
+          {
+            "name": "Fictional Service",
+            "service_id": "S1"
+          },
+          {
+            "name": "Another Fictional Service",
+            "service_id": "S2"
+          }
+        ],
+        "sla_targets": [
+          {
+            "priority": "P1",
+            "resolution_minutes": 240,
+            "response_minutes": 15,
+            "rule_version": "v1"
+          },
+          {
+            "priority": "P2",
+            "resolution_minutes": 480,
+            "response_minutes": 60,
+            "rule_version": "v1"
+          },
+          {
+            "priority": "P3",
+            "resolution_minutes": 1440,
+            "response_minutes": 240,
+            "rule_version": "v1"
+          },
+          {
+            "priority": "P4",
+            "resolution_minutes": 4320,
+            "response_minutes": 480,
+            "rule_version": "v1"
+          }
+        ],
+        "users": [
+          {
+            "display_name": "Fictional Agent",
+            "user_id": "U1"
+          }
+        ]
+      },
+      "expected_incident": {
+        "created_at": "2026-01-01T00:00:00Z",
+        "current_priority": "P2",
+        "first_response_at": "2026-01-01T00:10:00Z",
+        "group_id": "G1",
+        "incident_id": "I1",
+        "priority_at_creation": "P1",
+        "quality_flags": [],
+        "requester_id": "U1",
+        "resolution_minutes": 60,
+        "resolution_sla": "passed",
+        "resolved_at": "2026-01-01T01:00:00Z",
+        "response_minutes": 10,
+        "response_sla": "passed",
+        "service_id": "S1",
+        "state": "resolved"
+      },
+      "name": "creation-priority-preserved",
+      "report_start": "2026-01-01T00:00:00Z"
+    },
+    {
+      "cutoff": "2026-01-08T00:00:00Z",
+      "datasets": {
+        "assignment_groups": [
+          {
+            "group_id": "G1",
+            "name": "Fictional Support"
+          }
+        ],
+        "incident_events": [
+          {
+            "actor_id": "U1",
+            "event_id": "E1",
+            "event_time": "2026-01-01T00:10:00Z",
+            "event_type": "response",
+            "incident_id": "I1",
+            "source_sequence": 1
+          },
+          {
+            "actor_id": "U1",
+            "event_id": "E2",
+            "event_time": "2026-01-01T01:00:00Z",
+            "event_type": "resolve",
+            "incident_id": "I1",
+            "source_sequence": 2
+          }
+        ],
+        "incident_snapshots": [
+          {
+            "created_at": "2026-01-01T00:00:00Z",
+            "group_id": "G1",
+            "incident_id": "I1",
+            "priority": "P1",
+            "requester_id": "U1",
+            "service_id": "S1",
+            "source_updated_at": "2026-01-01T00:00:00Z",
+            "source_version": 1,
+            "status": "new"
+          },
+          {
+            "created_at": "2026-01-01T00:00:00Z",
+            "group_id": "G1",
+            "incident_id": "I1",
+            "priority": "P3",
+            "requester_id": "U1",
+            "service_id": "S2",
+            "source_updated_at": "2026-01-01T01:30:00Z",
+            "source_version": 2,
+            "status": "resolved"
+          }
+        ],
+        "services": [
+          {
+            "name": "Fictional Service",
+            "service_id": "S1"
+          },
+          {
+            "name": "Another Fictional Service",
+            "service_id": "S2"
+          }
+        ],
+        "sla_targets": [
+          {
+            "priority": "P1",
+            "resolution_minutes": 240,
+            "response_minutes": 15,
+            "rule_version": "v1"
+          },
+          {
+            "priority": "P2",
+            "resolution_minutes": 480,
+            "response_minutes": 60,
+            "rule_version": "v1"
+          },
+          {
+            "priority": "P3",
+            "resolution_minutes": 1440,
+            "response_minutes": 240,
+            "rule_version": "v1"
+          },
+          {
+            "priority": "P4",
+            "resolution_minutes": 4320,
+            "response_minutes": 480,
+            "rule_version": "v1"
+          }
+        ],
+        "users": [
+          {
+            "display_name": "Fictional Agent",
+            "user_id": "U1"
+          }
+        ]
+      },
+      "expected_incident": {
+        "created_at": "2026-01-01T00:00:00Z",
+        "current_priority": "P3",
+        "first_response_at": "2026-01-01T00:10:00Z",
+        "group_id": "G1",
+        "incident_id": "I1",
+        "priority_at_creation": "P1",
+        "quality_flags": [],
+        "requester_id": "U1",
+        "resolution_minutes": 60,
+        "resolution_sla": "passed",
+        "resolved_at": "2026-01-01T01:00:00Z",
+        "response_minutes": 10,
+        "response_sla": "passed",
+        "service_id": "S2",
+        "state": "resolved"
+      },
+      "name": "late-dimension-correction",
+      "report_start": "2026-01-01T00:00:00Z"
+    },
+    {
+      "cutoff": "2026-01-08T00:00:00Z",
+      "datasets": {
+        "assignment_groups": [
+          {
+            "group_id": "G1",
+            "name": "Fictional Support"
+          }
+        ],
+        "incident_events": [
+          {
+            "actor_id": "U1",
+            "event_id": "E1",
+            "event_time": "2026-01-01T00:10:00Z",
+            "event_type": "response",
+            "incident_id": "I1",
+            "source_sequence": 1
+          },
+          {
+            "actor_id": "U1",
+            "event_id": "E2",
+            "event_time": "2026-01-01T01:00:00Z",
+            "event_type": "resolve",
+            "incident_id": "I1",
+            "source_sequence": 2
+          }
+        ],
+        "incident_snapshots": [
+          {
+            "created_at": "2026-01-01T02:00:00+02:00",
+            "group_id": "G1",
+            "incident_id": " I1 ",
+            "priority": " 1 ",
+            "requester_id": "U1",
+            "service_id": "S1",
+            "source_updated_at": "2026-01-01T02:00:00+02:00",
+            "source_version": 1,
+            "status": " New "
+          }
+        ],
+        "services": [
+          {
+            "name": "Fictional Service",
+            "service_id": "S1"
+          },
+          {
+            "name": "Another Fictional Service",
+            "service_id": "S2"
+          }
+        ],
+        "sla_targets": [
+          {
+            "priority": "P1",
+            "resolution_minutes": 240,
+            "response_minutes": 15,
+            "rule_version": "v1"
+          },
+          {
+            "priority": "P2",
+            "resolution_minutes": 480,
+            "response_minutes": 60,
+            "rule_version": "v1"
+          },
+          {
+            "priority": "P3",
+            "resolution_minutes": 1440,
+            "response_minutes": 240,
+            "rule_version": "v1"
+          },
+          {
+            "priority": "P4",
+            "resolution_minutes": 4320,
+            "response_minutes": 480,
+            "rule_version": "v1"
+          }
+        ],
+        "users": [
+          {
+            "display_name": "Fictional Agent",
+            "user_id": "U1"
+          }
+        ]
+      },
+      "expected_incident": {
+        "created_at": "2026-01-01T00:00:00Z",
+        "current_priority": "P1",
+        "first_response_at": "2026-01-01T00:10:00Z",
+        "group_id": "G1",
+        "incident_id": "I1",
+        "priority_at_creation": "P1",
+        "quality_flags": [],
+        "requester_id": "U1",
+        "resolution_minutes": 60,
+        "resolution_sla": "passed",
+        "resolved_at": "2026-01-01T01:00:00Z",
+        "response_minutes": 10,
+        "response_sla": "passed",
+        "service_id": "S1",
+        "state": "resolved"
+      },
+      "name": "whitespace-and-timezone",
+      "report_start": "2026-01-01T00:00:00Z"
+    },
+    {
+      "cutoff": "2026-01-03T00:00:00Z",
+      "datasets": {
+        "assignment_groups": [
+          {
+            "group_id": "G1",
+            "name": "Fictional Support"
+          }
+        ],
+        "incident_events": [
+          {
+            "actor_id": "U1",
+            "event_id": "E1",
+            "event_time": "2026-01-01T23:40:00Z",
+            "event_type": "response",
+            "incident_id": "I1",
+            "source_sequence": 1
+          },
+          {
+            "actor_id": "U1",
+            "event_id": "E2",
+            "event_time": "2026-01-02T00:30:00Z",
+            "event_type": "resolve",
+            "incident_id": "I1",
+            "source_sequence": 2
+          }
+        ],
+        "incident_snapshots": [
+          {
+            "created_at": "2026-01-01T23:30:00Z",
+            "group_id": "G1",
+            "incident_id": "I1",
+            "priority": "P1",
+            "requester_id": "U1",
+            "service_id": "S1",
+            "source_updated_at": "2026-01-01T23:30:00Z",
+            "source_version": 1,
+            "status": "new"
+          }
+        ],
+        "services": [
+          {
+            "name": "Fictional Service",
+            "service_id": "S1"
+          },
+          {
+            "name": "Another Fictional Service",
+            "service_id": "S2"
+          }
+        ],
+        "sla_targets": [
+          {
+            "priority": "P1",
+            "resolution_minutes": 240,
+            "response_minutes": 15,
+            "rule_version": "v1"
+          },
+          {
+            "priority": "P2",
+            "resolution_minutes": 480,
+            "response_minutes": 60,
+            "rule_version": "v1"
+          },
+          {
+            "priority": "P3",
+            "resolution_minutes": 1440,
+            "response_minutes": 240,
+            "rule_version": "v1"
+          },
+          {
+            "priority": "P4",
+            "resolution_minutes": 4320,
+            "response_minutes": 480,
+            "rule_version": "v1"
+          }
+        ],
+        "users": [
+          {
+            "display_name": "Fictional Agent",
+            "user_id": "U1"
+          }
+        ]
+      },
+      "expected_daily": [
+        {
+          "avg_resolution_minutes": null,
+          "backlog_count": 1,
+          "created_count": 1,
+          "date": "2026-01-01",
+          "priority": "P1",
+          "resolution_breached": 0,
+          "resolution_pass_rate": null,
+          "resolution_passed": 0,
+          "resolved_count": 0,
+          "response_breached": 0,
+          "response_passed": 0,
+          "service_id": "S1"
+        },
+        {
+          "avg_resolution_minutes": 60.0,
+          "backlog_count": 0,
+          "created_count": 0,
+          "date": "2026-01-02",
+          "priority": "P1",
+          "resolution_breached": 0,
+          "resolution_pass_rate": 1.0,
+          "resolution_passed": 1,
+          "resolved_count": 1,
+          "response_breached": 0,
+          "response_passed": 1,
+          "service_id": "S1"
+        }
+      ],
+      "expected_incident": {
+        "created_at": "2026-01-01T23:30:00Z",
+        "current_priority": "P1",
+        "first_response_at": "2026-01-01T23:40:00Z",
+        "group_id": "G1",
+        "incident_id": "I1",
+        "priority_at_creation": "P1",
+        "quality_flags": [],
+        "requester_id": "U1",
+        "resolution_minutes": 60,
+        "resolution_sla": "passed",
+        "resolved_at": "2026-01-02T00:30:00Z",
+        "response_minutes": 10,
+        "response_sla": "passed",
+        "service_id": "S1",
+        "state": "resolved"
+      },
+      "name": "daily-cross-midnight",
+      "report_start": "2026-01-01T00:00:00Z"
+    }
+  ],
+  "expected_results": "Hand-authored clock calculations; not generated by production rules or SQL.",
+  "fixture_version": "v1"
+}

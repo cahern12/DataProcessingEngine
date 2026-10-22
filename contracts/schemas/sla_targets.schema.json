@@ -1,0 +1,36 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "priority": {
+      "enum": [
+        "P1",
+        "P2",
+        "P3",
+        "P4"
+      ],
+      "minLength": 1,
+      "type": "string"
+    },
+    "resolution_minutes": {
+      "minimum": 1,
+      "type": "integer"
+    },
+    "response_minutes": {
+      "minimum": 1,
+      "type": "integer"
+    },
+    "rule_version": {
+      "minLength": 1,
+      "type": "string"
+    }
+  },
+  "required": [
+    "rule_version",
+    "priority",
+    "response_minutes",
+    "resolution_minutes"
+  ],
+  "title": "sla_targets",
+  "type": "object"
+}

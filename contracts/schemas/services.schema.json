@@ -1,0 +1,20 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "name": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "service_id": {
+      "minLength": 1,
+      "type": "string"
+    }
+  },
+  "required": [
+    "service_id",
+    "name"
+  ],
+  "title": "services",
+  "type": "object"
+}

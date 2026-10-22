@@ -1,0 +1,48 @@
+{
+  "cost": "Local runtime only. Azure marginal/allocated costs unavailable; do not report zero cloud cost.",
+  "dependencies": {
+    "gold": [
+      "silver.incidents"
+    ],
+    "silver": [
+      "users",
+      "assignment_groups",
+      "services",
+      "incident_snapshots",
+      "incident_events",
+      "sla_targets"
+    ]
+  },
+  "envelope_fields": [
+    "run_id",
+    "attempt_id",
+    "batch_id",
+    "dataset_version",
+    "generator_seed",
+    "rule_version",
+    "transformation_revision",
+    "engine",
+    "engine_version",
+    "input_manifest_checksum",
+    "cutoff",
+    "started_at",
+    "finished_at",
+    "status",
+    "runtime_seconds"
+  ],
+  "local_engine": "python-reference + sqlite",
+  "publication": "SQLite transaction commits raw batch, Silver, both Gold tables, active publication, and committed run together. Failed attempt evidence recorded separately.",
+  "quality_gates": [
+    "schema-valid Gold rows",
+    "unique Gold keys",
+    "balanced raw-record dispositions",
+    "declared defect outcomes",
+    "valid immutable publication"
+  ],
+  "recovery": "New attempt UUID, stable batch/run identity; transactionally publish both Gold datasets; reject manifest mutation and out-of-order delta parents.",
+  "resource_profile": "single local Python process; full recomputation; not a scale benchmark",
+  "rule_definitions": "rules/business_rules.v1.json",
+  "rule_version": "v1",
+  "target_engine": "dbt + Trino (not integrated)",
+  "version": "v1"
+}

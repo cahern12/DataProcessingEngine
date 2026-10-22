@@ -1,0 +1,130 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "created_at": {
+      "format": "date-time",
+      "minLength": 1,
+      "type": "string"
+    },
+    "current_priority": {
+      "enum": [
+        "P1",
+        "P2",
+        "P3",
+        "P4"
+      ],
+      "minLength": 1,
+      "type": "string"
+    },
+    "first_response_at": {
+      "format": "date-time",
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "group_id": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "incident_id": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "priority_at_creation": {
+      "enum": [
+        "P1",
+        "P2",
+        "P3",
+        "P4"
+      ],
+      "minLength": 1,
+      "type": "string"
+    },
+    "quality_flags": {
+      "items": {
+        "minLength": 1,
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "requester_id": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "resolution_minutes": {
+      "minimum": 0,
+      "type": [
+        "number",
+        "null"
+      ]
+    },
+    "resolution_sla": {
+      "enum": [
+        "passed",
+        "pending",
+        "breached"
+      ],
+      "minLength": 1,
+      "type": "string"
+    },
+    "resolved_at": {
+      "format": "date-time",
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "response_minutes": {
+      "minimum": 0,
+      "type": [
+        "number",
+        "null"
+      ]
+    },
+    "response_sla": {
+      "enum": [
+        "passed",
+        "pending",
+        "breached"
+      ],
+      "minLength": 1,
+      "type": "string"
+    },
+    "service_id": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "state": {
+      "enum": [
+        "new",
+        "in_progress",
+        "on_hold",
+        "resolved",
+        "closed"
+      ],
+      "minLength": 1,
+      "type": "string"
+    }
+  },
+  "required": [
+    "incident_id",
+    "created_at",
+    "priority_at_creation",
+    "current_priority",
+    "state",
+    "service_id",
+    "group_id",
+    "requester_id",
+    "quality_flags",
+    "first_response_at",
+    "resolved_at",
+    "response_minutes",
+    "resolution_minutes",
+    "response_sla",
+    "resolution_sla"
+  ],
+  "title": "incident_resolution",
+  "type": "object"
+}
