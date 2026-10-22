@@ -1,0 +1,12 @@
+name: dpe_local
+version: 0.2.0
+config-version: 2
+profile: dpe_local
+model-paths: [models]
+macro-paths: [macros]
+test-paths: [tests]
+models:
+  dpe_local:
+    +materialized: table
+    +properties:
+      format: "'PARQUET'"

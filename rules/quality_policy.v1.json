@@ -1,0 +1,9 @@
+{
+  "version": "v1",
+  "record_errors": "Quarantine the complete incident history for BR-001 through BR-005 errors.",
+  "batch_errors": ["Invalid manifest or checksum", "Unparseable source JSON/CSV", "Invalid or conflicting reference data", "Unbalanced reconciliation", "Invalid or duplicate Gold keys"],
+  "max_quarantined_incident_fraction": 0.10,
+  "max_quarantined_incidents": null,
+  "threshold_denominator": "Distinct incident identities in source snapshots and events, including rejected histories",
+  "boundary": "Equality with a rejection threshold is permitted."
+}

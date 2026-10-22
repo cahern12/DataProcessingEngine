@@ -92,13 +92,13 @@
     "generator_version",
     "seed",
     "configuration",
-    "files",
-    "defects"
+    "files"
   ],
   "owner": "poc-team",
   "raw_retention": "Local artifacts retained until explicit workspace deletion; Azure policy deferred.",
   "schema_change_policy": "Reject unversioned columns/types; new contract version required.",
   "source": "fictional-itsm",
+  "synthetic_validation": "expected.v1.json is an optional test-harness sidecar; normal ingestion never reads it.",
   "version": "v1",
   "volume_profiles": "synthetic/configs/default.json"
 }

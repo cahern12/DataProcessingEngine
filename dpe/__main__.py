@@ -31,6 +31,7 @@ def main():
     execute.add_argument("--api-url")
     execute.add_argument("--fail-at", choices=["after_ingestion", "after_silver", "between_gold_writes", "before_publish"])
     execute.add_argument("--report", type=Path)
+    execute.add_argument("--quality-policy", type=Path)
     sql = commands.add_parser("query", help="Execute read-only SQL against published data")
     sql.add_argument("--db", type=Path, required=True)
     sql.add_argument("--sql", required=True)
@@ -40,6 +41,23 @@ def main():
     bench.add_argument("--workspace", type=Path, required=True)
     bench.add_argument("--count", type=int, default=1000)
     bench.add_argument("--repeats", type=int, default=3)
+    for name in ("lake-compat", "lake-fixtures"):
+        command = commands.add_parser(name, help="Verify the real local Trino/Iceberg path")
+        command.add_argument("--workspace", type=Path, required=True)
+    verify = commands.add_parser("lake-verify", help="Verify compatibility, fixtures, Smoke/delta, publication failures, and replay")
+    verify.add_argument("--workspace", type=Path, required=True)
+    verify.add_argument("--count", type=int, default=1000)
+    lake = commands.add_parser("lake-run", help="Publish a batch through dbt/Trino/Iceberg")
+    lake.add_argument("batch", type=Path)
+    lake.add_argument("--workspace", type=Path, required=True)
+    lake.add_argument("--api-url")
+    lake.add_argument("--quality-policy", type=Path)
+    lake.add_argument("--fail-at", choices=["between_gold_writes", "before_publish"])
+    consumer = commands.add_parser("lake-query", help="Read a contracted, snapshot-pinned Gold product")
+    consumer.add_argument("--workspace", type=Path, required=True)
+    consumer.add_argument("--dataset", choices=["incident_resolution", "service_daily_metrics"], required=True)
+    consumer.add_argument("--limit", type=int, default=10)
+    consumer.add_argument("--publication", help="Pin multiple reads to the same publication ID")
     args = parser.parse_args()
     from .ingestion import validate_batch
     from .pipeline import query, run
@@ -58,11 +76,23 @@ def main():
             server.serve_forever()
         return
     elif args.command == "run":
-        result = run(args.batch, args.db, args.api_url, args.fail_at)
+        result = run(args.batch, args.db, args.api_url, args.fail_at, args.quality_policy)
         if args.report:
             write_json(args.report, result)
     elif args.command == "query":
         result = query(args.db, args.sql)
+    elif args.command.startswith("lake-"):
+        from . import lakehouse
+        if args.command == "lake-compat":
+            result = lakehouse.compatibility(args.workspace)
+        elif args.command == "lake-fixtures":
+            result = lakehouse.fixture_check(args.workspace)
+        elif args.command == "lake-run":
+            result = lakehouse.run(args.batch, args.workspace, args.fail_at, args.api_url, args.quality_policy)
+        elif args.command == "lake-verify":
+            result = lakehouse.verify(args.workspace, args.count)
+        else:
+            result = lakehouse.consume(args.workspace, args.dataset, args.limit, args.publication)
     elif args.command == "demo":
         if not (args.workspace / "source").exists():
             generate(args.workspace / "source")

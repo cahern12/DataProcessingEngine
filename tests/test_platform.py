@@ -23,7 +23,7 @@ from dpe.validation import check_fixtures, output_checksum
 
 class RuleTests(unittest.TestCase):
     def test_independent_expected_results(self):
-        self.assertEqual(check_fixtures(), {"fixtures": 51, "status": "passed"})
+        self.assertEqual(check_fixtures(), {"fixtures": 53, "status": "passed"})
 
     def test_historical_backlog_moves_with_assignment(self):
         case = copy.deepcopy(read_json(ROOT / "synthetic/fixtures/rule_cases.v1.json")["cases"][0])
@@ -217,8 +217,8 @@ class PlatformTests(unittest.TestCase):
         source = self.root / "faults"
         generate(source, count=1000, mode="faults")
         checked = validate_batch(source / "initial")
-        self.assertGreater(checked["declared_schema_fault_rows"], 0)
-        manifest = read_json(source / "initial/manifest.json")
+        self.assertGreater(checked["schema_fault_rows"], 0)
+        manifest = read_json(source / "initial/expected.v1.json")
         self.assertEqual(len({d["incident_id"] for d in manifest["defects"]}), len(manifest["defects"]))
         self.assertEqual({d["fault"] for d in manifest["defects"]}, {"duplicate", "missing_service", "invalid_priority", "invalid_timestamp", "conflicting_version"})
         report = run(source / "initial", self.db)
@@ -241,8 +241,12 @@ class PlatformTests(unittest.TestCase):
         path.write_text("\n".join(lines) + "\n")
         item.update(sha256=digest(path), bytes=path.stat().st_size)
         write_json(self.initial / "manifest.json", manifest)
-        with self.assertRaisesRegex(ValueError, "quarantine differs"):
-            run(self.initial, self.db)
+        policy = read_json(ROOT / "rules/quality_policy.v1.json")
+        policy["max_quarantined_incidents"] = 0
+        policy_path = self.root / "strict-policy.json"
+        write_json(policy_path, policy)
+        with self.assertRaisesRegex(ValueError, "quality policy"):
+            run(self.initial, self.db, policy_path=policy_path)
         self.assertEqual(query(self.db, "SELECT count(*) n FROM publications"), [{"n": 0}])
 
     def test_consumer_query_cannot_write(self):

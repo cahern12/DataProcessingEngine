@@ -38,8 +38,7 @@ def validate_batch(root):
         raise ValueError("unsupported contract/rule version")
     if timestamp(manifest["report_start"]) >= timestamp(manifest["cutoff"]):
         raise ValueError("invalid reporting interval")
-    faults = {(f["incident_id"], f["fault"]) for f in manifest["defects"]}
-    seen, counts, declared_invalid = set(), Counter(), 0
+    seen, counts, invalid_rows = set(), Counter(), 0
     for item in manifest["files"]:
         if set(contract["manifest_file_fields"]) - item.keys():
             raise ValueError("incomplete file metadata")
@@ -54,10 +53,11 @@ def validate_batch(root):
             try:
                 normalize(item["dataset"], row)
             except (ValueError, TypeError):
-                key = str(row.get("incident_id", "")).strip()
-                if not any((key, fault) in faults for fault in ("invalid_timestamp", "invalid_priority")):
+                # Incident record failures are preserved for quarantine. Reference
+                # failures invalidate the batch; no synthetic oracle is consulted.
+                if item["dataset"] not in ("incident_snapshots", "incident_events"):
                     raise
-                declared_invalid += 1
+                invalid_rows += 1
             count += 1
         if count != item["rows"]:
             raise ValueError("row-count mismatch: " + item["path"])
@@ -65,7 +65,7 @@ def validate_batch(root):
     if set(counts) != set(DATASETS):
         raise ValueError("all six source datasets are required")
     return {"batch_id": manifest["batch_id"], "manifest_sha256": digest(root / "manifest.json"),
-            "rows": dict(counts), "declared_schema_fault_rows": declared_invalid}
+            "rows": dict(counts), "schema_fault_rows": invalid_rows}
 
 
 def read_api(base_url, batch_id, expected, landing=None):

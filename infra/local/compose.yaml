@@ -1,0 +1,107 @@
+name: dpe-local
+services:
+  postgres:
+    image: postgres:17.9@sha256:2a0d0fe14825b0939f78a8cad5cd4e6aa68bf94d0e5dd96e24b6d23af4315545
+    environment:
+      POSTGRES_DB: nessie
+      POSTGRES_USER: dpe
+      POSTGRES_PASSWORD: local-dpe-only
+    volumes:
+      - catalog-db:/var/lib/postgresql/data
+    healthcheck:
+      test: [CMD-SHELL, "pg_isready -U dpe -d nessie"]
+      interval: 3s
+      timeout: 3s
+      retries: 30
+  objectstore:
+    image: rustfs/rustfs:1.0.0-alpha.81@sha256:4ee605dfe7c6548d1fa1856357e8a1eccd929e3176acf933fafeba3ce09a69f9
+    environment:
+      RUSTFS_ACCESS_KEY: dpe-local
+      RUSTFS_SECRET_KEY: local-dpe-only
+      RUSTFS_VOLUMES: /data
+      RUSTFS_CONSOLE_ENABLE: "false"
+    ports:
+      - "127.0.0.1:19000:9000"
+    volumes:
+      - lake-data:/data
+    healthcheck:
+      test: [CMD, curl, --fail, --silent, http://127.0.0.1:9000/health]
+      interval: 3s
+      timeout: 3s
+      retries: 30
+  bucket-init:
+    image: amazon/aws-cli:2.38.1@sha256:733d5be1015825e4038c6016f3fa9954868ddee1f611b73be795a9cc2e706bfd
+    depends_on:
+      objectstore:
+        condition: service_healthy
+    environment:
+      AWS_ACCESS_KEY_ID: dpe-local
+      AWS_SECRET_ACCESS_KEY: local-dpe-only
+      AWS_DEFAULT_REGION: us-east-1
+      AWS_ENDPOINT_URL: http://objectstore:9000
+    entrypoint: [/bin/sh, -ec]
+    command:
+      - "aws s3api head-bucket --bucket warehouse || aws s3 mb s3://warehouse; aws s3api head-bucket --bucket raw || aws s3 mb s3://raw"
+  catalog:
+    image: ghcr.io/projectnessie/nessie:0.109.0@sha256:61a1a14e73d76ac3851e7bef627e4ef426f4f0cf71c352843908a5834acd19e1
+    depends_on:
+      postgres:
+        condition: service_healthy
+      bucket-init:
+        condition: service_completed_successfully
+    ports:
+      - "127.0.0.1:19120:19120"
+    environment:
+      nessie.version.store.type: JDBC2
+      nessie.version.store.persist.jdbc.datasource: postgresql
+      quarkus.datasource.postgresql.jdbc.url: jdbc:postgresql://postgres:5432/nessie
+      quarkus.datasource.postgresql.username: dpe
+      quarkus.datasource.postgresql.password: local-dpe-only
+      nessie.catalog.default-warehouse: warehouse
+      nessie.catalog.warehouses.warehouse.location: s3://warehouse/
+      nessie.catalog.service.s3.default-options.endpoint: http://objectstore:9000/
+      nessie.catalog.service.s3.default-options.region: us-east-1
+      nessie.catalog.service.s3.default-options.path-style-access: "true"
+      nessie.catalog.service.s3.default-options.access-key: urn:nessie-secret:quarkus:dpe.s3
+      dpe.s3.name: dpe-local
+      dpe.s3.secret: local-dpe-only
+      JAVA_OPTS_APPEND: -Xmx768m
+    healthcheck:
+      test: [CMD-SHELL, "bash -c 'exec 3<>/dev/tcp/127.0.0.1/19120'"]
+      interval: 3s
+      timeout: 3s
+      retries: 40
+  trino:
+    image: trinodb/trino:484@sha256:2704eb53935af5e582d63d6033e9bf99d20c325e9b0e30b1016ef59a4773979f
+    depends_on:
+      catalog:
+        condition: service_healthy
+    ports:
+      - "127.0.0.1:18080:8080"
+    volumes:
+      - ./trino/catalog:/etc/trino/catalog:ro
+      - ./trino/config.properties:/etc/trino/config.properties:ro
+      - ./trino/jvm.config:/etc/trino/jvm.config:ro
+    healthcheck:
+      test: [CMD, curl, --fail, --silent, http://localhost:8080/v1/info]
+      interval: 5s
+      timeout: 5s
+      retries: 40
+  runner:
+    profiles: [tools]
+    build:
+      context: ../..
+      dockerfile: infra/local/Dockerfile
+    environment:
+      DPE_TRINO_HOST: trino
+      DPE_TRINO_PORT: "8080"
+      DPE_S3_ENDPOINT: http://objectstore:9000
+    depends_on:
+      trino:
+        condition: service_healthy
+    volumes:
+      - ../../data:/app/data
+    entrypoint: [python, -m, dpe]
+volumes:
+  catalog-db:
+  lake-data:

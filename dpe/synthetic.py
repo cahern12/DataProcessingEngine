@@ -227,10 +227,14 @@ def generate(destination, profile="smoke", count=None, config_path=None, mode=No
                     "report_start": config["report_start"], "dataset_version": config["dataset_version"],
                     "rule_version": config["rule_version"], "generator_version": __version__, "seed": config["seed"],
                     "configuration": dict(config, incident_count=count, profile=profile),
-                    "files": writer.finish(), "defects": defects}
+                    "files": writer.finish()}
         write_json(root / "manifest.json", manifest)
+        write_json(root / "expected.v1.json", {"batch_id": manifest["batch_id"],
+                                               "manifest_sha256": digest(root / "manifest.json"),
+                                               "defects": defects})
         result.append(manifest)
-    return [{"batch_id": m["batch_id"], "rows": sum(f["rows"] for f in m["files"]), "defects": len(m["defects"])} for m in result]
+    return [{"batch_id": m["batch_id"], "rows": sum(f["rows"] for f in m["files"]),
+             "defects": len(read_json(destination / m["batch_kind"] / "expected.v1.json")["defects"])} for m in result]
 
 
 def digest_config(config, count):

@@ -9,3 +9,7 @@ data/
 build/
 dist/
 .coverage
+transformations/dbt/target/
+transformations/dbt/logs/
+transformations/dbt/.user.yml
+transformations/dbt/dbt_packages/

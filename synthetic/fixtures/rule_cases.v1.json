@@ -3584,6 +3584,106 @@
           }
         ]
       },
+      "expected_daily": [
+        {
+          "avg_resolution_minutes": null,
+          "backlog_count": 1,
+          "created_count": 1,
+          "date": "2026-01-01",
+          "priority": "P1",
+          "resolution_breached": 0,
+          "resolution_pass_rate": null,
+          "resolution_passed": 0,
+          "resolved_count": 0,
+          "response_breached": 0,
+          "response_passed": 0,
+          "service_id": "S1"
+        },
+        {
+          "avg_resolution_minutes": null,
+          "backlog_count": 1,
+          "created_count": 0,
+          "date": "2026-01-02",
+          "priority": "P1",
+          "resolution_breached": 0,
+          "resolution_pass_rate": null,
+          "resolution_passed": 0,
+          "resolved_count": 0,
+          "response_breached": 0,
+          "response_passed": 0,
+          "service_id": "S1"
+        },
+        {
+          "avg_resolution_minutes": null,
+          "backlog_count": 1,
+          "created_count": 0,
+          "date": "2026-01-03",
+          "priority": "P1",
+          "resolution_breached": 0,
+          "resolution_pass_rate": null,
+          "resolution_passed": 0,
+          "resolved_count": 0,
+          "response_breached": 0,
+          "response_passed": 0,
+          "service_id": "S1"
+        },
+        {
+          "avg_resolution_minutes": null,
+          "backlog_count": 1,
+          "created_count": 0,
+          "date": "2026-01-04",
+          "priority": "P1",
+          "resolution_breached": 0,
+          "resolution_pass_rate": null,
+          "resolution_passed": 0,
+          "resolved_count": 0,
+          "response_breached": 0,
+          "response_passed": 0,
+          "service_id": "S1"
+        },
+        {
+          "avg_resolution_minutes": null,
+          "backlog_count": 1,
+          "created_count": 0,
+          "date": "2026-01-05",
+          "priority": "P1",
+          "resolution_breached": 0,
+          "resolution_pass_rate": null,
+          "resolution_passed": 0,
+          "resolved_count": 0,
+          "response_breached": 0,
+          "response_passed": 0,
+          "service_id": "S1"
+        },
+        {
+          "avg_resolution_minutes": null,
+          "backlog_count": 1,
+          "created_count": 0,
+          "date": "2026-01-06",
+          "priority": "P1",
+          "resolution_breached": 0,
+          "resolution_pass_rate": null,
+          "resolution_passed": 0,
+          "resolved_count": 0,
+          "response_breached": 0,
+          "response_passed": 0,
+          "service_id": "S1"
+        },
+        {
+          "avg_resolution_minutes": null,
+          "backlog_count": 1,
+          "created_count": 0,
+          "date": "2026-01-07",
+          "priority": "P1",
+          "resolution_breached": 0,
+          "resolution_pass_rate": null,
+          "resolution_passed": 0,
+          "resolved_count": 0,
+          "response_breached": 0,
+          "response_passed": 0,
+          "service_id": "S1"
+        }
+      ],
       "expected_incident": {
         "created_at": "2026-01-01T00:00:00Z",
         "current_priority": "P1",
@@ -4860,6 +4960,36 @@
           }
         ]
       },
+      "expected_daily": [
+        {
+          "avg_resolution_minutes": null,
+          "backlog_count": 0,
+          "created_count": 1,
+          "date": "2026-01-01",
+          "priority": "P1",
+          "resolution_breached": 0,
+          "resolution_pass_rate": null,
+          "resolution_passed": 0,
+          "resolved_count": 0,
+          "response_breached": 0,
+          "response_passed": 0,
+          "service_id": "S1"
+        },
+        {
+          "avg_resolution_minutes": 60,
+          "backlog_count": 0,
+          "created_count": 0,
+          "date": "2026-01-01",
+          "priority": "P2",
+          "resolution_breached": 0,
+          "resolution_pass_rate": 1.0,
+          "resolution_passed": 1,
+          "resolved_count": 1,
+          "response_breached": 0,
+          "response_passed": 1,
+          "service_id": "S1"
+        }
+      ],
       "expected_incident": {
         "created_at": "2026-01-01T00:00:00Z",
         "current_priority": "P2",
@@ -4974,6 +5104,22 @@
           }
         ]
       },
+      "expected_daily": [
+        {
+          "avg_resolution_minutes": 60,
+          "backlog_count": 0,
+          "created_count": 1,
+          "date": "2026-01-01",
+          "priority": "P1",
+          "resolution_breached": 0,
+          "resolution_pass_rate": 1.0,
+          "resolution_passed": 1,
+          "resolved_count": 1,
+          "response_breached": 0,
+          "response_passed": 1,
+          "service_id": "S1"
+        }
+      ],
       "expected_incident": {
         "created_at": "2026-01-01T00:00:00Z",
         "current_priority": "P3",
@@ -5229,6 +5375,291 @@
       },
       "name": "daily-cross-midnight",
       "report_start": "2026-01-01T00:00:00Z"
+    },
+    {
+      "cutoff": "2026-01-04T00:00:00Z",
+      "datasets": {
+        "assignment_groups": [
+          {
+            "group_id": "G1",
+            "name": "Fictional Support"
+          }
+        ],
+        "incident_events": [],
+        "incident_snapshots": [
+          {
+            "created_at": "2026-01-01T00:00:00Z",
+            "group_id": "G1",
+            "incident_id": "I1",
+            "priority": "P1",
+            "requester_id": "U1",
+            "service_id": "S1",
+            "source_updated_at": "2026-01-01T00:00:00Z",
+            "source_version": 1,
+            "status": "new"
+          },
+          {
+            "created_at": "2026-01-01T00:00:00Z",
+            "group_id": "G1",
+            "incident_id": "I1",
+            "priority": "P1",
+            "requester_id": "U1",
+            "service_id": "S2",
+            "source_updated_at": "2026-01-02T12:00:00Z",
+            "source_version": 2,
+            "status": "new"
+          }
+        ],
+        "services": [
+          {
+            "name": "Fictional Service",
+            "service_id": "S1"
+          },
+          {
+            "name": "Another Fictional Service",
+            "service_id": "S2"
+          }
+        ],
+        "sla_targets": [
+          {
+            "priority": "P1",
+            "resolution_minutes": 240,
+            "response_minutes": 15,
+            "rule_version": "v1"
+          },
+          {
+            "priority": "P2",
+            "resolution_minutes": 480,
+            "response_minutes": 60,
+            "rule_version": "v1"
+          },
+          {
+            "priority": "P3",
+            "resolution_minutes": 1440,
+            "response_minutes": 240,
+            "rule_version": "v1"
+          },
+          {
+            "priority": "P4",
+            "resolution_minutes": 4320,
+            "response_minutes": 480,
+            "rule_version": "v1"
+          }
+        ],
+        "users": [
+          {
+            "display_name": "Fictional Agent",
+            "user_id": "U1"
+          }
+        ]
+      },
+      "expected_daily": [
+        {
+          "avg_resolution_minutes": null,
+          "backlog_count": 1,
+          "created_count": 1,
+          "date": "2026-01-01",
+          "priority": "P1",
+          "resolution_breached": 0,
+          "resolution_pass_rate": null,
+          "resolution_passed": 0,
+          "resolved_count": 0,
+          "response_breached": 0,
+          "response_passed": 0,
+          "service_id": "S1"
+        },
+        {
+          "avg_resolution_minutes": null,
+          "backlog_count": 1,
+          "created_count": 0,
+          "date": "2026-01-02",
+          "priority": "P1",
+          "resolution_breached": 0,
+          "resolution_pass_rate": null,
+          "resolution_passed": 0,
+          "resolved_count": 0,
+          "response_breached": 0,
+          "response_passed": 0,
+          "service_id": "S2"
+        },
+        {
+          "avg_resolution_minutes": null,
+          "backlog_count": 1,
+          "created_count": 0,
+          "date": "2026-01-03",
+          "priority": "P1",
+          "resolution_breached": 0,
+          "resolution_pass_rate": null,
+          "resolution_passed": 0,
+          "resolved_count": 0,
+          "response_breached": 0,
+          "response_passed": 0,
+          "service_id": "S2"
+        }
+      ],
+      "expected_incident": {
+        "created_at": "2026-01-01T00:00:00Z",
+        "current_priority": "P1",
+        "first_response_at": null,
+        "group_id": "G1",
+        "incident_id": "I1",
+        "priority_at_creation": "P1",
+        "quality_flags": [],
+        "requester_id": "U1",
+        "resolution_minutes": null,
+        "resolution_sla": "breached",
+        "resolved_at": null,
+        "response_minutes": null,
+        "response_sla": "breached",
+        "service_id": "S2",
+        "state": "new"
+      },
+      "name": "daily-history-reassignment",
+      "report_start": "2026-01-01T00:00:00Z"
+    },
+    {
+      "cutoff": "2026-01-03T00:00:00Z",
+      "datasets": {
+        "assignment_groups": [
+          {
+            "group_id": "G1",
+            "name": "Fictional Support"
+          }
+        ],
+        "incident_events": [
+          {
+            "actor_id": "U1",
+            "event_id": "E1",
+            "event_time": "2026-01-01T00:10:00Z",
+            "event_type": "response",
+            "incident_id": "I1",
+            "source_sequence": 1
+          },
+          {
+            "actor_id": "U1",
+            "event_id": "E2",
+            "event_time": "2026-01-01T01:00:00Z",
+            "event_type": "resolve",
+            "incident_id": "I1",
+            "source_sequence": 2
+          }
+        ],
+        "incident_snapshots": [
+          {
+            "created_at": "2026-01-01T00:00:00Z",
+            "group_id": "G1",
+            "incident_id": "I1",
+            "priority": "P1",
+            "requester_id": "U1",
+            "service_id": "S1",
+            "source_updated_at": "2026-01-01T00:00:00Z",
+            "source_version": 1,
+            "status": "new"
+          },
+          {
+            "created_at": "2025-12-31T23:30:00Z",
+            "group_id": "G1",
+            "incident_id": "I1",
+            "priority": "P1",
+            "requester_id": "U1",
+            "service_id": "S1",
+            "source_updated_at": "2026-01-01T02:00:00Z",
+            "source_version": 2,
+            "status": "resolved"
+          }
+        ],
+        "services": [
+          {
+            "name": "Fictional Service",
+            "service_id": "S1"
+          },
+          {
+            "name": "Another Fictional Service",
+            "service_id": "S2"
+          }
+        ],
+        "sla_targets": [
+          {
+            "priority": "P1",
+            "resolution_minutes": 240,
+            "response_minutes": 15,
+            "rule_version": "v1"
+          },
+          {
+            "priority": "P2",
+            "resolution_minutes": 480,
+            "response_minutes": 60,
+            "rule_version": "v1"
+          },
+          {
+            "priority": "P3",
+            "resolution_minutes": 1440,
+            "response_minutes": 240,
+            "rule_version": "v1"
+          },
+          {
+            "priority": "P4",
+            "resolution_minutes": 4320,
+            "response_minutes": 480,
+            "rule_version": "v1"
+          }
+        ],
+        "users": [
+          {
+            "display_name": "Fictional Agent",
+            "user_id": "U1"
+          }
+        ]
+      },
+      "expected_daily": [
+        {
+          "avg_resolution_minutes": null,
+          "backlog_count": 1,
+          "created_count": 1,
+          "date": "2025-12-31",
+          "priority": "P1",
+          "resolution_breached": 0,
+          "resolution_pass_rate": null,
+          "resolution_passed": 0,
+          "resolved_count": 0,
+          "response_breached": 0,
+          "response_passed": 0,
+          "service_id": "S1"
+        },
+        {
+          "avg_resolution_minutes": 90,
+          "backlog_count": 0,
+          "created_count": 0,
+          "date": "2026-01-01",
+          "priority": "P1",
+          "resolution_breached": 0,
+          "resolution_pass_rate": 1.0,
+          "resolution_passed": 1,
+          "resolved_count": 1,
+          "response_breached": 1,
+          "response_passed": 0,
+          "service_id": "S1"
+        }
+      ],
+      "expected_incident": {
+        "created_at": "2025-12-31T23:30:00Z",
+        "current_priority": "P1",
+        "first_response_at": "2026-01-01T00:10:00Z",
+        "group_id": "G1",
+        "incident_id": "I1",
+        "priority_at_creation": "P1",
+        "quality_flags": [],
+        "requester_id": "U1",
+        "resolution_minutes": 90,
+        "resolution_sla": "passed",
+        "resolved_at": "2026-01-01T01:00:00Z",
+        "response_minutes": 40,
+        "response_sla": "breached",
+        "service_id": "S1",
+        "state": "resolved"
+      },
+      "name": "daily-creation-date-correction",
+      "report_start": "2025-12-31T00:00:00Z"
     }
   ],
   "expected_results": "Hand-authored clock calculations; not generated by production rules or SQL.",

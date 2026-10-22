@@ -1,5 +1,7 @@
 # Local Platform Improvement Plan
 
+Execution status: phases 1–3 are implemented and verified locally. See [06 — Local Lakehouse Execution](06-local_lakehouse_execution.md) for evidence and the remaining phases.
+
 This plan follows [04 — Local Build Execution Record](04-local_build_execution.md) and advances the architecture in [01 — POC Requirements](01-enterprise_data_processing_poc_validation_plan.md). It keeps execution local while moving from the Python/SQLite development harness to a verified dbt/Trino/Iceberg processing path.
 
 The next milestone is **one reproducible local Bronze → Silver → Gold pipeline on the intended processing stack that passes the existing independent business-rule fixtures**. Retain the Python evaluator as a correctness reference and the current consumer contracts as the starting point.

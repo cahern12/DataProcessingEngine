@@ -1,0 +1,14 @@
+dpe_local:
+  target: local
+  outputs:
+    local:
+      type: trino
+      method: none
+      user: dpe
+      host: "{{ env_var('DPE_TRINO_HOST', '127.0.0.1') }}"
+      port: "{{ env_var('DPE_TRINO_PORT', '18080') | int }}"
+      database: lake
+      schema: "{{ env_var('DPE_DBT_SCHEMA', 'dpe_compat') }}"
+      threads: 2
+      retries: 3
+      http_scheme: http

@@ -1,0 +1,31 @@
+name: Platform validation
+on: [push, pull_request, workflow_dispatch]
+jobs:
+  reference:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m dpe check-fixtures
+      - run: python -m unittest discover -s tests -v
+  lakehouse:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - run: docker compose -f infra/local/compose.yaml up -d --wait postgres objectstore bucket-init catalog trino
+      - run: docker compose -f infra/local/compose.yaml build runner
+      - run: docker compose -f infra/local/compose.yaml run --rm runner lake-verify --workspace data/ci-verification --count 1000
+      - run: docker compose -f infra/local/compose.yaml restart postgres objectstore catalog trino
+      - name: Wait for restarted services
+        run: docker compose -f infra/local/compose.yaml up -d --wait postgres objectstore catalog trino
+      - run: docker compose -f infra/local/compose.yaml run --rm runner lake-query --workspace data/ci-verification/platform --dataset incident_resolution --limit 1
+      - if: always()
+        run: docker compose -f infra/local/compose.yaml logs --no-color > data/compose.log
+      - if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: local-lakehouse-evidence
+          path: data/

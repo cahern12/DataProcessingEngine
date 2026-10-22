@@ -1,0 +1,21 @@
+version: 2
+sources:
+  - name: bronze
+    database: lake
+    schema: "{{ var('raw_schema', target.schema) }}"
+    tables:
+      - name: raw_records
+      - name: batch_context
+models:
+  - name: compatibility_probe
+    columns:
+      - name: id
+        data_tests: [unique, not_null]
+  - name: gold_incident_resolution
+    columns:
+      - name: incident_id
+        data_tests: [not_null]
+  - name: gold_service_daily_metrics
+    columns:
+      - name: date
+        data_tests: [not_null]

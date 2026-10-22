@@ -1,0 +1,5 @@
+# Optional distributed local path; the Python/SQLite reference remains dependency-free.
+dbt-trino==1.10.6
+dbt-core==1.12.6
+trino==0.340.0
+boto3==1.43.118

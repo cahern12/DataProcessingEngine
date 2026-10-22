@@ -22,6 +22,7 @@
   ],
   "freshness": "On successful local batch completion; production freshness SLO deferred.",
   "interface": "SQLite SQL views gold_incident_resolution and gold_service_daily_metrics; dpe query pins one publication per query.",
+  "lakehouse_interface": "python -m dpe lake-query resolves logical dataset names through one committed publication and exact Iceberg snapshots. Pass --publication to pin multiple reads.",
   "owner": "poc-team",
   "version": "v1"
 }
