@@ -1,0 +1,17 @@
+{
+  "api_version": "2023-01-01-preview",
+  "currency": "USD",
+  "filter": "serviceName eq 'Azure Kubernetes Service' and armRegionName eq 'eastus' and priceType eq 'Consumption'",
+  "pages": [
+    {
+      "path": "page-000.json",
+      "sha256": "983d12b2cfab77623eda319d912977a0766a57e941f539f1814a9f60ef3e87b9",
+      "url": "https://prices.azure.com/api/retail/prices?api-version=2023-01-01-preview&currencyCode=%27USD%27&%24filter=serviceName+eq+%27Azure+Kubernetes+Service%27+and+armRegionName+eq+%27eastus%27+and+priceType+eq+%27Consumption%27"
+    }
+  ],
+  "provider": "Microsoft Azure public retail",
+  "records": 11,
+  "records_sha256": "23dadb1aa5443c6cfb17fc7b529d163f96f1e72459086ea65b2bcf89eb586333",
+  "retrieved_at": "2026-10-23T04:23:00.285734+00:00",
+  "warning": "Public retail scenario inputs; no negotiated invoice, cloud execution or billing reconciliation"
+}

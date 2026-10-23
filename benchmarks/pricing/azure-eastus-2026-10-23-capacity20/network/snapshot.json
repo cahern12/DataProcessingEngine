@@ -1,0 +1,17 @@
+{
+  "api_version": "2023-01-01-preview",
+  "currency": "USD",
+  "filter": "serviceName eq 'Virtual Network' and armRegionName eq 'eastus' and priceType eq 'Consumption'",
+  "pages": [
+    {
+      "path": "page-000.json",
+      "sha256": "d12784eff249186ee0a77e4ab9c040602d21b8eeabd12d2bf07b14e1ca327aee",
+      "url": "https://prices.azure.com/api/retail/prices?api-version=2023-01-01-preview&currencyCode=%27USD%27&%24filter=serviceName+eq+%27Virtual+Network%27+and+armRegionName+eq+%27eastus%27+and+priceType+eq+%27Consumption%27"
+    }
+  ],
+  "provider": "Microsoft Azure public retail",
+  "records": 8,
+  "records_sha256": "ec4420f851d1568c98a2882e7175d4564f3f8ca9e03f928ada6e433b0794e205",
+  "retrieved_at": "2026-10-23T04:23:00.500008+00:00",
+  "warning": "Public retail scenario inputs; no negotiated invoice, cloud execution or billing reconciliation"
+}

@@ -20,7 +20,7 @@ def acceptance(path=None):
         path=Path(path or DEFAULT)
         if not path.is_absolute():path=ROOT/path
         value=read_json(path)
-    if value.get('version') not in ('v1','v2','v3','v4','v5','v6'):raise ValueError('unsupported acceptance version')
+    if value.get('version') not in ('v1','v2','v3','v4','v5','v6','v7','v8'):raise ValueError('unsupported acceptance version')
     if value['engineering_criteria']['repetitions']<1:raise ValueError('positive repetitions required')
     resources=value['resources']
     if resources['maximum_local_logical_input_bytes']<1:raise ValueError('positive input budget required')

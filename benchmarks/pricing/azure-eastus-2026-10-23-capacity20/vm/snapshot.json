@@ -1,0 +1,17 @@
+{
+  "api_version": "2023-01-01-preview",
+  "currency": "USD",
+  "filter": "serviceName eq 'Virtual Machines' and armRegionName eq 'eastus' and (armSkuName eq 'Standard_D4as_v5' or armSkuName eq 'Standard_E4as_v5') and priceType eq 'Consumption'",
+  "pages": [
+    {
+      "path": "page-000.json",
+      "sha256": "b9f9b971dc18952adb691b722f45a8d39b2d205d76e3873fc2ad6cb0334e2bbc",
+      "url": "https://prices.azure.com/api/retail/prices?api-version=2023-01-01-preview&currencyCode=%27USD%27&%24filter=serviceName+eq+%27Virtual+Machines%27+and+armRegionName+eq+%27eastus%27+and+%28armSkuName+eq+%27Standard_D4as_v5%27+or+armSkuName+eq+%27Standard_E4as_v5%27%29+and+priceType+eq+%27Consumption%27"
+    }
+  ],
+  "provider": "Microsoft Azure public retail",
+  "records": 16,
+  "records_sha256": "f368d7a5702cbb67e21605f71614e5b7a3a2aa2e03cbbdc81237e96917f47aef",
+  "retrieved_at": "2026-10-23T06:35:55.553810+00:00",
+  "warning": "Public retail scenario inputs; no negotiated invoice, cloud execution or billing reconciliation"
+}

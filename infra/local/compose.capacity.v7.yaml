@@ -1,0 +1,10 @@
+services:
+  trino:
+    mem_limit: 4g
+    volumes:
+      - ./trino/config.capacity-v5.properties:/etc/trino/config.properties:ro
+      - ./trino/catalog/lake.capacity-v6.properties:/etc/trino/catalog/lake.properties:ro
+  benchmark-coordinator:
+    mem_limit: 2560m
+  runner:
+    mem_limit: 2560m

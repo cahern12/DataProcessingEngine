@@ -16,6 +16,33 @@ def crash_owner(root,ready):
 
 
 class CapacityTests(unittest.TestCase):
+    def test_jvm_reserved_committed_heap_and_resident_memory_remain_distinct(self):
+        from dpe.capacity_reports import jvm_summary
+        import json
+        with tempfile.TemporaryDirectory() as directory:
+            row={'native':{'stdout':'Total: reserved=4096KB, committed=2048KB\n- Java Heap (reserved=3072KB, committed=1024KB)\n'},
+                 'heap':{'stdout':'garbage-first heap   total reserved 3072K, committed 1024K, used 512K'},
+                 'os':{'stdout':'VmRSS:\t1536 kB\n'}}
+            Path(directory,'jvm_samples.jsonl').write_text(json.dumps(row)+'\n')
+            result=jvm_summary(directory);values=result['sampled_maxima']
+            self.assertEqual(values['heap_used_bytes'],512*1024)
+            self.assertEqual(values['os_process_rss_bytes'],1536*1024)
+            self.assertEqual(values['nmt_total_committed_bytes'],2048*1024)
+            self.assertEqual(result['nmt_categories']['Java Heap']['peak_committed_bytes'],1024*1024)
+    def test_custom_success_cannot_be_presented_as_small_milestone_evidence(self):
+        from benchmarks.assemble_capacity_evidence import assemble
+        with tempfile.TemporaryDirectory() as directory:
+            root=Path(directory)
+            result={'status':'passed','correctness_status':'passed','specification':{'count':10000,'size':'custom'}}
+            write_json(root/'custom/run_results.json',result)
+            with self.assertRaisesRegex(ValueError,'Small evidence'):
+                assemble(root/'out',root/'custom',root/'custom')
+    def test_airflow_json_survives_startup_logs_and_rejects_missing_result(self):
+        from benchmarks.run_capacity_comparisons import airflow_runs
+        rows=airflow_runs('2026-10-23 [info] initializing\n[{"run_id":"custom","state":"success"}]\n')
+        self.assertEqual(rows[0]['state'],'success')
+        self.assertEqual(airflow_runs('initializing\n[]\n'),[])
+        with self.assertRaisesRegex(ValueError,'run list'):airflow_runs('[info] no result\n')
     def test_expired_query_history_uses_durable_events_without_inventing_total_memory(self):
         from dpe.lakehouse import query_telemetry
         with tempfile.TemporaryDirectory() as directory:
@@ -44,7 +71,7 @@ class CapacityTests(unittest.TestCase):
         self.assertEqual(new['resources']['local_memory_gib'],16)
         self.assertGreater(new['resources']['maximum_local_logical_input_bytes'],113412943)
         self.assertNotEqual(checksum(old),checksum(new))
-        for version in ('v3','v4','v5','v6'):
+        for version in ('v3','v4','v5','v6','v7','v8'):
             revised=acceptance('benchmarks/specs/acceptance.poc.'+version+'.json')
             self.assertEqual(revised['business_limits'],old['business_limits'])
             self.assertEqual(revised['engineering_criteria'],old['engineering_criteria'])

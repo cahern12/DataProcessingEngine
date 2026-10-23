@@ -1,0 +1,22 @@
+{
+  "api_version": "2023-01-01-preview",
+  "currency": "USD",
+  "filter": "serviceName eq 'Storage' and armRegionName eq 'eastus' and priceType eq 'Consumption'",
+  "pages": [
+    {
+      "path": "page-000.json",
+      "sha256": "62008cad06cf14e51bd29f52c47dfff6d89a048a0e0c0c4d283f3c5988a38503",
+      "url": "https://prices.azure.com/api/retail/prices?api-version=2023-01-01-preview&currencyCode=%27USD%27&%24filter=serviceName+eq+%27Storage%27+and+armRegionName+eq+%27eastus%27+and+priceType+eq+%27Consumption%27"
+    },
+    {
+      "path": "page-001.json",
+      "sha256": "636d4318bf763088e366fff145942e39bf0350182c717e1c28b4fab32905e622",
+      "url": "https://prices.azure.com:443/api/retail/prices?api-version=2023-01-01-preview&currencyCode=%27USD%27&$filter=serviceName%20eq%20%27Storage%27%20and%20armRegionName%20eq%20%27eastus%27%20and%20priceType%20eq%20%27Consumption%27&$skip=1000"
+    }
+  ],
+  "provider": "Microsoft Azure public retail",
+  "records": 1505,
+  "records_sha256": "201f8db533fa5e20b9f64137cdfea3370c07142e58c6a632e516ac5fcdc8c3a6",
+  "retrieved_at": "2026-10-23T04:22:59.970787+00:00",
+  "warning": "Public retail scenario inputs; no negotiated invoice, cloud execution or billing reconciliation"
+}

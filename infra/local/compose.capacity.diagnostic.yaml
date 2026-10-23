@@ -1,0 +1,4 @@
+services:
+  trino:
+    volumes:
+      - ./trino/jvm.capacity-diagnostic.config:/etc/trino/jvm.config:ro

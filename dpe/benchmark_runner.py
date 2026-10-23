@@ -113,6 +113,7 @@ def _run(workspace,count=1000,repeats=3,engines=('trino','spark'),orchestration=
             observer.mark('dependencies_ready')
         observer.mark('source_generation')
         generate(workspace/'source',count=count)
+        input_bytes=sum(f['bytes'] for f in read_json(workspace/'source/initial/manifest.json')['files'])
         from .benchmark_calibration import assess
         preflight=assess(read_json(workspace/'source/initial/manifest.json'),criteria)
         from .experiment import memory_admission

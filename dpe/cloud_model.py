@@ -15,7 +15,7 @@ GIB=Decimal(2**30)
 MONTH_HOURS=Decimal(720)  # Explicit 30-day planning normalization, not invoice proration.
 
 
-def catalog(snapshot):
+def catalog(snapshot,application_sku='Standard_D4as_v5'):
     """Exact product/SKU/meter identities, including every progressive storage tier."""
     snapshot=Path(snapshot);result=[]
     for folder in ('vm','storage','aks','network','nat'):
@@ -36,6 +36,9 @@ def catalog(snapshot):
         ('ip','network','IP Addresses','Standard','Standard IPv4 Static Public IP','hour',1),
         ('nat','nat','NAT Gateway','Standard','Standard Gateway','hour',1),
         ('nat_data','nat','NAT Gateway','Standard','Standard Data Processed','gb',1)]
+    if application_sku=='Standard_E4as_v5':
+        definitions.append(('application_node','vm','Virtual Machines Easv5 Series','E4as v5','E4as v5','hour',1))
+    elif application_sku!='Standard_D4as_v5':raise ValueError('unsupported modeled application shape')
     for key,folder,product,sku,meter,unit,divisor in definitions:
         records=read_json(snapshot/folder/'records.json')
         region='Global' if folder=='nat' else 'eastus'
@@ -101,7 +104,13 @@ def model(workspace,snapshot,output,topology='vm',spark_retained=True,variant='b
     factors={'low':('0.75','0.8',3,'0.5'),'base':('1','1',7,'1'),'high':('1.5','1.2',14,'2')}
     runtime_factor,rate_factor,retention,request_factor=factors[variant]
     runtime_factor=decimal(runtime_factor);rate_factor=decimal(rate_factor);request_factor=decimal(request_factor)
-    rates=catalog(snapshot)
+    application_sku=criteria['resources'].get('modeled_azure_application_vm','Standard_D4as_v5')
+    application_memory=criteria['resources'].get('modeled_azure_application_memory_gib',16)
+    if application_memory<criteria['resources']['local_memory_gib']:raise ValueError('modeled application shape is smaller than local memory envelope')
+    if {'Standard_D4as_v5':16,'Standard_E4as_v5':32}.get(application_sku)!=application_memory:
+        raise ValueError('modeled memory does not match the named application SKU')
+    application_rate='application_node' if application_sku=='Standard_E4as_v5' else 'node'
+    rates=catalog(snapshot,application_sku)
     for rate in rates['rates']:
         for tier in rate['tiers']:tier['price']=number(decimal(tier['price'])*rate_factor)
     runs=[copy.deepcopy(r) for r in result['runs'] if spark_retained or r['engine']!='spark']
@@ -136,7 +145,7 @@ def model(workspace,snapshot,output,topology='vm',spark_retained=True,variant='b
         'window_boundary':'Whole observed benchmark lifecycle, including generation/verification/preparation/collectors and gaps; Airflow queue before producer startup remains outside this diagnostic window',
         'request_factor':number(request_factor),'cache_policy':criteria['cache_policy'],
         'allocation_driver':driver,'sensitivity_interpretation':'Bundled assumption alternatives, not confidence bounds or guaranteed per-row minimum/maximum costs',
-        'capacity_equivalence':'D4as_v5 shape is an assumption; local ARM elapsed time is not measured Azure x86 performance',
+        'capacity_equivalence':application_sku+' is an assumed memory-compatible shape; local ARM elapsed time is not measured Azure x86 performance',
         'warm_capacity':'Fixed warm nodes. Attributed active compute is diagnostic within standing compute, never added a second time. Marginal compute cash is zero under this inventory.',
         'storage_mapping':'Measured object bytes retained for assumed days; ADLS operations assumed from object counts, not measured S3/Azure billable requests.',
         'storage_operation_mapping':{'writes_per_new_object':2,'reads_per_scanned_object':2,'other_operations_per_attempt':100,'disk_io_per_attempt':10000},
@@ -160,12 +169,12 @@ def model(workspace,snapshot,output,topology='vm',spark_retained=True,variant='b
     # One application node, shared by every engine/service. Splits sum to one node.
     trino_share=decimal(criteria['resources'].get('trino_container_gib',3))
     shares={'trino':trino_share,'spark':Decimal(3) if spark_retained else Decimal(0),'dbt':Decimal('1.5'),
-            'airflow':Decimal('1.5'),'catalog':Decimal('1.75'),'monitoring':Decimal('.25'),'container_infrastructure':Decimal(8)-trino_share}
+            'airflow':Decimal('1.5'),'catalog':Decimal('1.75'),'monitoring':Decimal('.25'),'container_infrastructure':decimal(application_memory)-8-trino_share}
     shares=weights({k:v for k,v in shares.items() if v})
-    inventory=[{'resource':'application-node','sku':'Standard_D4as_v5','count':1,'shape':'4 vCPU / 16 GiB; all self-hosted application components share it'},
+    inventory=[{'resource':'application-node','sku':application_sku,'count':1,'shape':'4 vCPU / '+str(application_memory)+' GiB; all self-hosted application components share it'},
                {'resource':'os-and-catalog-disks','sku':'E10 LRS 128 GiB','count':2,'reason':'one OS and one persistent catalog/log disk'},
                {'resource':'adls','sku':'Hot LRS HNS','count':1,'reason':'same-region raw and Iceberg objects; seven-day base retention'}]
-    for component,share in shares.items():line(component,'node',hours*share,'application-node','',reason='one node charge split by assumed capacity shares '+canonical({k:number(v) for k,v in shares.items()}))
+    for component,share in shares.items():line(component,application_rate,hours*share,'application-node','',reason='one node charge split by assumed capacity shares '+canonical({k:number(v) for k,v in shares.items()}))
     node_count=1;disk_count=2
     if topology=='aks':
         # Current AKS system pools require at least two nodes and >=4 vCPU each.
@@ -197,7 +206,8 @@ def model(workspace,snapshot,output,topology='vm',spark_retained=True,variant='b
         line('object_storage','other',100*request_factor,'adls-other',r,reason='assumed 100 list/metadata calls per attempt')
         line('container_infrastructure','disk_io',10000*request_factor,'managed-disks',r,reason='assumed 10,000 OS/catalog disk operations per attempt; not measured IOPS')
     computed=calculate(usage,rates)
-    node_rate=next(r for r in rates['rates'] if r['id']=='node')['tiers'][0]['price']
+    node_rate=next(r for r in rates['rates'] if r['id']==application_rate)['tiers'][0]['price']
+    system_rate=next(r for r in rates['rates'] if r['id']=='node')['tiers'][0]['price']
     for row,r in zip(computed['workloads'],runs):
         row['attributed_active_compute_cost']=number(decimal(r['runtime_seconds'])/3600*runtime_factor*decimal(node_rate))
         row['active_compute_boundary']='One application-node elapsed-time allocation, already contained in standing node charge; includes service work, not extra cash'
@@ -211,7 +221,7 @@ def model(workspace,snapshot,output,topology='vm',spark_retained=True,variant='b
         row['fully_allocated_cost_per_logical_tb']=number(decimal(row['fully_allocated_cost'])/logical) if logical and row['fully_allocated_cost'] is not None else None
         row['quantity_provenance']='measured local elapsed/object bytes plus explicit scenario assumptions; resource ledger contains per-line basis'
         row.update({k:source[k] for k in ('variant','strategy','failure_injection') if k in source})
-    monthly=(decimal(node_rate)*node_count + sum((charge(1,rate) for rate in rates['rates'] if rate['id'] in (['ip','aks','nat'] if topology=='aks' else ['ip'])),Decimal(0)))*MONTH_HOURS
+    monthly=(decimal(node_rate)+decimal(system_rate)*(node_count-1) + sum((charge(1,rate) for rate in rates['rates'] if rate['id'] in (['ip','aks','nat'] if topology=='aks' else ['ip'])),Decimal(0)))*MONTH_HOURS
     monthly+=charge(disk_count,next(r for r in rates['rates'] if r['id']=='disk'))
     # Standing storage is the measured existing byte stock; hypothetical future
     # Small-only demand retention is added to each run's marginal quantity.

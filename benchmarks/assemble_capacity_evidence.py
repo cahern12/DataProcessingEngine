@@ -16,10 +16,16 @@ def assemble(output,small,custom,representative=None,targeted=None,concurrency=N
     output=Path(output);output.mkdir(parents=True,exist_ok=True)
     main=read_json(Path(small)/'run_results.json');paired=read_json(Path(custom)/'run_results.json')
     if main['status']!='passed' or paired['status']!='passed':raise ValueError('completed custom and Small comparisons required')
+    if main['specification']['count']!=100000 or main['specification']['size']!='small':raise ValueError('Small evidence requires 100000 incidents and the Small tier')
+    if paired['specification']['count']!=10000 or paired['specification']['size']!='custom':raise ValueError('custom calibration requires 10000 incidents and the custom tier')
+    if any(r.get('correctness_status')!='passed' for r in (main,paired)):raise ValueError('exact correctness must pass for both primary comparisons')
     if main['specification']['revision']!=paired['specification']['revision']:raise ValueError('paired comparisons have different implementations')
     if main['specification']['criteria_sha256']!=paired['specification']['criteria_sha256']:raise ValueError('paired comparisons have different frozen profiles')
     paths=list(dict.fromkeys(['data/capacity-custom-10000','data/capacity-custom-10000-trino4g','data/capacity-small-unmodified',
-           'data/capacity-custom-bounded-10000','data/capacity-small-bounded-100000',custom,small]))
+           'data/capacity-custom-bounded-10000','data/capacity-small-bounded-100000',
+           'data/capacity-custom-history-10000','data/capacity-small-history-100000',
+           'data/capacity-custom-parquet-10000','data/capacity-small-parquet-100000',
+           'data/capacity-custom-producer2500-10000','data/capacity-small-producer2500-100000',custom,small]))
     if representative:paths.append(representative)
     if targeted:paths.append(targeted)
     phases=[];cost_rows=[];technology=[];scenarios=[]
@@ -34,7 +40,8 @@ def assemble(output,small,custom,representative=None,targeted=None,concurrency=N
         phases.append(phase)
         if not (root/'observations/storage_samples.json').exists():
             phase['modeled_cost_status']='incomplete: durable storage inventory unavailable after producer kill';continue
-        try:campaign(root,ROOT/'benchmarks/pricing/azure-eastus-2026-10-22',root/'modeled_cloud_final')
+        snapshot=ROOT/'benchmarks/pricing'/('azure-eastus-2026-10-23-capacity20' if result['specification']['criteria']['resources'].get('modeled_azure_application_vm')=='Standard_E4as_v5' else 'azure-eastus-2026-10-22')
+        try:campaign(root,snapshot,root/'modeled_cloud_final')
         except Exception as error:phase['modeled_cost_status']='incomplete: '+str(error);continue
         for path in sorted((root/'modeled_cloud_final').glob('*/scenario.json')):
             scenario=read_json(path);report=read_json(path.parent/'cost_report.json');run_index={r['logical_run_id']:r for r in result['runs']}
@@ -65,15 +72,32 @@ def assemble(output,small,custom,representative=None,targeted=None,concurrency=N
     write_json(output/'specification.json',main['specification'])
     score=scorecard(output,main['runs'],findings,main['specification']['criteria']);measured=performance(output,main['runs'])
     csv_rows(output/'modeled_cost_performance.csv',cost_rows);csv_rows(output/'technology_costs.csv',technology);csv_rows(output/'scenario_comparison.csv',scenarios)
-    summary={'date':'2026-10-22','scope':'local capacity and retail planning; original Azure POC incomplete','recommendation':'incomplete',
+    from datetime import datetime,timezone
+    summary={'date':datetime.now(timezone.utc).date().isoformat(),'scope':'local capacity and retail planning; original Azure POC incomplete','recommendation':'incomplete',
         'phases':phases,'primary_small_performance':measured,'primary_small_performance_status':main.get('performance_status'),
         'matrix_cells':len(score['matrix']),'matrix_status_counts':{s:sum(c['coverage_status']==s for c in score['matrix']) for s in ('passed','failed','not_assessed')},
         'matrix_performance_status_counts':{s:sum(c['performance_status']==s for c in score['matrix']) for s in ('passed','failed','not_assessed')},
         'delivery_recovery':checks,'cost_basis':'local_measured_usage + separate modeled_cloud',
         'azure_measured_costs':'unavailable','original_mix_projection':'unavailable: Medium/Large measurements missing',
         'concurrency':findings.get('concurrency'),'small_scenarios':[r for r in scenarios if r['experiment']==str(small)]}
+    milestone_checks={'paired_custom_and_small':True,
+        'representative_full':bool(representative and read_json(Path(representative)/'representative.json')['status']=='passed'),
+        'representative_targeted':bool(targeted and read_json(Path(targeted)/'representative.json')['status']=='passed'),
+        'representative_restart':bool(checks and all(c['restart'].get('status')=='passed' and c['restart'].get('restart_status')=='passed' for c in checks)),
+        'concurrency_diagnostic':bool(concurrency and findings['concurrency']['status']=='passed'),
+        'modeled_small_costs':len(summary['small_scenarios'])==12}
+    summary['local_milestone']={'status':'complete' if all(milestone_checks.values()) else 'incomplete','checks':milestone_checks,
+        'scope':'Plan 11 implementation/evidence milestone; original POC gates remain incomplete and performance targets are assessed separately'}
+    if concurrency:
+        observed=findings['concurrency'];limits=main['specification']['criteria']['business_limits']['concurrency']
+        throughput=observed.get('four_way_throughput_ratio');completion=observed.get('four_way_completion_ratio')
+        summary['local_concurrency_diagnostic']={'scope':'Additional local single-worker Trino W2 host-client diagnostic; required Medium/cross-engine gate remains unassessed',
+            'throughput_ratio':throughput,'minimum_throughput_ratio':limits['minimum_four_way_throughput_ratio'],
+            'completion_ratio':completion,'maximum_completion_ratio':limits['maximum_completion_time_ratio'],
+            'status':'not_assessed' if throughput is None or completion is None else 'passed' if throughput>=float(limits['minimum_four_way_throughput_ratio']) and completion<=float(limits['maximum_completion_time_ratio']) else 'failed'}
     write_json(output/'summary.json',summary)
     document=['# Capacity campaign results','','Original POC recommendation: **incomplete**. These are local experiments and public-retail planning scenarios.','',
+              'Local milestone: **'+summary['local_milestone']['status']+'**. Check details in `summary.json`; completed processing does not override failed performance targets.','',
               '| Experiment | Technical status | Performance | Producer sampled peak MiB |','|---|---|---|---:|']
     for row in phases:document.append(f"| {row['workspace']} | {row['status']} | {row['performance_status'] or 'not assessed'} | {round(row['peak_sampled_producer_rss_bytes']/2**20,1) if row['peak_sampled_producer_rss_bytes'] else 'unavailable'} |")
     document+=['','## Tuned Small workloads','','| Workload | Engine | Repetitions | Median seconds | Range seconds |','|---|---|---:|---:|---|']
@@ -87,12 +111,17 @@ def assemble(output,small,custom,representative=None,targeted=None,concurrency=N
               '','Local measured usage remains unpriced. ADLS requests, Azure performance/billing and recurring operating labor are unavailable. Retail scenario assumptions do not close their measurement gates. Source configurations are not combined for rankings.',
               '',f"Primary required-cell coverage: {summary['matrix_status_counts']}. Single Small delivery cases and custom observations do not fill unexecuted required repetitions/topologies.",
               '','Read `poc_scorecard.md`, `matrix.csv`, per-phase `observations/resource_summary.json`, and the chronological execution document for limits, failures, restart evidence and remaining work.']
+    if concurrency:
+        diagnostic=summary['local_concurrency_diagnostic']
+        document+=['','## Additional local read concurrency','',
+            f"Local target diagnostic: **{diagnostic['status']}**. Four-way throughput ratio {diagnostic['throughput_ratio']:.3f} versus minimum {diagnostic['minimum_throughput_ratio']}; completion ratio {diagnostic['completion_ratio']:.3f} versus maximum {diagnostic['maximum_completion_ratio']}.",
+            '',diagnostic['scope']+'. Successful query execution does not override a missed target.']
     (output/'capacity_results.md').write_text('\n'.join(document)+'\n')
     return summary
 
 
 if __name__=='__main__':
     parser=argparse.ArgumentParser();parser.add_argument('--out',default='data/capacity-evidence-final')
-    parser.add_argument('--small',default='data/capacity-small-bounded-100000');parser.add_argument('--custom',default='data/capacity-custom-bounded-10000')
+    parser.add_argument('--small',default='data/capacity-small-native6g-100000');parser.add_argument('--custom',default='data/capacity-custom-native6g-10000')
     parser.add_argument('--representative');parser.add_argument('--targeted');parser.add_argument('--concurrency')
     args=parser.parse_args();print(json.dumps(assemble(args.out,args.small,args.custom,args.representative,args.targeted,args.concurrency),indent=2))

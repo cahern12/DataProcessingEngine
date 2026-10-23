@@ -10,6 +10,27 @@ from dpe.rules import evaluate
 
 
 class IncrementalTests(unittest.TestCase):
+    def test_large_work_population_uses_persisted_membership_without_oversized_sql(self):
+        from dpe.incremental import IncidentSelection,rows_in
+        ids=['INC-%08d'%n for n in range(100000)]
+        selection=IncidentSelection(ids,'lake.work.affected_incidents')
+        self.assertEqual(list(selection),ids)
+        self.assertEqual(rows_in(selection),'(SELECT DISTINCT incident_id FROM lake.work.affected_incidents)')
+        self.assertEqual(rows_in(IncidentSelection(["a'b"],'lake.work.affected_incidents')),"('a''b')")
+        with self.assertRaises(ValueError):IncidentSelection(ids,'lake.work.ids; DROP TABLE x')
+
+    def test_large_reason_insert_stays_below_query_limit_and_preserves_every_value(self):
+        from dpe.incremental import insert
+        class Capture:
+            queries=[]
+            def sql(self,query):self.queries.append(query)
+        client=Capture();rows=[('INC-%06d'%n,'reason-é'*200) for n in range(2500)]
+        insert(client,'lake.work.reasons',rows)
+        self.assertGreater(len(client.queries),1)
+        self.assertTrue(all(len(q.encode())<1000000 for q in client.queries))
+        text='\n'.join(client.queries)
+        self.assertTrue(all(text.count("'"+key+"'")==1 for key,_ in rows))
+
     def test_cutoff_only_delivery_has_explicit_empty_manifest_files(self):
         with tempfile.TemporaryDirectory() as directory:
             paths = scenario_batches(Path(directory))

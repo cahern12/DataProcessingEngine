@@ -11,6 +11,25 @@ SNAPSHOT=ROOT/'benchmarks/pricing/azure-eastus-2026-10-22'
 
 
 class CloudModelTests(unittest.TestCase):
+    def test_larger_local_envelope_prices_memory_compatible_application_node_and_distinct_system_nodes(self):
+        snapshot=ROOT/'benchmarks/pricing/azure-eastus-2026-10-23-capacity20'
+        with tempfile.TemporaryDirectory() as temporary:
+            root=Path(temporary);self.example(root/'source')
+            criteria=acceptance('benchmarks/specs/acceptance.poc.v8.json')
+            write_json(root/'source/specification.json',{'criteria':criteria})
+            value=model(root/'source',snapshot,root/'aks','aks')
+            inventory={r['resource']:r for r in value['inventory']}
+            self.assertEqual(inventory['application-node']['sku'],'Standard_E4as_v5')
+            self.assertEqual(inventory['system-pool']['sku'],'Standard_D4as_v5')
+            usage=read_json(root/'aks/usage.json')
+            self.assertEqual({r['rate_id'] for r in usage['lines'] if r['resource_id']=='application-node'},{'application_node'})
+            self.assertEqual({r['rate_id'] for r in usage['lines'] if r['resource_id']=='system-pool'},{'node'})
+            report=read_json(root/'aks/cost_report.json')
+            self.assertEqual(Decimal(report['scope_total']),Decimal(report['allocated_total']))
+            criteria['resources']['modeled_azure_application_memory_gib']=16
+            write_json(root/'source/specification.json',{'criteria':criteria})
+            with self.assertRaisesRegex(ValueError,'smaller'):model(root/'source',snapshot,root/'invalid')
+
     def example(self,root):
         criteria=acceptance('benchmarks/specs/acceptance.poc.v2.json')
         write_json(root/'specification.json',{'criteria':criteria})

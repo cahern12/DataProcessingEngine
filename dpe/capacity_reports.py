@@ -4,7 +4,7 @@ import re
 import statistics
 from collections import defaultdict
 from pathlib import Path
-from .common import read_json,write_json,timestamp
+from .common import read_json,write_json,timestamp,digest
 from .costing import csv_rows
 
 
@@ -16,6 +16,32 @@ def byte_size(value):
 
 
 def lines(path):return [json.loads(v) for v in Path(path).read_text().splitlines() if v.strip()] if Path(path).exists() else []
+
+
+def jvm_summary(folder):
+    samples=lines(Path(folder)/'jvm_samples.jsonl');peaks={};categories={};overhead=0
+    def maximum(key,value):peaks[key]=max(peaks.get(key,0),int(value)*1024)
+    for row in samples:
+        overhead+=sum(row.get(key,{}).get('collector_seconds',0) for key in ('native','heap','os'))
+        heap=row.get('heap',{}).get('stdout','')
+        match=re.search(r'total reserved (\d+)K, committed (\d+)K, used (\d+)K',heap)
+        if match:
+            for key,value in zip(('heap_reserved_bytes','heap_committed_bytes','heap_used_bytes'),match.groups()):maximum(key,value)
+        native=row.get('native',{}).get('stdout','')
+        match=re.search(r'Total: reserved=(\d+)KB, committed=(\d+)KB',native)
+        if match:
+            maximum('nmt_total_reserved_bytes',match[1]);maximum('nmt_total_committed_bytes',match[2])
+        for name,reserved,committed in re.findall(r'^-\s+([^\n(]+) \(reserved=(\d+)KB, committed=(\d+)KB\)',native,re.MULTILINE):
+            target=categories.setdefault(name.strip(),{'peak_reserved_bytes':0,'peak_committed_bytes':0})
+            target['peak_reserved_bytes']=max(target['peak_reserved_bytes'],int(reserved)*1024)
+            target['peak_committed_bytes']=max(target['peak_committed_bytes'],int(committed)*1024)
+        match=re.search(r'^VmRSS:\s*(\d+) kB',row.get('os',{}).get('stdout',''),re.MULTILINE)
+        if match:maximum('os_process_rss_bytes',match[1])
+    return {'status':'observed' if peaks else 'not_assessed','samples':len(samples),'sampled_maxima':peaks,
+            'nmt_categories':categories,'collector_seconds_sum':overhead,
+            'limits':['NMT reserved/committed, heap used and OS RSS are distinct quantities; maxima may occur at different times.',
+                      'HotSpot NMT does not account for every third-party native allocation. No complete off-heap attribution is claimed.',
+                      'Sampling can miss peaks; retain command timestamps, return codes and collection overhead.']}
 
 
 def summarize(workspace):
@@ -68,11 +94,12 @@ def summarize(workspace):
         'collector_wall_seconds_sum':overhead,'sampling_gap_seconds':{'median':statistics.median(gaps) if gaps else None,'maximum':max(gaps,default=None)},
         'runtime_before':before,'runtime_after':after,'storage_layout':layout,'protected_pins':protected,
         'storage_byte_hours_left_sample':sum(a['bytes']*(timestamp(b['at'])-timestamp(a['at'])).total_seconds()/3600 for a,b in zip(inventories,inventories[1:])),
+        'jvm':jvm_summary(folder),'reporter_source_sha256':digest(Path(__file__)),
         'errors':errors,'limits':['Sample maxima are not exact peaks; Docker memory values rounded by Docker stats.',
              'CPU seconds integrate sampled container CPU%; distinct from measured engine task/query CPU.',
              'Storage byte-hours use left-sample interpolation; retention is separately assumed in cloud models.',
              'Namespace classification does not prove all objects are referenced by Iceberg; no garbage collection authorized or performed.',
-             'Per-process native/JVM heap breakdown, billable ADLS request counts, transfer meters and recurring hands-on labor unavailable.']}
+             'Complete native-memory attribution, billable ADLS request counts, transfer meters and recurring hands-on labor unavailable; partial JVM summaries are separate when collected.']}
     write_json(folder/'resource_summary.json',result)
     csv_rows(folder/'container_resources.csv',list(aggregate.values()));csv_rows(folder/'storage_layout.csv',layout)
     csv_rows(folder/'stage_memory.csv',[{'stage':stage,'container':container,'peak_sampled_memory_bytes':max(values),'samples':len(values)} for (stage,container),values in stage_rows.items()])

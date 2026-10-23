@@ -67,16 +67,17 @@ def _run(workspace,count=100000,acceptance_path='benchmarks/specs/acceptance.poc
     if workspace.exists():raise ValueError('representative workspace exists')
     criteria=acceptance(acceptance_path);workspace.mkdir(parents=True)
     spec={'version':'v1','criteria':criteria,'count':count,'size':'small' if count==100000 else 'smoke' if count==1000 else 'custom',
-          'revision':lakehouse.sql_revision(),'criteria_sha256':hashlib.sha256(canonical(criteria).encode()).hexdigest(),
+          'revision':lakehouse.sql_revision(),'started_at':iso(datetime.now(timezone.utc)),'criteria_sha256':hashlib.sha256(canonical(criteria).encode()).hexdigest(),
           'resources':criteria['resources'],'cache_policy':criteria['cache_policy'],'scope':'Additional local open-heavy delivery/recovery cases; one attempt per case, not repeated baseline or distributed W5 coverage'}
     write_json(workspace/'specification.json',spec)
+    started=time.perf_counter()
     observer=Observer(workspace,criteria);report={'status':'running','specification':spec,'runs':[],'recovery':[],'cases':[]};all_sources=[]
     def persist():
         lakehouse.atomic_json(workspace/'run_results.json',report)
         write_json(workspace/'representative.json',report)
     def measured(name,engine,platform,execute,path,fail_at=None):
         begin=time.perf_counter();clock=iso(datetime.now(timezone.utc));details={};status='failed'
-        report['current_attempt']={'engine':'trino' if engine=='targeted' else engine,'workload_id':'W4','started_at':clock};persist()
+        report['current_attempt']={'engine':'trino' if engine=='targeted' else engine,'workload_id':'W5' if fail_at else 'W4','started_at':clock};persist()
         observer.mark('full-'+name+'-'+engine+('-'+fail_at if fail_at else ''))
         try:
             with watchdog(criteria['operational_watchdogs_seconds']['full']):details=execute(path,platform,fail_at=fail_at)
@@ -89,7 +90,7 @@ def _run(workspace,count=100000,acceptance_path='benchmarks/specs/acceptance.poc
             raise
         finally:
             logical=sum(sum(f['bytes'] for f in read_json(p/'manifest.json')['files']) for p in all_sources)
-            report['runs'].append({'logical_run_id':uuid.uuid4().hex,'attempt_id':uuid.uuid4().hex,'workload_id':'W4','variant':name,
+            report['runs'].append({'logical_run_id':uuid.uuid4().hex,'attempt_id':uuid.uuid4().hex,'workload_id':'W5' if fail_at else 'W4','variant':name+'-'+fail_at if fail_at else name,
                 'engine':'trino' if engine=='targeted' else engine,'strategy':'targeted' if engine=='targeted' else 'full','size':spec['size'],'workers':1,'concurrency':1,
                 'started_at':clock,'finished_at':iso(datetime.now(timezone.utc)),'runtime_seconds':time.perf_counter()-begin,
                 'logical_input_bytes':logical,'input_manifest_checksum':hashlib.sha256(canonical([read_json(p/'manifest.json') for p in all_sources]).encode()).hexdigest(),
@@ -99,6 +100,10 @@ def _run(workspace,count=100000,acceptance_path='benchmarks/specs/acceptance.poc
         with profile(criteria):
             observer.start();observer.mark('source_generation')
             cases=deliveries(workspace,count);previous={}
+            from .benchmark_calibration import assess
+            preflight=assess(read_json(cases[0][1]/'manifest.json'),criteria)
+            write_json(workspace/'capacity_preflight.json',preflight)
+            if preflight['processing_status']!='eligible':raise ValueError('representative source exceeds frozen input budget')
             for name,path,changed in cases:
                 all_sources.append(path);entry={'variant':name,'expected_changed_incident_keys':changed,'engines':{}};report['cases'].append(entry)
                 for engine in strategies:
@@ -111,9 +116,14 @@ def _run(workspace,count=100000,acceptance_path='benchmarks/specs/acceptance.poc
                             if before!=(platform/'active.json').read_bytes():raise AssertionError('partial publication visible after injected failure')
                             for product in lakehouse.OUTPUTS:
                                 if fingerprint(lakehouse.consume(platform,product,publication_id=old['publication_id'])['rows'])!=previous[engine]['pins'][product]:raise AssertionError('failed attempt changed old pin')
-                            report['recovery'].append({'engine':engine,'failpoint':fail,'status':'passed','failure_runtime_seconds':report['runs'][-1]['runtime_seconds'],
+                            report['recovery'].append({'engine':engine,'failpoint':fail,'status':'publication_preserved','failure_finished_at':report['runs'][-1]['finished_at'],'failure_runtime_seconds':report['runs'][-1]['runtime_seconds'],
                                 'detection_boundary':'synchronous injected error, not infrastructure failure detection','old_publication_id':old['publication_id'],'operator_actions':0})
                     details=measured(name,engine,platform,execute,path)
+                    if name=='sparse_delta':
+                        for recovery in report['recovery']:
+                            if recovery['engine']==engine:
+                                recovery.update(status='passed',recovery_seconds=(timestamp(report['runs'][-1]['finished_at'])-timestamp(recovery['failure_finished_at'])).total_seconds(),
+                                    recovery_boundary='Injected failure return to independently validated retry; earlier failpoint includes the subsequent serial injected attempt')
                     current={p:lakehouse.consume(platform,p)['rows'] for p in lakehouse.OUTPUTS}
                     if old:
                         indexed={r['incident_id']:hashlib.sha256(canonical(r).encode()).hexdigest() for r in current['incident_resolution']}
@@ -137,7 +147,7 @@ def _run(workspace,count=100000,acceptance_path='benchmarks/specs/acceptance.poc
             return {'status':'passed','report':str(workspace/'representative.json'),'performance_status':report['performance_status']}
     except Exception as error:report.update(status='failed',error=str(error));raise
     finally:
-        observer.stop();persist();performance(workspace,report['runs']);scorecard(workspace,report['runs'],criteria=criteria)
+        observer.stop();report['runtime_seconds']=time.perf_counter()-started;persist();performance(workspace,report['runs']);scorecard(workspace,report['runs'],criteria=criteria)
         write_json(workspace/'usage.json',observed_usage(report['runs'],workspace.name))
 
 

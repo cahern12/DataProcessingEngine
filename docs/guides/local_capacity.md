@@ -8,20 +8,20 @@ The helper expects Docker CLI, `docker-compose` and the `colima-dpe-capacity` Do
 
 ```sh
 colima stop --profile dpe
-colima start --profile dpe-capacity --cpu 4 --memory 16 --disk 80 --runtime docker --vm-type vz
-make local-capacity-build POC_ACCEPTANCE=benchmarks/specs/acceptance.poc.v6.json
-make local-capacity-up POC_ACCEPTANCE=benchmarks/specs/acceptance.poc.v6.json
+colima start --profile dpe-capacity --cpu 4 --memory 20 --disk 80 --runtime docker --vm-type vz
+make local-capacity-build POC_ACCEPTANCE=benchmarks/specs/acceptance.poc.v8.json
+make local-capacity-up POC_ACCEPTANCE=benchmarks/specs/acceptance.poc.v8.json
 ```
 
 The tested Mac has 32 GiB RAM. Check current memory pressure and disk capacity before starting a VM. The helper starts the loopback read-only resource observer automatically and waits for the complete stack, including Airflow scheduler/database readiness. It does not provision Colima or Azure. Baseline `local-poc-*` commands preserve their historical defaults; use the explicit capacity selection for this environment.
 
-The current v6 profile uses typed Parquet landing; its runner image installs the pinned optional `requirements-parquet.lock`. Install that lock into the host virtual environment to run Parquet unit tests locally. The 10,000-incident comparison has passed; the 100,000-incident comparison and representative campaign remain incomplete. Commands below describe how to run them, not completed evidence.
+The current v8 profile uses typed Parquet landing; its runner image installs the pinned optional `requirements-parquet.lock`. Install that lock into the host virtual environment to run Parquet unit tests locally. The current experiment uses a 20-GiB VM, a 6-GiB Trino container with a 2-GiB JVM heap, and a 2.5-GiB producer ceiling. NMT summary instrumentation is enabled and has overhead. Earlier 16-GiB experiments are retained under their original profile versions. The paired custom/Small comparison passed. The representative full-engine campaign stopped when the cutoff-only daily aggregation exceeded Trino's 768-MB per-query memory allowance. Targeted Small, post-restart checks and the final consolidated package remain pending; preserve that failed workspace when continuing. Commands below describe how to run them, not completed evidence.
 
 ## Verification and measurements
 
 ```sh
-make local-capacity-verify POC_ACCEPTANCE=benchmarks/specs/acceptance.poc.v6.json POC_WORKSPACE=data/my-capacity-verify
-python3 benchmarks/run_capacity_comparisons.py --acceptance benchmarks/specs/acceptance.poc.v6.json --prefix parquet
+make local-capacity-verify POC_ACCEPTANCE=benchmarks/specs/acceptance.poc.v8.json POC_WORKSPACE=data/my-capacity-verify
+python3 benchmarks/run_capacity_comparisons.py --acceptance benchmarks/specs/acceptance.poc.v8.json --prefix native6g
 ```
 
 The comparison script uses fixed experiment names derived from its prefix. It preserves successful matching phases on rerun and refuses failed/mismatched phases. For a new campaign, make a new acceptance JSON naming its own `memory_admission.reference_workspace` and select a new prefix. The custom 10,000-incident calibration precedes the 100,000-incident Small attempt. Both comparisons use real Airflow, three paired repetitions and immutable shared read inputs. Do not build images or submit other experiments during measurements.
@@ -31,7 +31,7 @@ Actual limits, memory events, producer/container samples, stages, storage invent
 Additional delivery cases use a separate source distribution and workspace:
 
 ```sh
-DOCKER_CONTEXT=colima-dpe-capacity docker-compose -f infra/local/compose.yaml -f infra/local/compose.benchmark.yaml -f infra/local/compose.capacity.yaml -f infra/local/compose.capacity.v6.yaml run --rm --entrypoint python runner -m dpe.representative --workspace data/my-delivery-cases --count 100000 --acceptance benchmarks/specs/acceptance.poc.v6.json --strategies trino spark
+DOCKER_CONTEXT=colima-dpe-capacity docker-compose -f infra/local/compose.yaml -f infra/local/compose.benchmark.yaml -f infra/local/compose.capacity.yaml -f infra/local/compose.capacity.v8.yaml run --rm --entrypoint python runner -m dpe.representative --workspace data/my-delivery-cases --count 100000 --acceptance benchmarks/specs/acceptance.poc.v8.json --strategies trino spark
 ```
 
 Targeted Trino is an additional strategy (`--strategies targeted`) with its own workspace, candidate population and retained-copy overhead. Single delivery cases do not establish three required controlled repetitions. Spark remains a full rebuild implementation.
@@ -39,18 +39,18 @@ Targeted Trino is an additional strategy (`--strategies targeted`) with its own 
 After measurements, independent audits can run from the host's pinned `.venv`, separately from workload timings:
 
 ```sh
-.venv/bin/python benchmarks/audit_dispositions.py --workspace data/capacity-small-parquet-100000
-.venv/bin/python benchmarks/verify_capacity_publications.py --workspace data/capacity-small-parquet-100000 --out data/my-pin-check.json
+.venv/bin/python benchmarks/audit_dispositions.py --workspace data/capacity-small-native6g-100000
+.venv/bin/python benchmarks/verify_capacity_publications.py --workspace data/capacity-small-native6g-100000 --out data/my-pin-check.json
 ```
 
-Restart PostgreSQL/object storage/catalog/Trino and wait for readiness before claiming a post-restart result. Keep the selected Compose overlay when restarting. Audits read committed ancestry, including old pins in failed experiments; they never relabel a failed comparison as passed.
+Use `python3 benchmarks/restart_capacity_services.py --acceptance benchmarks/specs/acceptance.poc.v8.json --out data/my-service-restart.json` after experiments finish. This restarts PostgreSQL/object storage/catalog/Trino, waits for readiness, and records before/after startup times and health. Supply `--restart-evidence data/my-service-restart.json` to the pin auditor before claiming a post-restart result. Keep the selected Compose overlay when restarting. Audits read committed ancestry, including old pins in failed experiments; they never relabel a failed comparison as passed.
 
 ## Price models and reports
 
 ```sh
 python3 benchmarks/fetch_public_prices.py --out benchmarks/pricing/my-new-retail-snapshot
-python3 -m dpe.capacity_reports --workspace data/capacity-small-parquet-100000
-python3 -m dpe.cloud_model --workspace data/capacity-small-parquet-100000 --snapshot benchmarks/pricing/azure-eastus-2026-10-22 --output data/my-capacity-prices
+python3 -m dpe.capacity_reports --workspace data/capacity-small-native6g-100000
+python3 -m dpe.cloud_model --workspace data/capacity-small-native6g-100000 --snapshot benchmarks/pricing/azure-eastus-2026-10-23-capacity20 --output data/my-capacity-prices
 ```
 
 The captured snapshot supplies public USD rates, not Azure usage or bills. Keep the valuation interval consistent with its price date. Per-workload and technology CSVs distinguish assumed requests/retention/allocation from measured local elapsed time and object bytes. VM and AKS inventories are separate; shared charges are allocated once. Retained/failed objects stay charged in their declared scope. Original mixed-size demand forecasts remain unavailable without Medium/Large observations.
@@ -58,7 +58,7 @@ The captured snapshot supplies public USD rates, not Azure usage or bills. Keep 
 The final assembler accepts explicit primary comparison paths and keeps configurations/variants separate:
 
 ```sh
-python3 benchmarks/assemble_capacity_evidence.py --small data/capacity-small-parquet-100000 --custom data/capacity-custom-parquet-10000 --out data/capacity-evidence-final
+python3 benchmarks/assemble_capacity_evidence.py --small data/capacity-small-native6g-100000 --custom data/capacity-custom-native6g-10000 --out data/capacity-evidence-final
 ```
 
 Full raw evidence remains ignored under `data/`; compact summaries and execution documents belong in the repository. No command here deploys Azure resources or automatically commits changes.

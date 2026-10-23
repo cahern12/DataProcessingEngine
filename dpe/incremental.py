@@ -41,7 +41,15 @@ def ref(client, name):
     return {'table': name, 'snapshot_id': snapshots[0]['snapshot_id']}
 
 
+class IncidentSelection(list):
+    """Keep small static filters; use a persisted set for large work populations."""
+    def __init__(self,values,relation):
+        super().__init__(values);self.relation=table(relation)
+
+
 def rows_in(values):
+    if isinstance(values,IncidentSelection) and len(values)>1000:
+        return '(SELECT DISTINCT incident_id FROM '+values.relation+')'
     return '(' + ','.join(literal(v) for v in values) + ')' if values else '(SELECT cast(NULL as varchar) WHERE false)'
 
 
@@ -99,8 +107,13 @@ def delivery(client, schema, manifest, incoming, parent, checksum):
 
 
 def insert(client, target, rows):
-    client.sql('INSERT INTO ' + target + ' VALUES ' + ','.join('(' + ','.join(
-        ('true' if v else 'false') if type(v) is bool else literal(v) for v in row) + ')' for row in rows))
+    buffer=[];size=0
+    for row in rows:
+        text='('+','.join(('true' if v else 'false') if type(v) is bool else literal(v) for v in row)+')'
+        if buffer and (len(buffer)>=1000 or size+len(text.encode())>768*1024):
+            client.sql('INSERT INTO '+target+' VALUES '+','.join(buffer));buffer=[];size=0
+        buffer.append(text);size+=len(text.encode())+1
+    if buffer:client.sql('INSERT INTO '+target+' VALUES '+','.join(buffer))
 
 
 def candidates(client, schema, current, parent, manifest):
@@ -110,12 +123,13 @@ def candidates(client, schema, current, parent, manifest):
     if not parent:
         reasons = [(v, 'initial') for v in incoming_ids]
     elif incoming_ids:
-        prior = raw_union(parent['input_checkpoint']['deliveries'], 'record_incident IN ' + rows_in(incoming_ids), 'dataset,payload')
+        incoming_set='(SELECT DISTINCT record_incident FROM '+pinned(current)+' WHERE record_incident IS NOT NULL)'
+        prior = raw_union(parent['input_checkpoint']['deliveries'], 'record_incident IN ' + incoming_set, 'dataset,payload')
         novel = client.sql('SELECT DISTINCT n.record_incident FROM ' + pinned(current) + ' n WHERE n.record_incident IS NOT NULL AND NOT EXISTS (SELECT 1 FROM (' + prior + ') p WHERE p.dataset=n.dataset AND p.payload=n.payload)')
         reasons.extend((r['record_incident'], 'source_change') for r in novel)
         event_ids = [r['event_id'] for r in client.sql('SELECT event_id FROM ' + pinned(current['event_ids']))]
         if event_ids:
-            prior_ids = ' UNION ALL '.join('SELECT * FROM ' + pinned(d['event_ids']) + ' WHERE event_id IN ' + rows_in(event_ids) for d in parent['input_checkpoint']['deliveries'])
+            prior_ids = ' UNION ALL '.join('SELECT * FROM ' + pinned(d['event_ids']) + ' WHERE event_id IN (SELECT event_id FROM '+pinned(current['event_ids'])+')' for d in parent['input_checkpoint']['deliveries'])
             conflicts = client.sql('SELECT DISTINCT p.record_incident FROM ('+prior_ids+') p JOIN '+pinned(current['event_ids'])+' n ON n.event_id=p.event_id WHERE p.record_incident<>n.record_incident')
             reasons.extend((r['record_incident'], 'event_identity_conflict') for r in conflicts)
     if parent and timestamp(manifest['cutoff']) > timestamp(parent['cutoff']):
@@ -130,20 +144,27 @@ def candidates(client, schema, current, parent, manifest):
     # A future conflicting event can invalidate an incident with no new delivery.
     all_deliveries = (parent['input_checkpoint']['deliveries'] if parent else []) + [current]
     known = {v for v, _ in reasons}
+    relation='lake.'+schema+'.affected_incidents'
+    client.sql('CREATE TABLE '+relation+'(incident_id varchar,reason varchar)')
+    if reasons:
+        if __import__('os').environ.get('DPE_INGEST_MODE')=='parquet_add_files':
+            from .parquet_landing import register
+            register(client,relation,({'incident_id':v,'reason':reason} for v,reason in sorted(set(reasons))),
+                     [('incident_id','string'),('reason','string')])
+        else:insert(client,relation,sorted(set(reasons)))
     while known:
         identities = ' UNION ALL '.join('SELECT * FROM '+pinned(d['event_ids']) for d in all_deliveries)
-        linked = client.sql('SELECT DISTINCT record_incident FROM ('+identities+') WHERE event_id IN (SELECT event_id FROM ('+identities+') WHERE record_incident IN '+rows_in(sorted(known))+')')
+        linked = client.sql('SELECT DISTINCT record_incident FROM ('+identities+') WHERE event_id IN (SELECT event_id FROM ('+identities+') WHERE record_incident IN '+rows_in(IncidentSelection(sorted(known),relation))+')')
         extra = {r['record_incident'] for r in linked} - known
         if not extra: break
-        reasons.extend((v, 'event_identity_conflict') for v in extra); known.update(extra)
-    client.sql('CREATE TABLE lake.'+schema+'.affected_incidents(incident_id varchar,reason varchar)')
-    if reasons: insert(client, 'lake.'+schema+'.affected_incidents', sorted(set(reasons)))
-    return sorted({v for v, _ in reasons})
+        additions=[(v,'event_identity_conflict') for v in sorted(extra)]
+        insert(client,relation,additions);known.update(extra)
+    return IncidentSelection(sorted(known),relation)
 
 
 def materialize_histories(client, schema, deliveries, selected, manifest):
     predicate = 'record_incident IN ' + rows_in(selected) + ' OR record_incident IS NULL'
-    # Static predicates reach each bucketed delivery before any JSON parsing/window work.
+    # Small sets use static bucket filters; large sets use the persisted work relation.
     client.sql('CREATE TABLE lake.'+schema+'.raw_records AS '+raw_union(deliveries, predicate, RAW_COLUMNS))
     client.sql('CREATE TABLE lake.'+schema+'.batch_context(case_id varchar,cutoff varchar,report_start varchar)')
     insert(client, 'lake.'+schema+'.batch_context', [('__batch__', manifest['cutoff'], manifest['report_start'])])

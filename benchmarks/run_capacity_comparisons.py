@@ -11,6 +11,17 @@ from dpe.common import ROOT,read_json,write_json
 from dpe.experiment import acceptance,checksum
 
 
+def airflow_runs(stdout):
+    """Airflow CLI may emit startup logs before its JSON result."""
+    decoder=json.JSONDecoder()
+    for line_number,line in enumerate(stdout.splitlines()):
+        if not line.lstrip().startswith('['):continue
+        try:value,_=decoder.raw_decode('\n'.join(stdout.splitlines()[line_number:]).lstrip())
+        except ValueError:continue
+        if isinstance(value,list) and all(isinstance(row,dict) and 'run_id' in row for row in value):return value
+    raise ValueError('Airflow CLI did not return a run list')
+
+
 def run(criteria_path,prefix='bounded'):
     criteria=acceptance(criteria_path);environment=dict(os.environ,DOCKER_CONTEXT='colima-dpe-capacity')
     phases=[('capacity-custom-'+prefix+'-10000',10000),('capacity-small-'+prefix+'-100000',100000)]
@@ -43,7 +54,7 @@ def run(criteria_path,prefix='bounded'):
             for _ in range(20):
                 state=subprocess.run(['docker','exec','dpe-local-airflow-1','airflow','dags','list-runs','dpe_benchmarks','-o','json'],env=environment,capture_output=True,text=True,check=True)
                 (ROOT/'data'/(workspace+'-airflow-runs.json')).write_text(state.stdout)
-                try:found=next(r for r in json.loads(state.stdout) if r['run_id']==workspace)
+                try:found=next(r for r in airflow_runs(state.stdout) if r['run_id']==workspace)
                 except (ValueError,KeyError,StopIteration):found={}
                 if found.get('state')=='success':break
                 if found.get('state')=='failed':raise RuntimeError('Airflow validation failed: '+workspace)
