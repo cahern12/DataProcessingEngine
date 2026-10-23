@@ -63,6 +63,10 @@ def fixtures(workspace):
     cases=read_json(ROOT/'synthetic/fixtures/rule_cases.v1.json')['cases']
     result=execute({'cases':cases},workspace)
     differences=[]
+    for row in result['reconciliation']:
+        if row['disposition']=='duplicate' and row['rule_id']!='BR-002':
+            differences.append({'case':row['case_id'],'dataset':row['dataset'],'ordinal':row['ordinal'],
+                                'error':'duplicate must retain BR-002 rule ID','actual':row['rule_id']})
     for case in cases:
         actual=[{k:v for k,v in r.items() if k!='case_id'} for r in result['outputs']['incident_resolution'] if r['case_id']==case['name']]
         expected=[] if 'expected_quarantine_rule' in case else [case['expected_incident']]

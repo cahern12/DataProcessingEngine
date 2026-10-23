@@ -71,7 +71,7 @@ class CapacityTests(unittest.TestCase):
         self.assertEqual(new['resources']['local_memory_gib'],16)
         self.assertGreater(new['resources']['maximum_local_logical_input_bytes'],113412943)
         self.assertNotEqual(checksum(old),checksum(new))
-        for version in ('v3','v4','v5','v6','v7','v8'):
+        for version in ('v3','v4','v5','v6','v7','v8','v9'):
             revised=acceptance('benchmarks/specs/acceptance.poc.'+version+'.json')
             self.assertEqual(revised['business_limits'],old['business_limits'])
             self.assertEqual(revised['engineering_criteria'],old['engineering_criteria'])

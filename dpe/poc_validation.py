@@ -67,12 +67,14 @@ def _verify(workspace,count=1000,acceptance_path=None):
                 if execute(batch,platform)['status']!='already_committed':raise AssertionError('replay not idempotent')
             if active!=(platform/'active.json').read_bytes():raise AssertionError('old replay rolled publication back')
             entry['status']='passed'
-        findings={'spark_compatibility':'cross-engine Iceberg reads passed','fixtures':'53 independent cases in both engines',
+        fixture_count=evidence['trino_fixtures']['fixtures']
+        if fixture_count!=evidence['spark_fixtures']['fixture_count']:raise AssertionError('engine fixture counts differ')
+        findings={'spark_compatibility':'cross-engine Iceberg reads passed','fixtures':str(fixture_count)+' independent cases in both engines',
                   'local_publication':'both products, old pins, failures, retry and replay pass for Trino and Spark',
                   'scope':'local '+str(count)+' incidents; required distributed faults and Azure economics not assessed'}
         scorecard(workspace,findings=findings,criteria=criteria)
         evidence['status']='passed'
-        return {'status':'passed','fixtures':53,'engines':['trino','spark'],'report':str(workspace/'verification.json'),'poc_verdict':'incomplete'}
+        return {'status':'passed','fixtures':fixture_count,'engines':['trino','spark'],'report':str(workspace/'verification.json'),'poc_verdict':'incomplete'}
     except Exception as error:evidence.update(status='failed',error=str(error));raise
     finally:
         observer.stop();write_json(workspace/'verification.json',evidence)

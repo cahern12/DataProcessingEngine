@@ -251,8 +251,12 @@ def fixture_check(workspace):
         evidence["dbt"] = build(client, schema, workspace / "dbt")
         rows = {name: client.sql("SELECT * FROM lake." + schema + ".gold_" + name) for name in OUTPUTS}
         errors = client.sql("SELECT * FROM lake." + schema + ".quarantine")
-        dispositions = client.sql("SELECT case_id,disposition,count(*) count FROM lake."+schema+".record_dispositions GROUP BY 1,2")
+        dispositions = client.sql("SELECT case_id,dataset,ordinal,disposition,rule_id FROM lake."+schema+".record_dispositions")
         differences = []
+        for row in dispositions:
+            if row['disposition']=='duplicate' and row['rule_id']!='BR-002':
+                differences.append({'case':row['case_id'],'dataset':row['dataset'],'ordinal':row['ordinal'],
+                                    'error':'duplicate must retain BR-002 rule ID','actual':row['rule_id']})
         for case in cases:
             actual = [{k:v for k,v in row.items() if k!="case_id"} for row in rows["incident_resolution"] if row["case_id"]==case["name"]]
             expected = [] if "expected_quarantine_rule" in case else [case["expected_incident"]]
@@ -265,7 +269,7 @@ def fixture_check(workspace):
                 differences.extend(compare_rows("service_daily_metrics", case["expected_daily"], actual, case["name"]))
             for key, disposition in (("expected_duplicate_count","duplicate"),("expected_deferred_count","deferred")):
                 if key in case:
-                    count=sum(r["count"] for r in dispositions if r["case_id"]==case["name"] and r["disposition"]==disposition)
+                    count=sum(1 for r in dispositions if r["case_id"]==case["name"] and r["disposition"]==disposition)
                     if count!=case[key]:
                         differences.append({"case":case["name"],"disposition":disposition,"expected":case[key],"actual":count})
         evidence["differences"] = differences

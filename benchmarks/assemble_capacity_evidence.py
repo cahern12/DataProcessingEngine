@@ -1,5 +1,6 @@
 """Assemble local capacity evidence, retaining configuration and cost boundaries."""
 import argparse
+import csv
 import json
 import statistics
 import sys
@@ -25,10 +26,11 @@ def assemble(output,small,custom,representative=None,targeted=None,concurrency=N
            'data/capacity-custom-bounded-10000','data/capacity-small-bounded-100000',
            'data/capacity-custom-history-10000','data/capacity-small-history-100000',
            'data/capacity-custom-parquet-10000','data/capacity-small-parquet-100000',
-           'data/capacity-custom-producer2500-10000','data/capacity-small-producer2500-100000',custom,small]))
+           'data/capacity-custom-producer2500-10000','data/capacity-small-producer2500-100000',
+           'data/capacity-native6g-deliveries-full','data/capacity-query1g-deliveries-full',custom,small]))
     if representative:paths.append(representative)
     if targeted:paths.append(targeted)
-    phases=[];cost_rows=[];technology=[];scenarios=[]
+    phases=[];cost_rows=[];technology=[];scenarios=[];small_demand=[]
     for workspace in paths:
         root=Path(workspace);result=read_json(root/'run_results.json')
         observation=summarize(root)
@@ -37,6 +39,13 @@ def assemble(output,small,custom,representative=None,targeted=None,concurrency=N
                'revision':result['specification']['revision'],'run_results_sha256':digest(root/'run_results.json'),
                'peak_sampled_producer_rss_bytes':observation['peak_sampled_producer_rss_bytes'],'oom_killed_containers':observation['oom_killed_containers'],
                'resource_evidence':str(root/'observations/resource_summary.json'),'runs':len(result['runs'])}
+        for name in ('restart','disposition_audit'):
+            artifact=root/(name+'.json')
+            if artifact.exists():
+                audit=read_json(artifact)
+                phase[name]={'status':audit.get('status'),'evidence':str(artifact),'sha256':digest(artifact)}
+                if name=='restart':phase[name]['restart_status']=audit.get('restart_status','not_assessed')
+            else:phase[name]={'status':'not_assessed'}
         phases.append(phase)
         if not (root/'observations/storage_samples.json').exists():
             phase['modeled_cost_status']='incomplete: durable storage inventory unavailable after producer kill';continue
@@ -45,15 +54,20 @@ def assemble(output,small,custom,representative=None,targeted=None,concurrency=N
         except Exception as error:phase['modeled_cost_status']='incomplete: '+str(error);continue
         for path in sorted((root/'modeled_cloud_final').glob('*/scenario.json')):
             scenario=read_json(path);report=read_json(path.parent/'cost_report.json');run_index={r['logical_run_id']:r for r in result['runs']}
+            if str(root)==str(small):
+                with (path.parent/'demand_sensitivity.csv').open() as source:
+                    small_demand.extend(dict(row,scenario_id=scenario['scenario']) for row in csv.DictReader(source))
             scenarios.append({'experiment':str(root),'scenario':scenario['scenario'],'standing_monthly_usd':scenario['standing_monthly_usd'],
                               'standing_target_status':scenario['standing_target_status'],'scope_total_usd':scenario['experiment_scope_total_usd'],
                               'model_status':scenario['status'],'measurement_status':scenario['measurement_status'],'evidence':str(path)})
             for row in report['workloads']:
                 source=run_index[row['logical_run_id']]
                 cost_rows.append(dict(row,experiment=str(root),scenario=scenario['scenario'],runtime_seconds=source['runtime_seconds'],
-                    correctness_status=source.get('quality_status'),variant=source.get('variant','initial'),strategy=source.get('strategy','full'),
+                    gold_validation_status=source.get('quality_status'),phase_disposition_audit_status=phase['disposition_audit']['status'],
+                    validation_scope='Gold products and additional phase-level disposition audit are separate; a failed audit is not overridden by Gold success',
+                    variant=source.get('variant','initial'),strategy=source.get('strategy','full'),
                     economic_basis='modeled_cloud; measured local elapsed and bytes, explicit deployment/request assumptions',evidence=str(path.parent/'cost_report.json')))
-            technology.extend(dict(row,experiment=str(root),scenario=scenario['scenario']) for row in report['technology'])
+            technology.extend(dict(row,experiment=str(root),scenario=scenario['scenario'],phase_disposition_audit_status=phase['disposition_audit']['status']) for row in report['technology'])
         phase['modeled_cost_status']='complete_declared_planning_scenarios; cloud measurements incomplete'
     findings={'capacity':'Custom and Small exact paired comparisons completed; see separate performance assessments.',
         'retained_failures':'3-GiB Trino OOM and original Small producer OOM remain failed.',
@@ -63,7 +77,10 @@ def assemble(output,small,custom,representative=None,targeted=None,concurrency=N
     checks=[]
     for workspace in (representative,targeted):
         if not workspace:continue
-        root=Path(workspace);entry={'workspace':str(root),'status':read_json(root/'representative.json')['status']}
+        root=Path(workspace);delivery=read_json(root/'representative.json')
+        entry={'workspace':str(root),'status':delivery['status'],'performance_status':delivery.get('performance_status'),
+               'criteria_sha256':delivery['specification']['criteria_sha256'],'revision':delivery['specification']['revision'],
+               'cases':delivery['cases'],'recovery':delivery['recovery']}
         if (root/'restart.json').exists():entry['restart']=read_json(root/'restart.json')
         else:entry['restart']={'status':'not_assessed'}
         checks.append(entry)
@@ -72,18 +89,28 @@ def assemble(output,small,custom,representative=None,targeted=None,concurrency=N
     write_json(output/'specification.json',main['specification'])
     score=scorecard(output,main['runs'],findings,main['specification']['criteria']);measured=performance(output,main['runs'])
     csv_rows(output/'modeled_cost_performance.csv',cost_rows);csv_rows(output/'technology_costs.csv',technology);csv_rows(output/'scenario_comparison.csv',scenarios)
+    csv_rows(output/'small_demand_sensitivity.csv',small_demand)
     from datetime import datetime,timezone
     summary={'date':datetime.now(timezone.utc).date().isoformat(),'scope':'local capacity and retail planning; original Azure POC incomplete','recommendation':'incomplete',
+        'assembler_source_sha256':digest(Path(__file__)),
         'phases':phases,'primary_small_performance':measured,'primary_small_performance_status':main.get('performance_status'),
         'matrix_cells':len(score['matrix']),'matrix_status_counts':{s:sum(c['coverage_status']==s for c in score['matrix']) for s in ('passed','failed','not_assessed')},
         'matrix_performance_status_counts':{s:sum(c['performance_status']==s for c in score['matrix']) for s in ('passed','failed','not_assessed')},
         'delivery_recovery':checks,'cost_basis':'local_measured_usage + separate modeled_cloud',
         'azure_measured_costs':'unavailable','original_mix_projection':'unavailable: Medium/Large measurements missing',
-        'concurrency':findings.get('concurrency'),'small_scenarios':[r for r in scenarios if r['experiment']==str(small)]}
+        'concurrency':findings.get('concurrency'),'small_scenarios':[r for r in scenarios if r['experiment']==str(small)],
+        'modeled_scenario_count':len(scenarios),'workload_cost_rows':len(cost_rows),'technology_cost_rows':len(technology),
+        'small_demand_sensitivity':str(output/'small_demand_sensitivity.csv')}
+    phase_index={p['workspace']:p for p in phases}
     milestone_checks={'paired_custom_and_small':True,
         'representative_full':bool(representative and read_json(Path(representative)/'representative.json')['status']=='passed'),
         'representative_targeted':bool(targeted and read_json(Path(targeted)/'representative.json')['status']=='passed'),
         'representative_restart':bool(checks and all(c['restart'].get('status')=='passed' and c['restart'].get('restart_status')=='passed' for c in checks)),
+        'primary_restart':all(phase_index[str(root)]['restart'].get('status')=='passed' and
+                              phase_index[str(root)]['restart'].get('restart_status')=='passed' for root in (custom,small)),
+        'small_and_delivery_dispositions':bool(representative and targeted and all(
+            phase_index[str(root)]['disposition_audit'].get('status')=='passed'
+            for root in (small,representative,targeted))),
         'concurrency_diagnostic':bool(concurrency and findings['concurrency']['status']=='passed'),
         'modeled_small_costs':len(summary['small_scenarios'])==12}
     summary['local_milestone']={'status':'complete' if all(milestone_checks.values()) else 'incomplete','checks':milestone_checks,
@@ -98,15 +125,34 @@ def assemble(output,small,custom,representative=None,targeted=None,concurrency=N
     write_json(output/'summary.json',summary)
     document=['# Capacity campaign results','','Original POC recommendation: **incomplete**. These are local experiments and public-retail planning scenarios.','',
               'Local milestone: **'+summary['local_milestone']['status']+'**. Check details in `summary.json`; completed processing does not override failed performance targets.','',
-              '| Experiment | Technical status | Performance | Producer sampled peak MiB |','|---|---|---|---:|']
-    for row in phases:document.append(f"| {row['workspace']} | {row['status']} | {row['performance_status'] or 'not assessed'} | {round(row['peak_sampled_producer_rss_bytes']/2**20,1) if row['peak_sampled_producer_rss_bytes'] else 'unavailable'} |")
+              '| Experiment | Processing status | Performance | Disposition audit | Producer sampled peak MiB |','|---|---|---|---|---:|']
+    for row in phases:document.append(f"| {row['workspace']} | {row['status']} | {row['performance_status'] or 'not assessed'} | {row['disposition_audit']['status']} | {round(row['peak_sampled_producer_rss_bytes']/2**20,1) if row['peak_sampled_producer_rss_bytes'] else 'unavailable'} |")
     document+=['','## Tuned Small workloads','','| Workload | Engine | Repetitions | Median seconds | Range seconds |','|---|---|---:|---:|---|']
     for row in measured:
         if row['workload_id'] not in ('W1','W2','W3','W4'):continue
         document.append(f"| {row['workload_id']} | {row['engine']} | {row['successful_repetitions']} | {row['median_seconds']:.2f} | {row['min_seconds']:.2f}–{row['max_seconds']:.2f} |")
+    if checks:
+        document+=['','## Additional representative deliveries','',
+            'Open-heavy sources, one observation per case/strategy. These use their own frozen configuration and do not add repetitions to the primary comparison. Timings include independent validation; replay and additional pin audits are separate.','',
+            '| Workspace | Case | Engine/strategy | Status | Seconds | Selected incidents |',
+            '|---|---|---|---|---:|---:|']
+        for check in checks:
+            for case in check['cases']:
+                for engine,row in case['engines'].items():
+                    selected=row.get('candidate_count')
+                    document.append(f"| {Path(check['workspace']).name} | {case['variant']} | {engine} | {row['status']} | {row['runtime_seconds']:.2f} | {selected if selected is not None else 'full population'} |")
+        document+=['','Full-engine publication failures are preserved as W5 attempts. Recovery intervals run from the synchronous injected error to independently validated retry; an earlier interval includes the subsequent serial fault attempt. This does not establish infrastructure failure-detection or distributed recovery targets.']
     document+=['','## Small public-retail scenarios','','Fixed warm shared capacity; additional cash compute for a run is zero under this assumption. Active compute allocation is already inside standing cost.','',
               '| Scenario | Standing USD/month | Standing target |','|---|---:|---|']
     for row in summary['small_scenarios']:document.append(f"| {row['scenario']} | {float(row['standing_monthly_usd']):.2f} | {row['standing_target_status']} |")
+    document+=['','### Alternative Small W4 demand, base assumptions','',
+        'Each row is an alternative using the whole warm platform with Spark retained; rows are not additive. These are modeled Small-only workloads, not the original mixed-size forecast. Shared read preparation and isolated-read application startup remain separately reported workloads.','',
+        '| Scenario | Engine | Runs/day | Fully allocated USD/run | Total USD/month | USD 2/run target |',
+        '|---|---|---:|---:|---:|---|']
+    for row in small_demand:
+        if row['workload_id']=='W4' and row['scenario_id'] in ('vm-with-spark-base','aks-with-spark-base'):
+            document.append(f"| {row['scenario_id']} | {row['engine']} | {row['runs_per_day']} | {float(row['fully_allocated_per_run_usd']):.3f} | {float(row['total_monthly_usd']):.2f} | {row['fully_allocated_target_status']} |")
+    document+=['','AKS at six runs/day misses the modeled per-run target despite meeting the standing monthly target. All Small observations remain below the 10-GB minimum for the per-logical-TB acceptance gate. `small_demand_sensitivity.csv` retains all workload/scenario/frequency alternatives and their explicit assumptions.']
     document+=['','Per-attempt workload costs are in `modeled_cost_performance.csv`; child technology costs are in `technology_costs.csv`. Each scenario directory retains quantity/rate/resource ledgers, provenance, allocation assumptions and 6/24/96-per-day demand sensitivities.',
               '','Local measured usage remains unpriced. ADLS requests, Azure performance/billing and recurring operating labor are unavailable. Retail scenario assumptions do not close their measurement gates. Source configurations are not combined for rankings.',
               '',f"Primary required-cell coverage: {summary['matrix_status_counts']}. Single Small delivery cases and custom observations do not fill unexecuted required repetitions/topologies.",

@@ -1,0 +1,1834 @@
+{
+  "azure_measured_costs": "unavailable",
+  "checkpoint_generator": {
+    "path": "data/write_capacity_checkpoint.py",
+    "sha256": "fb3774cea9f752b92b89c14073b2a516da233a5ab1e817e9a059b3b9976522b5"
+  },
+  "cost_coverage": {
+    "modeled_scenario_count": 180,
+    "small_demand_sensitivity": "data/capacity-evidence-final/small_demand_sensitivity.csv",
+    "technology_cost_rows": 23580,
+    "workload_cost_rows": 2358
+  },
+  "date": "2026-10-23",
+  "deliveries": [
+    {
+      "cases": [
+        {
+          "engines": {
+            "spark": {
+              "candidate_count": null,
+              "publication_id": "7735f04a4e38e9f7fc3029dc735bbbf8ff82064e3d0db7bfdf6ddf6765a0ba26",
+              "quality": {
+                "incident_count": 100000,
+                "policy_sha256": "c1819700a036ea3ad31c012b4f40dd59b1b902cd680f583338d883a07a91f77f",
+                "policy_version": "v1",
+                "quarantined_fraction": 0.0,
+                "quarantined_incidents": 0,
+                "status": "passed"
+              },
+              "runtime_seconds": 144.45921380000073,
+              "status": "passed"
+            },
+            "trino": {
+              "candidate_count": null,
+              "publication_id": "763b558673e52c93bf3d057db3818b3a687c5d300efd38e30de65570142f8d97",
+              "quality": {
+                "incident_count": 100000,
+                "policy_sha256": "c1819700a036ea3ad31c012b4f40dd59b1b902cd680f583338d883a07a91f77f",
+                "policy_version": "v1",
+                "quarantined_fraction": 0.0,
+                "quarantined_incidents": 0,
+                "status": "passed"
+              },
+              "runtime_seconds": 126.66303922799852,
+              "status": "passed"
+            }
+          },
+          "expected_changed_incident_keys_count": 0,
+          "variant": "initial"
+        },
+        {
+          "engines": {
+            "spark": {
+              "candidate_count": null,
+              "publication_id": "54b60cc5061319966077887803b369c52e4f7e57bc66f3392938ab84b2cb20ac",
+              "quality": {
+                "incident_count": 100000,
+                "policy_sha256": "c1819700a036ea3ad31c012b4f40dd59b1b902cd680f583338d883a07a91f77f",
+                "policy_version": "v1",
+                "quarantined_fraction": 0.0,
+                "quarantined_incidents": 0,
+                "status": "passed"
+              },
+              "runtime_seconds": 135.4016617419984,
+              "status": "passed"
+            },
+            "trino": {
+              "candidate_count": null,
+              "publication_id": "2084d144cf4fbafa142270148b02f3e0852726edb40d02e763aabfd98d329343",
+              "quality": {
+                "incident_count": 100000,
+                "policy_sha256": "c1819700a036ea3ad31c012b4f40dd59b1b902cd680f583338d883a07a91f77f",
+                "policy_version": "v1",
+                "quarantined_fraction": 0.0,
+                "quarantined_incidents": 0,
+                "status": "passed"
+              },
+              "runtime_seconds": 92.99445965600171,
+              "status": "passed"
+            }
+          },
+          "expected_changed_incident_keys_count": 1,
+          "variant": "sparse_delta"
+        },
+        {
+          "engines": {
+            "spark": {
+              "candidate_count": null,
+              "publication_id": "36ee125a912878a615357d6a1fc9e4cab572fb2c3083577e8c4fe00f5e91b0d9",
+              "quality": {
+                "incident_count": 100000,
+                "policy_sha256": "c1819700a036ea3ad31c012b4f40dd59b1b902cd680f583338d883a07a91f77f",
+                "policy_version": "v1",
+                "quarantined_fraction": 0.0,
+                "quarantined_incidents": 0,
+                "status": "passed"
+              },
+              "runtime_seconds": 144.96513002999927,
+              "status": "passed"
+            },
+            "trino": {
+              "candidate_count": null,
+              "publication_id": "a4a66dc8c457ad644f0dbaadec0e89b47c08626e9125c2e783e57e2ec841ae81",
+              "quality": {
+                "incident_count": 100000,
+                "policy_sha256": "c1819700a036ea3ad31c012b4f40dd59b1b902cd680f583338d883a07a91f77f",
+                "policy_version": "v1",
+                "quarantined_fraction": 0.0,
+                "quarantined_incidents": 0,
+                "status": "passed"
+              },
+              "runtime_seconds": 103.55788340300205,
+              "status": "passed"
+            }
+          },
+          "expected_changed_incident_keys_count": 999,
+          "variant": "late_correction"
+        },
+        {
+          "engines": {
+            "spark": {
+              "candidate_count": null,
+              "publication_id": "5cb2c655a73c90ddd94ecd17b1bbafde9ebf83ad5b7a28fb2e4000f36f5a9735",
+              "quality": {
+                "incident_count": 100000,
+                "policy_sha256": "c1819700a036ea3ad31c012b4f40dd59b1b902cd680f583338d883a07a91f77f",
+                "policy_version": "v1",
+                "quarantined_fraction": 0.0,
+                "quarantined_incidents": 0,
+                "status": "passed"
+              },
+              "runtime_seconds": 132.6761868600006,
+              "status": "passed"
+            },
+            "trino": {
+              "candidate_count": null,
+              "publication_id": "1debd42c0cc95a3cedf1a8f370cc27d685649743b3b42437c9f6a1cdd5f8c56c",
+              "quality": {
+                "incident_count": 100000,
+                "policy_sha256": "c1819700a036ea3ad31c012b4f40dd59b1b902cd680f583338d883a07a91f77f",
+                "policy_version": "v1",
+                "quarantined_fraction": 0.0,
+                "quarantined_incidents": 0,
+                "status": "passed"
+              },
+              "runtime_seconds": 93.21013263699933,
+              "status": "passed"
+            }
+          },
+          "expected_changed_incident_keys_count": 0,
+          "variant": "duplicate_only"
+        },
+        {
+          "engines": {
+            "spark": {
+              "candidate_count": null,
+              "publication_id": "0ecf0e2ea42b04a0840951c3380d1491bfa330c66feddea749e87913fefef8cf",
+              "quality": {
+                "incident_count": 100000,
+                "policy_sha256": "c1819700a036ea3ad31c012b4f40dd59b1b902cd680f583338d883a07a91f77f",
+                "policy_version": "v1",
+                "quarantined_fraction": 0.0,
+                "quarantined_incidents": 0,
+                "status": "passed"
+              },
+              "runtime_seconds": 143.2723543630018,
+              "status": "passed"
+            },
+            "trino": {
+              "candidate_count": null,
+              "publication_id": "feaa45fbe2d318313aedd94ea4903aaab965cd4dbbb6c8063c073e9977839ae1",
+              "quality": {
+                "incident_count": 100000,
+                "policy_sha256": "c1819700a036ea3ad31c012b4f40dd59b1b902cd680f583338d883a07a91f77f",
+                "policy_version": "v1",
+                "quarantined_fraction": 0.0,
+                "quarantined_incidents": 0,
+                "status": "passed"
+              },
+              "runtime_seconds": 103.27539579800214,
+              "status": "passed"
+            }
+          },
+          "expected_changed_incident_keys_count": 0,
+          "variant": "future_deferred"
+        },
+        {
+          "engines": {
+            "spark": {
+              "candidate_count": null,
+              "publication_id": "25fa03df5c5f89f277a9245e1484b800e77f0c2f20fced01c54a0d32d9f3576e",
+              "quality": {
+                "incident_count": 100000,
+                "policy_sha256": "c1819700a036ea3ad31c012b4f40dd59b1b902cd680f583338d883a07a91f77f",
+                "policy_version": "v1",
+                "quarantined_fraction": 0.0,
+                "quarantined_incidents": 0,
+                "status": "passed"
+              },
+              "runtime_seconds": 140.22534906500005,
+              "status": "passed"
+            },
+            "trino": {
+              "candidate_count": null,
+              "publication_id": "e00ad466fbadc43023a76d69c1f7808860f57833e616eea6edbe4b9f6ad3a83b",
+              "quality": {
+                "incident_count": 100000,
+                "policy_sha256": "c1819700a036ea3ad31c012b4f40dd59b1b902cd680f583338d883a07a91f77f",
+                "policy_version": "v1",
+                "quarantined_fraction": 0.0,
+                "quarantined_incidents": 0,
+                "status": "passed"
+              },
+              "runtime_seconds": 104.75670405900019,
+              "status": "passed"
+            }
+          },
+          "expected_changed_incident_keys_count": 1,
+          "variant": "open_heavy_cutoff"
+        }
+      ],
+      "criteria_sha256": "0df95d473db540506d03b6d7de3bf9602261858b5ebd7beb3ff499359897b91a",
+      "disposition_audit": {
+        "path": "data/capacity-ruleids-deliveries-full/disposition_audit.json",
+        "publications": 12,
+        "rows_compared": 6742626,
+        "sha256": "1b3a97b0d63afdea27283af39b0c181824743e500b2605e5a405b21211906828",
+        "status": "passed"
+      },
+      "performance_status": "passed",
+      "recovery": [
+        {
+          "detection_boundary": "synchronous injected error, not infrastructure failure detection",
+          "engine": "trino",
+          "failpoint": "between_gold_writes",
+          "failure_finished_at": "2026-10-23T15:53:08.162989Z",
+          "failure_runtime_seconds": 56.13218548200166,
+          "old_publication_id": "763b558673e52c93bf3d057db3818b3a687c5d300efd38e30de65570142f8d97",
+          "operator_actions": 0,
+          "recovery_boundary": "Injected failure return to independently validated retry; earlier failpoint includes the subsequent serial injected attempt",
+          "recovery_seconds": 166.670355,
+          "status": "passed"
+        },
+        {
+          "detection_boundary": "synchronous injected error, not infrastructure failure detection",
+          "engine": "trino",
+          "failpoint": "before_publish",
+          "failure_finished_at": "2026-10-23T15:54:18.422574Z",
+          "failure_runtime_seconds": 66.51751227799832,
+          "old_publication_id": "763b558673e52c93bf3d057db3818b3a687c5d300efd38e30de65570142f8d97",
+          "operator_actions": 0,
+          "recovery_boundary": "Injected failure return to independently validated retry; earlier failpoint includes the subsequent serial injected attempt",
+          "recovery_seconds": 96.41077,
+          "status": "passed"
+        },
+        {
+          "detection_boundary": "synchronous injected error, not infrastructure failure detection",
+          "engine": "spark",
+          "failpoint": "between_gold_writes",
+          "failure_finished_at": "2026-10-23T15:57:45.080225Z",
+          "failure_runtime_seconds": 93.72887296000044,
+          "old_publication_id": "7735f04a4e38e9f7fc3029dc735bbbf8ff82064e3d0db7bfdf6ddf6765a0ba26",
+          "operator_actions": 0,
+          "recovery_boundary": "Injected failure return to independently validated retry; earlier failpoint includes the subsequent serial injected attempt",
+          "recovery_seconds": 255.207368,
+          "status": "passed"
+        },
+        {
+          "detection_boundary": "synchronous injected error, not infrastructure failure detection",
+          "engine": "spark",
+          "failpoint": "before_publish",
+          "failure_finished_at": "2026-10-23T15:59:40.893077Z",
+          "failure_runtime_seconds": 111.24961339899892,
+          "old_publication_id": "7735f04a4e38e9f7fc3029dc735bbbf8ff82064e3d0db7bfdf6ddf6765a0ba26",
+          "operator_actions": 0,
+          "recovery_boundary": "Injected failure return to independently validated retry; earlier failpoint includes the subsequent serial injected attempt",
+          "recovery_seconds": 139.394516,
+          "status": "passed"
+        }
+      ],
+      "restart": {
+        "restart_status": "passed",
+        "runtime_seconds": 209.39840112498496,
+        "status": "passed"
+      },
+      "revision": "e7215b38c2ab5fba7b96d420a87a7b6e8626d2813e263d99182cc0c9fbb31dd7",
+      "status": "passed",
+      "workspace": "data/capacity-ruleids-deliveries-full"
+    },
+    {
+      "cases": [
+        {
+          "engines": {
+            "targeted": {
+              "candidate_count": 100000,
+              "publication_id": "f6a8e5bad01838c6ba3213a1636aabec956e9da82f0edf6ac7f84da075937f9b",
+              "quality": {
+                "incident_count": 100000,
+                "policy_sha256": "c1819700a036ea3ad31c012b4f40dd59b1b902cd680f583338d883a07a91f77f",
+                "policy_version": "v1",
+                "quarantined_fraction": 0.0,
+                "quarantined_incidents": 0,
+                "status": "passed"
+              },
+              "runtime_seconds": 133.6362838419991,
+              "status": "passed"
+            }
+          },
+          "expected_changed_incident_keys_count": 0,
+          "variant": "initial"
+        },
+        {
+          "engines": {
+            "targeted": {
+              "candidate_count": 1,
+              "publication_id": "f41c01be79b9c31ae163e7ee5bd23cc0642b4b635daa98f7f2292df39d789f56",
+              "quality": {
+                "incident_count": 100000,
+                "policy_sha256": "c1819700a036ea3ad31c012b4f40dd59b1b902cd680f583338d883a07a91f77f",
+                "policy_version": "v1",
+                "quarantined_fraction": 0.0,
+                "quarantined_incidents": 0,
+                "status": "passed"
+              },
+              "runtime_seconds": 57.146161039996514,
+              "status": "passed"
+            }
+          },
+          "expected_changed_incident_keys_count": 1,
+          "variant": "sparse_delta"
+        },
+        {
+          "engines": {
+            "targeted": {
+              "candidate_count": 999,
+              "publication_id": "f4104500ede972c682a18987ae278fb005adde6e7d24b242b51d507d6ce04506",
+              "quality": {
+                "incident_count": 100000,
+                "policy_sha256": "c1819700a036ea3ad31c012b4f40dd59b1b902cd680f583338d883a07a91f77f",
+                "policy_version": "v1",
+                "quarantined_fraction": 0.0,
+                "quarantined_incidents": 0,
+                "status": "passed"
+              },
+              "runtime_seconds": 67.16156075500112,
+              "status": "passed"
+            }
+          },
+          "expected_changed_incident_keys_count": 999,
+          "variant": "late_correction"
+        },
+        {
+          "engines": {
+            "targeted": {
+              "candidate_count": 0,
+              "publication_id": "f95bc17479278e9df0d5690ab3fb9cbb96ac130dc263316add001f4f7cac8925",
+              "quality": {
+                "incident_count": 100000,
+                "policy_sha256": "c1819700a036ea3ad31c012b4f40dd59b1b902cd680f583338d883a07a91f77f",
+                "policy_version": "v1",
+                "quarantined_fraction": 0.0,
+                "quarantined_incidents": 0,
+                "status": "passed"
+              },
+              "runtime_seconds": 66.95702412500032,
+              "status": "passed"
+            }
+          },
+          "expected_changed_incident_keys_count": 0,
+          "variant": "duplicate_only"
+        },
+        {
+          "engines": {
+            "targeted": {
+              "candidate_count": 1,
+              "publication_id": "d4b5b58538eeea3610b2b7a360e9b273bded51fbfe2d864f899ce919e186fe2e",
+              "quality": {
+                "incident_count": 100000,
+                "policy_sha256": "c1819700a036ea3ad31c012b4f40dd59b1b902cd680f583338d883a07a91f77f",
+                "policy_version": "v1",
+                "quarantined_fraction": 0.0,
+                "quarantined_incidents": 0,
+                "status": "passed"
+              },
+              "runtime_seconds": 64.87642553600017,
+              "status": "passed"
+            }
+          },
+          "expected_changed_incident_keys_count": 0,
+          "variant": "future_deferred"
+        },
+        {
+          "engines": {
+            "targeted": {
+              "candidate_count": 90037,
+              "publication_id": "b8ea53df787cec0ca72c25a6a3f7dc223868950bb1ad99ec2ff27c5901eafc8b",
+              "quality": {
+                "incident_count": 100000,
+                "policy_sha256": "c1819700a036ea3ad31c012b4f40dd59b1b902cd680f583338d883a07a91f77f",
+                "policy_version": "v1",
+                "quarantined_fraction": 0.0,
+                "quarantined_incidents": 0,
+                "status": "passed"
+              },
+              "runtime_seconds": 93.40307891699922,
+              "status": "passed"
+            }
+          },
+          "expected_changed_incident_keys_count": 1,
+          "variant": "open_heavy_cutoff"
+        }
+      ],
+      "criteria_sha256": "0df95d473db540506d03b6d7de3bf9602261858b5ebd7beb3ff499359897b91a",
+      "disposition_audit": {
+        "path": "data/capacity-ruleids-deliveries-targeted/disposition_audit.json",
+        "publications": 6,
+        "rows_compared": 3371313,
+        "sha256": "f9da0820a90b1f0f4e6be1e6af71514c110b39e80781db94db3a8671907c8e17",
+        "status": "passed"
+      },
+      "performance_status": "passed",
+      "recovery": [],
+      "restart": {
+        "restart_status": "passed",
+        "runtime_seconds": 184.27927620901028,
+        "status": "passed"
+      },
+      "revision": "e7215b38c2ab5fba7b96d420a87a7b6e8626d2813e263d99182cc0c9fbb31dd7",
+      "status": "passed",
+      "workspace": "data/capacity-ruleids-deliveries-targeted"
+    }
+  ],
+  "evidence": {
+    "capacity_results.md": {
+      "path": "data/capacity-evidence-final/capacity_results.md",
+      "sha256": "ed27b475ad988cc4acf200c8a1bdecdadf5320944a5357221da9e5fee5177361"
+    },
+    "matrix.csv": {
+      "path": "data/capacity-evidence-final/matrix.csv",
+      "sha256": "2496c4287fa200915890fd1b6f0a3c91b9f713d0f959cdceb9c514c91ddf55d8"
+    },
+    "modeled_cost_performance.csv": {
+      "path": "data/capacity-evidence-final/modeled_cost_performance.csv",
+      "sha256": "777e9f32958583471268737a22e40d2acdbbabf6fc6263a9e1435518f385bcf9"
+    },
+    "poc_scorecard.json": {
+      "path": "data/capacity-evidence-final/poc_scorecard.json",
+      "sha256": "afd91bbfee3de28429f35b0bdf7c160af8f1816a6b056c8e63f89045b5fe0d00"
+    },
+    "scenario_comparison.csv": {
+      "path": "data/capacity-evidence-final/scenario_comparison.csv",
+      "sha256": "ae01791e3881c35f699f10264d9a04ce5ad5215ca6e96c6184d4ff751e8bcdc7"
+    },
+    "small_demand_sensitivity.csv": {
+      "path": "data/capacity-evidence-final/small_demand_sensitivity.csv",
+      "sha256": "fe18cf58b5f5d1ca6f3d138cc13bcddd2d178602d3db4331e109ef95a1218dd5"
+    },
+    "summary.json": {
+      "path": "data/capacity-evidence-final/summary.json",
+      "sha256": "5adb39e0ebd413354d411b7b5f71c2a1b512149e5b10aa791f46b9ec674a3091"
+    },
+    "technology_costs.csv": {
+      "path": "data/capacity-evidence-final/technology_costs.csv",
+      "sha256": "ebba5d3cf2cd666adda62f8e9451a9ec999ec7595ec41024e25017f941d35fde"
+    }
+  },
+  "final_assembly": {
+    "path": "data/capacity-final-assemble.log",
+    "sha256": "5ebe8a13bd4b794bcc80ebaa02c7471266b4fa04df37c50d2a547efcc72ee64b"
+  },
+  "limits": [
+    "Local ARM single-worker measurements; cache uncontrolled and NMT instrumentation enabled.",
+    "Representative cases are one observation each under their own source/configuration; they do not fill repeated baseline or distributed W5 cells.",
+    "Small concurrency reference targets failed; host-client timing includes transport and result normalization/comparison.",
+    "Public Azure prices are real snapshots. Deployment, request counts, retention, allocation and local-to-cloud timing mappings are scenario assumptions.",
+    "Azure/ADLS execution, Medium/Large, distributed worker/concurrency coverage, settled bills and recurring operator labor remain unassessed.",
+    "Small logical input is below the 10-GB minimum for the dollar-per-TB acceptance gate. No final production recommendation is made."
+  ],
+  "local_concurrency_diagnostic": {
+    "completion_ratio": 3.094374763416681,
+    "maximum_completion_ratio": "3.0",
+    "minimum_throughput_ratio": "1.5",
+    "scope": "Additional local single-worker Trino W2 host-client diagnostic; required Medium/cross-engine gate remains unassessed",
+    "status": "failed",
+    "throughput_ratio": 1.177405652864804
+  },
+  "local_milestone": {
+    "checks": {
+      "concurrency_diagnostic": true,
+      "modeled_small_costs": true,
+      "paired_custom_and_small": true,
+      "primary_restart": true,
+      "representative_full": true,
+      "representative_restart": true,
+      "representative_targeted": true,
+      "small_and_delivery_dispositions": true
+    },
+    "scope": "Plan 11 implementation/evidence milestone; original POC gates remain incomplete and performance targets are assessed separately",
+    "status": "complete"
+  },
+  "matrix_cells": 89,
+  "matrix_performance_status_counts": {
+    "failed": 0,
+    "not_assessed": 82,
+    "passed": 7
+  },
+  "matrix_status_counts": {
+    "failed": 0,
+    "not_assessed": 82,
+    "passed": 7
+  },
+  "modeled_small_scenarios": [
+    {
+      "evidence": "data/capacity-small-native6g-100000/modeled_cloud_final/aks-trino-only-base/scenario.json",
+      "experiment": "data/capacity-small-native6g-100000",
+      "measurement_status": "incomplete",
+      "model_status": "complete_declared_planning_scenario",
+      "scenario": "aks-trino-only-base",
+      "scope_total_usd": "0.25488033510682747716598894136289231",
+      "standing_monthly_usd": "557.1523096056327223777770996",
+      "standing_target_status": "passed"
+    },
+    {
+      "evidence": "data/capacity-small-native6g-100000/modeled_cloud_final/aks-trino-only-high/scenario.json",
+      "experiment": "data/capacity-small-native6g-100000",
+      "measurement_status": "incomplete",
+      "model_status": "complete_declared_planning_scenario",
+      "scenario": "aks-trino-only-high",
+      "scope_total_usd": "0.483926808566315340189215885482247484",
+      "standing_monthly_usd": "668.5827715267592668533325195",
+      "standing_target_status": "passed"
+    },
+    {
+      "evidence": "data/capacity-small-native6g-100000/modeled_cloud_final/aks-trino-only-low/scenario.json",
+      "experiment": "data/capacity-small-native6g-100000",
+      "measurement_status": "incomplete",
+      "model_status": "complete_declared_planning_scenario",
+      "scenario": "aks-trino-only-low",
+      "scope_total_usd": "0.144422369046656822889406597244108960",
+      "standing_monthly_usd": "445.7218476845061779022216797",
+      "standing_target_status": "passed"
+    },
+    {
+      "evidence": "data/capacity-small-native6g-100000/modeled_cloud_final/aks-with-spark-base/scenario.json",
+      "experiment": "data/capacity-small-native6g-100000",
+      "measurement_status": "incomplete",
+      "model_status": "complete_declared_planning_scenario",
+      "scenario": "aks-with-spark-base",
+      "scope_total_usd": "0.29962753339439081355823264456933774",
+      "standing_monthly_usd": "557.1523096056327223777770996",
+      "standing_target_status": "passed"
+    },
+    {
+      "evidence": "data/capacity-small-native6g-100000/modeled_cloud_final/aks-with-spark-high/scenario.json",
+      "experiment": "data/capacity-small-native6g-100000",
+      "measurement_status": "incomplete",
+      "model_status": "complete_declared_planning_scenario",
+      "scenario": "aks-with-spark-high",
+      "scope_total_usd": "0.591320084456467347530600773169327352",
+      "standing_monthly_usd": "668.5827715267592668533325195",
+      "standing_target_status": "passed"
+    },
+    {
+      "evidence": "data/capacity-small-native6g-100000/modeled_cloud_final/aks-with-spark-low/scenario.json",
+      "experiment": "data/capacity-small-native6g-100000",
+      "measurement_status": "incomplete",
+      "model_status": "complete_declared_planning_scenario",
+      "scenario": "aks-with-spark-low",
+      "scope_total_usd": "0.162219774173821395366747295483861672",
+      "standing_monthly_usd": "445.7218476845061779022216797",
+      "standing_target_status": "passed"
+    },
+    {
+      "evidence": "data/capacity-small-native6g-100000/modeled_cloud_final/vm-trino-only-base/scenario.json",
+      "experiment": "data/capacity-small-native6g-100000",
+      "measurement_status": "incomplete",
+      "model_status": "complete_declared_planning_scenario",
+      "scenario": "vm-trino-only-base",
+      "scope_total_usd": "0.11283124510716860216598894136545231",
+      "standing_monthly_usd": "185.5483096056327223777770996",
+      "standing_target_status": "passed"
+    },
+    {
+      "evidence": "data/capacity-small-native6g-100000/modeled_cloud_final/vm-trino-only-high/scenario.json",
+      "experiment": "data/capacity-small-native6g-100000",
+      "measurement_status": "incomplete",
+      "model_status": "complete_declared_planning_scenario",
+      "scenario": "vm-trino-only-high",
+      "scope_total_usd": "0.228238446566929365189215885482247484",
+      "standing_monthly_usd": "222.6579715267592668533325195",
+      "standing_target_status": "passed"
+    },
+    {
+      "evidence": "data/capacity-small-native6g-100000/modeled_cloud_final/vm-trino-only-low/scenario.json",
+      "experiment": "data/capacity-small-native6g-100000",
+      "measurement_status": "incomplete",
+      "model_status": "complete_declared_planning_scenario",
+      "scenario": "vm-trino-only-low",
+      "scope_total_usd": "0.059192915046861497889406597244108960",
+      "standing_monthly_usd": "148.4386476845061779022216797",
+      "standing_target_status": "passed"
+    },
+    {
+      "evidence": "data/capacity-small-native6g-100000/modeled_cloud_final/vm-with-spark-base/scenario.json",
+      "experiment": "data/capacity-small-native6g-100000",
+      "measurement_status": "incomplete",
+      "model_status": "complete_declared_planning_scenario",
+      "scenario": "vm-with-spark-base",
+      "scope_total_usd": "0.15757844339473193855823264457189774",
+      "standing_monthly_usd": "185.5483096056327223777770996",
+      "standing_target_status": "passed"
+    },
+    {
+      "evidence": "data/capacity-small-native6g-100000/modeled_cloud_final/vm-with-spark-high/scenario.json",
+      "experiment": "data/capacity-small-native6g-100000",
+      "measurement_status": "incomplete",
+      "model_status": "complete_declared_planning_scenario",
+      "scenario": "vm-with-spark-high",
+      "scope_total_usd": "0.335631722457081372530600773169327352",
+      "standing_monthly_usd": "222.6579715267592668533325195",
+      "standing_target_status": "passed"
+    },
+    {
+      "evidence": "data/capacity-small-native6g-100000/modeled_cloud_final/vm-with-spark-low/scenario.json",
+      "experiment": "data/capacity-small-native6g-100000",
+      "measurement_status": "incomplete",
+      "model_status": "complete_declared_planning_scenario",
+      "scenario": "vm-with-spark-low",
+      "scope_total_usd": "0.076990320174026070366747295483861672",
+      "standing_monthly_usd": "148.4386476845061779022216797",
+      "standing_target_status": "passed"
+    }
+  ],
+  "modeled_small_w4_demand": [
+    {
+      "actual_azure_gate_status": "not_assessed: modeled assumptions and local timings are not cloud execution/billing evidence",
+      "capacity_status": "unverified hypothetical capacity",
+      "capacity_utilization_fraction": "0.008181800126597222222222222222",
+      "engine": "trino",
+      "fully_allocated_per_logical_tb_usd": "27331.52108415063606345986969",
+      "fully_allocated_per_run_usd": "3.099748242820074291278918584",
+      "fully_allocated_target_status": "failed",
+      "marginal_per_run_usd": "0.00445763389989250029126803080253192",
+      "marginal_target_status": "passed",
+      "observed_size": "small",
+      "runs_per_day": "6",
+      "scenario": "hypothetical small-only repeated workload; excludes amortized shared input preparation/read Spark startup unless those are this workload",
+      "scenario_id": "aks-trino-only-base",
+      "standing_monthly_usd": "557.1523096056327223777770996",
+      "total_monthly_usd": "557.9546837076133724302053451",
+      "unit_cost_target_status": "not_assessed: below minimum logical input gate",
+      "workload_id": "W4"
+    },
+    {
+      "actual_azure_gate_status": "not_assessed: modeled assumptions and local timings are not cloud execution/billing evidence",
+      "capacity_status": "unverified hypothetical capacity",
+      "capacity_utilization_fraction": "0.03272720050638888888888888889",
+      "engine": "trino",
+      "fully_allocated_per_logical_tb_usd": "6862.358612190655770551520465",
+      "fully_allocated_per_run_usd": "0.7782802861299379480381806691",
+      "fully_allocated_target_status": "passed",
+      "marginal_per_run_usd": "0.00445763389989250029126803080253192",
+      "marginal_target_status": "passed",
+      "observed_size": "small",
+      "runs_per_day": "24",
+      "scenario": "hypothetical small-only repeated workload; excludes amortized shared input preparation/read Spark startup unless those are this workload",
+      "scenario_id": "aks-trino-only-base",
+      "standing_monthly_usd": "557.1523096056327223777770996",
+      "total_monthly_usd": "560.3618060135553225874900818",
+      "unit_cost_target_status": "not_assessed: below minimum logical input gate",
+      "workload_id": "W4"
+    },
+    {
+      "actual_azure_gate_status": "not_assessed: modeled assumptions and local timings are not cloud execution/billing evidence",
+      "capacity_status": "unverified hypothetical capacity",
+      "capacity_utilization_fraction": "0.1309088020255555555555555556",
+      "engine": "trino",
+      "fully_allocated_per_logical_tb_usd": "1745.067994200660697324433159",
+      "fully_allocated_per_run_usd": "0.1979132969574038622279961904",
+      "fully_allocated_target_status": "passed",
+      "marginal_per_run_usd": "0.00445763389989250029126803080253192",
+      "marginal_target_status": "passed",
+      "observed_size": "small",
+      "runs_per_day": "96",
+      "scenario": "hypothetical small-only repeated workload; excludes amortized shared input preparation/read Spark startup unless those are this workload",
+      "scenario_id": "aks-trino-only-base",
+      "standing_monthly_usd": "557.1523096056327223777770996",
+      "total_monthly_usd": "569.9902952373231232166290283",
+      "unit_cost_target_status": "not_assessed: below minimum logical input gate",
+      "workload_id": "W4"
+    },
+    {
+      "actual_azure_gate_status": "not_assessed: modeled assumptions and local timings are not cloud execution/billing evidence",
+      "capacity_status": "unverified hypothetical capacity",
+      "capacity_utilization_fraction": "0.009446237497569443055555555556",
+      "engine": "spark",
+      "fully_allocated_per_logical_tb_usd": "27329.38957139803061235838932",
+      "fully_allocated_per_run_usd": "3.099506501685759276151657104",
+      "fully_allocated_target_status": "failed",
+      "marginal_per_run_usd": "0.00421589276557748516400655110670051",
+      "marginal_target_status": "passed",
+      "observed_size": "small",
+      "runs_per_day": "6",
+      "scenario": "hypothetical small-only repeated workload; excludes amortized shared input preparation/read Spark startup unless those are this workload",
+      "scenario_id": "aks-with-spark-base",
+      "standing_monthly_usd": "557.1523096056327223777770996",
+      "total_monthly_usd": "557.9111703034366697072982788",
+      "unit_cost_target_status": "not_assessed: below minimum logical input gate",
+      "workload_id": "W4"
+    },
+    {
+      "actual_azure_gate_status": "not_assessed: modeled assumptions and local timings are not cloud execution/billing evidence",
+      "capacity_status": "unverified hypothetical capacity",
+      "capacity_utilization_fraction": "0.03778494999027777222222222222",
+      "engine": "spark",
+      "fully_allocated_per_logical_tb_usd": "6860.227099438050319450040102",
+      "fully_allocated_per_run_usd": "0.7780385449956229329109191894",
+      "fully_allocated_target_status": "passed",
+      "marginal_per_run_usd": "0.00421589276557748516400655110670051",
+      "marginal_target_status": "passed",
+      "observed_size": "small",
+      "runs_per_day": "24",
+      "scenario": "hypothetical small-only repeated workload; excludes amortized shared input preparation/read Spark startup unless those are this workload",
+      "scenario_id": "aks-with-spark-base",
+      "standing_monthly_usd": "557.1523096056327223777770996",
+      "total_monthly_usd": "560.1877523968485116958618164",
+      "unit_cost_target_status": "not_assessed: below minimum logical input gate",
+      "workload_id": "W4"
+    },
+    {
+      "actual_azure_gate_status": "not_assessed: modeled assumptions and local timings are not cloud execution/billing evidence",
+      "capacity_status": "unverified hypothetical capacity",
+      "capacity_utilization_fraction": "0.1511397999611110888888888889",
+      "engine": "spark",
+      "fully_allocated_per_logical_tb_usd": "1742.936481448055246222952796",
+      "fully_allocated_per_run_usd": "0.1976715558230888471007347107",
+      "fully_allocated_target_status": "passed",
+      "marginal_per_run_usd": "0.00421589276557748516400655110670051",
+      "marginal_target_status": "passed",
+      "observed_size": "small",
+      "runs_per_day": "96",
+      "scenario": "hypothetical small-only repeated workload; excludes amortized shared input preparation/read Spark startup unless those are this workload",
+      "scenario_id": "aks-with-spark-base",
+      "standing_monthly_usd": "557.1523096056327223777770996",
+      "total_monthly_usd": "569.2940807704958796501159668",
+      "unit_cost_target_status": "not_assessed: below minimum logical input gate",
+      "workload_id": "W4"
+    },
+    {
+      "actual_azure_gate_status": "not_assessed: modeled assumptions and local timings are not cloud execution/billing evidence",
+      "capacity_status": "unverified hypothetical capacity",
+      "capacity_utilization_fraction": "0.008181800126597222222222222222",
+      "engine": "trino",
+      "fully_allocated_per_logical_tb_usd": "27331.52108415063606345986969",
+      "fully_allocated_per_run_usd": "3.099748242820074291278918584",
+      "fully_allocated_target_status": "failed",
+      "marginal_per_run_usd": "0.00445763389989250029126803080253192",
+      "marginal_target_status": "passed",
+      "observed_size": "small",
+      "runs_per_day": "6",
+      "scenario": "hypothetical small-only repeated workload; excludes amortized shared input preparation/read Spark startup unless those are this workload",
+      "scenario_id": "aks-with-spark-base",
+      "standing_monthly_usd": "557.1523096056327223777770996",
+      "total_monthly_usd": "557.9546837076133724302053451",
+      "unit_cost_target_status": "not_assessed: below minimum logical input gate",
+      "workload_id": "W4"
+    },
+    {
+      "actual_azure_gate_status": "not_assessed: modeled assumptions and local timings are not cloud execution/billing evidence",
+      "capacity_status": "unverified hypothetical capacity",
+      "capacity_utilization_fraction": "0.03272720050638888888888888889",
+      "engine": "trino",
+      "fully_allocated_per_logical_tb_usd": "6862.358612190655770551520465",
+      "fully_allocated_per_run_usd": "0.7782802861299379480381806691",
+      "fully_allocated_target_status": "passed",
+      "marginal_per_run_usd": "0.00445763389989250029126803080253192",
+      "marginal_target_status": "passed",
+      "observed_size": "small",
+      "runs_per_day": "24",
+      "scenario": "hypothetical small-only repeated workload; excludes amortized shared input preparation/read Spark startup unless those are this workload",
+      "scenario_id": "aks-with-spark-base",
+      "standing_monthly_usd": "557.1523096056327223777770996",
+      "total_monthly_usd": "560.3618060135553225874900818",
+      "unit_cost_target_status": "not_assessed: below minimum logical input gate",
+      "workload_id": "W4"
+    },
+    {
+      "actual_azure_gate_status": "not_assessed: modeled assumptions and local timings are not cloud execution/billing evidence",
+      "capacity_status": "unverified hypothetical capacity",
+      "capacity_utilization_fraction": "0.1309088020255555555555555556",
+      "engine": "trino",
+      "fully_allocated_per_logical_tb_usd": "1745.067994200660697324433159",
+      "fully_allocated_per_run_usd": "0.1979132969574038622279961904",
+      "fully_allocated_target_status": "passed",
+      "marginal_per_run_usd": "0.00445763389989250029126803080253192",
+      "marginal_target_status": "passed",
+      "observed_size": "small",
+      "runs_per_day": "96",
+      "scenario": "hypothetical small-only repeated workload; excludes amortized shared input preparation/read Spark startup unless those are this workload",
+      "scenario_id": "aks-with-spark-base",
+      "standing_monthly_usd": "557.1523096056327223777770996",
+      "total_monthly_usd": "569.9902952373231232166290283",
+      "unit_cost_target_status": "not_assessed: below minimum logical input gate",
+      "workload_id": "W4"
+    },
+    {
+      "actual_azure_gate_status": "not_assessed: modeled assumptions and local timings are not cloud execution/billing evidence",
+      "capacity_status": "unverified hypothetical capacity",
+      "capacity_utilization_fraction": "0.008181800126597222222222222222",
+      "engine": "trino",
+      "fully_allocated_per_logical_tb_usd": "9128.425281701821498559048221",
+      "fully_allocated_per_run_usd": "1.035281576153407624612251918",
+      "fully_allocated_target_status": "passed",
+      "marginal_per_run_usd": "0.00445763389989250029126803080253192",
+      "marginal_target_status": "passed",
+      "observed_size": "small",
+      "runs_per_day": "6",
+      "scenario": "hypothetical small-only repeated workload; excludes amortized shared input preparation/read Spark startup unless those are this workload",
+      "scenario_id": "vm-trino-only-base",
+      "standing_monthly_usd": "185.5483096056327223777770996",
+      "total_monthly_usd": "186.3506837076133724302053451",
+      "unit_cost_target_status": "not_assessed: below minimum logical input gate",
+      "workload_id": "W4"
+    },
+    {
+      "actual_azure_gate_status": "not_assessed: modeled assumptions and local timings are not cloud execution/billing evidence",
+      "capacity_status": "unverified hypothetical capacity",
+      "capacity_utilization_fraction": "0.03272720050638888888888888889",
+      "engine": "trino",
+      "fully_allocated_per_logical_tb_usd": "2311.584661578452129326315097",
+      "fully_allocated_per_run_usd": "0.2621636194632712813715140025",
+      "fully_allocated_target_status": "passed",
+      "marginal_per_run_usd": "0.00445763389989250029126803080253192",
+      "marginal_target_status": "passed",
+      "observed_size": "small",
+      "runs_per_day": "24",
+      "scenario": "hypothetical small-only repeated workload; excludes amortized shared input preparation/read Spark startup unless those are this workload",
+      "scenario_id": "vm-trino-only-base",
+      "standing_monthly_usd": "185.5483096056327223777770996",
+      "total_monthly_usd": "188.7578060135553225874900818",
+      "unit_cost_target_status": "not_assessed: below minimum logical input gate",
+      "workload_id": "W4"
+    },
+    {
+      "actual_azure_gate_status": "not_assessed: modeled assumptions and local timings are not cloud execution/billing evidence",
+      "capacity_status": "unverified hypothetical capacity",
+      "capacity_utilization_fraction": "0.1309088020255555555555555556",
+      "engine": "trino",
+      "fully_allocated_per_logical_tb_usd": "607.3745065476097870181318169",
+      "fully_allocated_per_run_usd": "0.06888413029073719556132952372",
+      "fully_allocated_target_status": "passed",
+      "marginal_per_run_usd": "0.00445763389989250029126803080253192",
+      "marginal_target_status": "passed",
+      "observed_size": "small",
+      "runs_per_day": "96",
+      "scenario": "hypothetical small-only repeated workload; excludes amortized shared input preparation/read Spark startup unless those are this workload",
+      "scenario_id": "vm-trino-only-base",
+      "standing_monthly_usd": "185.5483096056327223777770996",
+      "total_monthly_usd": "198.3862952373231232166290283",
+      "unit_cost_target_status": "not_assessed: below minimum logical input gate",
+      "workload_id": "W4"
+    },
+    {
+      "actual_azure_gate_status": "not_assessed: modeled assumptions and local timings are not cloud execution/billing evidence",
+      "capacity_status": "unverified hypothetical capacity",
+      "capacity_utilization_fraction": "0.009446237497569443055555555556",
+      "engine": "spark",
+      "fully_allocated_per_logical_tb_usd": "9126.293768949216047457567854",
+      "fully_allocated_per_run_usd": "1.035039835019092609484990438",
+      "fully_allocated_target_status": "passed",
+      "marginal_per_run_usd": "0.00421589276557748516400655110670051",
+      "marginal_target_status": "passed",
+      "observed_size": "small",
+      "runs_per_day": "6",
+      "scenario": "hypothetical small-only repeated workload; excludes amortized shared input preparation/read Spark startup unless those are this workload",
+      "scenario_id": "vm-with-spark-base",
+      "standing_monthly_usd": "185.5483096056327223777770996",
+      "total_monthly_usd": "186.3071703034366697072982788",
+      "unit_cost_target_status": "not_assessed: below minimum logical input gate",
+      "workload_id": "W4"
+    },
+    {
+      "actual_azure_gate_status": "not_assessed: modeled assumptions and local timings are not cloud execution/billing evidence",
+      "capacity_status": "unverified hypothetical capacity",
+      "capacity_utilization_fraction": "0.03778494999027777222222222222",
+      "engine": "spark",
+      "fully_allocated_per_logical_tb_usd": "2309.453148825846678224834733",
+      "fully_allocated_per_run_usd": "0.2619218783289562662442525228",
+      "fully_allocated_target_status": "passed",
+      "marginal_per_run_usd": "0.00421589276557748516400655110670051",
+      "marginal_target_status": "passed",
+      "observed_size": "small",
+      "runs_per_day": "24",
+      "scenario": "hypothetical small-only repeated workload; excludes amortized shared input preparation/read Spark startup unless those are this workload",
+      "scenario_id": "vm-with-spark-base",
+      "standing_monthly_usd": "185.5483096056327223777770996",
+      "total_monthly_usd": "188.5837523968485116958618164",
+      "unit_cost_target_status": "not_assessed: below minimum logical input gate",
+      "workload_id": "W4"
+    },
+    {
+      "actual_azure_gate_status": "not_assessed: modeled assumptions and local timings are not cloud execution/billing evidence",
+      "capacity_status": "unverified hypothetical capacity",
+      "capacity_utilization_fraction": "0.1511397999611110888888888889",
+      "engine": "spark",
+      "fully_allocated_per_logical_tb_usd": "605.2429937950043359166514534",
+      "fully_allocated_per_run_usd": "0.06864238915642218043406804403",
+      "fully_allocated_target_status": "passed",
+      "marginal_per_run_usd": "0.00421589276557748516400655110670051",
+      "marginal_target_status": "passed",
+      "observed_size": "small",
+      "runs_per_day": "96",
+      "scenario": "hypothetical small-only repeated workload; excludes amortized shared input preparation/read Spark startup unless those are this workload",
+      "scenario_id": "vm-with-spark-base",
+      "standing_monthly_usd": "185.5483096056327223777770996",
+      "total_monthly_usd": "197.6900807704958796501159668",
+      "unit_cost_target_status": "not_assessed: below minimum logical input gate",
+      "workload_id": "W4"
+    },
+    {
+      "actual_azure_gate_status": "not_assessed: modeled assumptions and local timings are not cloud execution/billing evidence",
+      "capacity_status": "unverified hypothetical capacity",
+      "capacity_utilization_fraction": "0.008181800126597222222222222222",
+      "engine": "trino",
+      "fully_allocated_per_logical_tb_usd": "9128.425281701821498559048221",
+      "fully_allocated_per_run_usd": "1.035281576153407624612251918",
+      "fully_allocated_target_status": "passed",
+      "marginal_per_run_usd": "0.00445763389989250029126803080253192",
+      "marginal_target_status": "passed",
+      "observed_size": "small",
+      "runs_per_day": "6",
+      "scenario": "hypothetical small-only repeated workload; excludes amortized shared input preparation/read Spark startup unless those are this workload",
+      "scenario_id": "vm-with-spark-base",
+      "standing_monthly_usd": "185.5483096056327223777770996",
+      "total_monthly_usd": "186.3506837076133724302053451",
+      "unit_cost_target_status": "not_assessed: below minimum logical input gate",
+      "workload_id": "W4"
+    },
+    {
+      "actual_azure_gate_status": "not_assessed: modeled assumptions and local timings are not cloud execution/billing evidence",
+      "capacity_status": "unverified hypothetical capacity",
+      "capacity_utilization_fraction": "0.03272720050638888888888888889",
+      "engine": "trino",
+      "fully_allocated_per_logical_tb_usd": "2311.584661578452129326315097",
+      "fully_allocated_per_run_usd": "0.2621636194632712813715140025",
+      "fully_allocated_target_status": "passed",
+      "marginal_per_run_usd": "0.00445763389989250029126803080253192",
+      "marginal_target_status": "passed",
+      "observed_size": "small",
+      "runs_per_day": "24",
+      "scenario": "hypothetical small-only repeated workload; excludes amortized shared input preparation/read Spark startup unless those are this workload",
+      "scenario_id": "vm-with-spark-base",
+      "standing_monthly_usd": "185.5483096056327223777770996",
+      "total_monthly_usd": "188.7578060135553225874900818",
+      "unit_cost_target_status": "not_assessed: below minimum logical input gate",
+      "workload_id": "W4"
+    },
+    {
+      "actual_azure_gate_status": "not_assessed: modeled assumptions and local timings are not cloud execution/billing evidence",
+      "capacity_status": "unverified hypothetical capacity",
+      "capacity_utilization_fraction": "0.1309088020255555555555555556",
+      "engine": "trino",
+      "fully_allocated_per_logical_tb_usd": "607.3745065476097870181318169",
+      "fully_allocated_per_run_usd": "0.06888413029073719556132952372",
+      "fully_allocated_target_status": "passed",
+      "marginal_per_run_usd": "0.00445763389989250029126803080253192",
+      "marginal_target_status": "passed",
+      "observed_size": "small",
+      "runs_per_day": "96",
+      "scenario": "hypothetical small-only repeated workload; excludes amortized shared input preparation/read Spark startup unless those are this workload",
+      "scenario_id": "vm-with-spark-base",
+      "standing_monthly_usd": "185.5483096056327223777770996",
+      "total_monthly_usd": "198.3862952373231232166290283",
+      "unit_cost_target_status": "not_assessed: below minimum logical input gate",
+      "workload_id": "W4"
+    }
+  ],
+  "orchestrator": {
+    "path": "data/capacity-ruleids-post.json",
+    "sha256": "571e98750733faf85798b28b260352f6ff0d65198c33b516be770f927b9a03e3"
+  },
+  "original_mix_projection": "unavailable: Medium/Large measurements missing",
+  "phases": [
+    {
+      "count": 10000,
+      "criteria_sha256": "e179c529d3437f08873adf9fb6f2751b6e6a50475c03185bd9c21f15b5d02453",
+      "disposition_audit": {
+        "status": "not_assessed"
+      },
+      "error": "failed to fetch: HTTPConnectionPool(host='trino', port=8080): Max retries exceeded with url: /v1/statement/executing/20261023_044147_00988_sqk28/yb0e40cb24356f16bf59b31e5321bda0167f8d26d/1 (Caused by NameResolutionError(\"HTTPConnection(host='trino', port=8080): Failed to resolve 'trino' ([Errno -2] Name or service not known)\"))",
+      "modeled_cost_status": "complete_declared_planning_scenarios; cloud measurements incomplete",
+      "oom_killed_containers": [
+        "dpe-local-trino-1"
+      ],
+      "peak_sampled_producer_rss_bytes": 487514112,
+      "performance_status": null,
+      "resource_evidence": "data/capacity-custom-10000/observations/resource_summary.json",
+      "restart": {
+        "status": "not_assessed"
+      },
+      "revision": "1a6e5d8265f9dff365bec84533aa546fca2cff1fb22e6d1a3418d90fbd707976",
+      "run_results_sha256": "49dcf2bb18cd5ce78435a2783306a58d13d27f019fcbaa1823ac6c4df1545cae",
+      "runs": 10,
+      "status": "failed",
+      "workspace": "data/capacity-custom-10000"
+    },
+    {
+      "count": 10000,
+      "criteria_sha256": "c95e99cf7ed3f96c047d221a83aba7f34b98d5a8d8016f5a79a525e2bfe59884",
+      "disposition_audit": {
+        "status": "not_assessed"
+      },
+      "error": null,
+      "modeled_cost_status": "complete_declared_planning_scenarios; cloud measurements incomplete",
+      "oom_killed_containers": [],
+      "peak_sampled_producer_rss_bytes": 492654592,
+      "performance_status": "not_assessed",
+      "resource_evidence": "data/capacity-custom-10000-trino4g/observations/resource_summary.json",
+      "restart": {
+        "status": "not_assessed"
+      },
+      "revision": "1a6e5d8265f9dff365bec84533aa546fca2cff1fb22e6d1a3418d90fbd707976",
+      "run_results_sha256": "72caf39f6e1dd42adc1ccfd7968fa2735f0cce9280c79ff58599f3bb0f30fa99",
+      "runs": 28,
+      "status": "passed",
+      "workspace": "data/capacity-custom-10000-trino4g"
+    },
+    {
+      "count": 100000,
+      "criteria_sha256": "c95e99cf7ed3f96c047d221a83aba7f34b98d5a8d8016f5a79a525e2bfe59884",
+      "disposition_audit": {
+        "status": "not_assessed"
+      },
+      "error": "producer exited with code -9",
+      "modeled_cost_status": "incomplete: durable storage inventory unavailable after producer kill",
+      "oom_killed_containers": [
+        "dpe-local-benchmark-coordinator-1"
+      ],
+      "peak_sampled_producer_rss_bytes": 1358381056,
+      "performance_status": null,
+      "resource_evidence": "data/capacity-small-unmodified/observations/resource_summary.json",
+      "restart": {
+        "status": "not_assessed"
+      },
+      "revision": "1a6e5d8265f9dff365bec84533aa546fca2cff1fb22e6d1a3418d90fbd707976",
+      "run_results_sha256": "3ce8d0607665ff9be67181b3fdebb16a164a9576aa8bb2e5c02b4f5825d85ea5",
+      "runs": 1,
+      "status": "failed",
+      "workspace": "data/capacity-small-unmodified"
+    },
+    {
+      "count": 10000,
+      "criteria_sha256": "92017caecff144a09dfd9f8d5dc7d9536ace975e4e33ba83073859e992a0d366",
+      "disposition_audit": {
+        "status": "not_assessed"
+      },
+      "error": null,
+      "modeled_cost_status": "complete_declared_planning_scenarios; cloud measurements incomplete",
+      "oom_killed_containers": [],
+      "peak_sampled_producer_rss_bytes": 135012352,
+      "performance_status": "not_assessed",
+      "resource_evidence": "data/capacity-custom-bounded-10000/observations/resource_summary.json",
+      "restart": {
+        "status": "not_assessed"
+      },
+      "revision": "4ba679d9bbc11c64b55251d5c275cbf7fc7905edf3ce8cf0613fb0b50cb8f356",
+      "run_results_sha256": "bcfa5070a03deb8e777952682dea786086f610d5f41155fcfa3a745f82981239",
+      "runs": 28,
+      "status": "passed",
+      "workspace": "data/capacity-custom-bounded-10000"
+    },
+    {
+      "count": 100000,
+      "criteria_sha256": "92017caecff144a09dfd9f8d5dc7d9536ace975e4e33ba83073859e992a0d366",
+      "disposition_audit": {
+        "status": "not_assessed"
+      },
+      "error": "failed to fetch: HTTPConnectionPool(host='trino', port=8080): Max retries exceeded with url: /v1/statement/executing/20261023_052011_02193_kkx84/y5fbfcb6c79cad4793c5e315b164e4bbba66f161a/8 (Caused by NameResolutionError(\"HTTPConnection(host='trino', port=8080): Failed to resolve 'trino' ([Errno -2] Name or service not known)\"))",
+      "modeled_cost_status": "complete_declared_planning_scenarios; cloud measurements incomplete",
+      "oom_killed_containers": [],
+      "peak_sampled_producer_rss_bytes": 86601728,
+      "performance_status": null,
+      "resource_evidence": "data/capacity-small-bounded-100000/observations/resource_summary.json",
+      "restart": {
+        "status": "not_assessed"
+      },
+      "revision": "4ba679d9bbc11c64b55251d5c275cbf7fc7905edf3ce8cf0613fb0b50cb8f356",
+      "run_results_sha256": "03e2aee44dfadd6f5c7b2a7cecff3ccda7eb376446ca0516b8c1a82ff26d76b5",
+      "runs": 1,
+      "status": "failed",
+      "workspace": "data/capacity-small-bounded-100000"
+    },
+    {
+      "count": 10000,
+      "criteria_sha256": "802e94d5e0dd684a3e5df70757a824c3ac17d89a69efc49df57c03641ee872c9",
+      "disposition_audit": {
+        "status": "not_assessed"
+      },
+      "error": null,
+      "modeled_cost_status": "complete_declared_planning_scenarios; cloud measurements incomplete",
+      "oom_killed_containers": [],
+      "peak_sampled_producer_rss_bytes": 167534592,
+      "performance_status": "not_assessed",
+      "resource_evidence": "data/capacity-custom-history-10000/observations/resource_summary.json",
+      "restart": {
+        "status": "not_assessed"
+      },
+      "revision": "9914aecc01119c6bd541fe72b76b580703395c042b8503de2e193c21baaf70b0",
+      "run_results_sha256": "3a883451e886681c77040473763913b13bf27665be8a545bedb43331d37249ce",
+      "runs": 28,
+      "status": "passed",
+      "workspace": "data/capacity-custom-history-10000"
+    },
+    {
+      "count": 100000,
+      "criteria_sha256": "802e94d5e0dd684a3e5df70757a824c3ac17d89a69efc49df57c03641ee872c9",
+      "disposition_audit": {
+        "status": "not_assessed"
+      },
+      "error": "producer exited with code 130",
+      "modeled_cost_status": "complete_declared_planning_scenarios; cloud measurements incomplete",
+      "oom_killed_containers": [],
+      "peak_sampled_producer_rss_bytes": 858107904,
+      "performance_status": null,
+      "resource_evidence": "data/capacity-small-history-100000/observations/resource_summary.json",
+      "restart": {
+        "status": "not_assessed"
+      },
+      "revision": "9914aecc01119c6bd541fe72b76b580703395c042b8503de2e193c21baaf70b0",
+      "run_results_sha256": "092e7ce22b005a926bfc95c96e7a912d69d454c002202ef9455168ded437fb62",
+      "runs": 2,
+      "status": "failed",
+      "workspace": "data/capacity-small-history-100000"
+    },
+    {
+      "count": 10000,
+      "criteria_sha256": "d54ff412deb88f008afdef89f35907b18d55fce61ba3a14f7203e4e643315e61",
+      "disposition_audit": {
+        "status": "not_assessed"
+      },
+      "error": null,
+      "modeled_cost_status": "complete_declared_planning_scenarios; cloud measurements incomplete",
+      "oom_killed_containers": [],
+      "peak_sampled_producer_rss_bytes": 234426368,
+      "performance_status": "not_assessed",
+      "resource_evidence": "data/capacity-custom-parquet-10000/observations/resource_summary.json",
+      "restart": {
+        "status": "not_assessed"
+      },
+      "revision": "3358b394e79f1ee0182984ebe4a69e95c2d877bd0a011046fff791dfc797bc61",
+      "run_results_sha256": "185447cccd8cca8690123a666c1793e50d28f870c0a0cf4a39dcfb91e85c753e",
+      "runs": 28,
+      "status": "passed",
+      "workspace": "data/capacity-custom-parquet-10000"
+    },
+    {
+      "count": 100000,
+      "criteria_sha256": "d54ff412deb88f008afdef89f35907b18d55fce61ba3a14f7203e4e643315e61",
+      "disposition_audit": {
+        "status": "not_assessed"
+      },
+      "error": "resource_limited: frozen input or calibrated memory budget exceeded; see capacity_preflight.json",
+      "modeled_cost_status": "incomplete: two storage inventories required for measured retention baseline",
+      "oom_killed_containers": [],
+      "peak_sampled_producer_rss_bytes": 96002048,
+      "performance_status": null,
+      "resource_evidence": "data/capacity-small-parquet-100000/observations/resource_summary.json",
+      "restart": {
+        "status": "not_assessed"
+      },
+      "revision": "3358b394e79f1ee0182984ebe4a69e95c2d877bd0a011046fff791dfc797bc61",
+      "run_results_sha256": "58e7b80b2d93549e10cb8263efdbf3398acdb98d53f4830032549c9609a5c605",
+      "runs": 1,
+      "status": "failed",
+      "workspace": "data/capacity-small-parquet-100000"
+    },
+    {
+      "count": 10000,
+      "criteria_sha256": "f65fba765c7b68d912186e171321d94babf075392eff3a70ae9ff2682e786ac9",
+      "disposition_audit": {
+        "status": "not_assessed"
+      },
+      "error": null,
+      "modeled_cost_status": "complete_declared_planning_scenarios; cloud measurements incomplete",
+      "oom_killed_containers": [],
+      "peak_sampled_producer_rss_bytes": 236634112,
+      "performance_status": "not_assessed",
+      "resource_evidence": "data/capacity-custom-producer2500-10000/observations/resource_summary.json",
+      "restart": {
+        "status": "not_assessed"
+      },
+      "revision": "5b75688ea2ea2531687edf720bd58a7f7234418156e0bb76afd655f8ee5b286d",
+      "run_results_sha256": "877f89eba248418f87cad259679d088226cb775530b34b97832dc66aebfe1383",
+      "runs": 28,
+      "status": "passed",
+      "workspace": "data/capacity-custom-producer2500-10000"
+    },
+    {
+      "count": 100000,
+      "criteria_sha256": "f65fba765c7b68d912186e171321d94babf075392eff3a70ae9ff2682e786ac9",
+      "disposition_audit": {
+        "status": "not_assessed"
+      },
+      "error": "dbt failed; log: /app/data/capacity-small-producer2500-100000/shared/dbt/58c735eb8197482ea6558c1db0513fb6/8018f1a28c904cd790bebaa1da0d5073/console.log\n06:26:26  Running with dbt=1.12.6\nINFO:trino.auth:keyring module not found. OAuth2 token will not be stored in keyring.\nINFO:trino.auth:keyring module not found. OAuth2 token will not be stored in keyring.\n06:26:26  Registered adapter: trino=1.10.6\n06:26:26  Unable to do partial parsing because saved manifest not found. Starting full parse.\n06:26:27  Found 14 models, 6 data tests, 3 sources, 502 macros\n06:26:27  \n06:26:27  Concurrency: 2 threads (target='local')\n06:26:27  \n06:26:27  [WARNING]: SSL certificate validation is disabled by default. It is legacy behavior which will be changed in future releases. It is strongly advised to enable `require_certificate_validation` flag or explicitly set `cert` configuration to `True` for security reasons. You may receive an error after that if your SSL setup is incorrect.\nYou may opt into the new behavior sooner by setting `flags.require_certificate_validation` to `True` in `dbt_project.yml`.\nVisit https://docs.getdbt.com/reference/global-configs/behavior-changes for more information.\n06:26:28  1 of 10 START sql table model dpe_run_58c735eb8197482e.stg_events .............. [RUN]\n06:26:28  2 of 10 START sql table model dpe_run_58c735eb8197482e.stg_references .......... [RUN]\n06:26:28  2 of 10 OK created sql table model dpe_run_58c735eb8197482e.stg_references ..... [CREATE TABLE (134 rows) in 0.42s]\n06:26:28  3 of 10 START sql table model dpe_run_58c735eb8197482e.stg_snapshots ........... [RUN]\nINFO:trino.client:failed after 3 attempts\n06:26:37  3 of 10 ERROR creating sql table model dpe_run_58c735eb8197482e.stg_snapshots .. [ERROR in 9.22s]\n06:26:37  4 of 10 SKIP relation dpe_run_58c735eb8197482e.eligible_snapshots .............. [SKIP]\n06:26:37  5 of 10 SKIP relation dpe_run_58c735eb8197482e.incident_headers ................ [SKIP]\nINFO:trino.client:failed after 3 attempts\n06:26:37  1 of 10 ERROR creating sql table model dpe_run_58c735eb8197482e.stg_events ..... [ERROR in 9.74s]\n06:26:37  6 of 10 SKIP relation dpe_run_58c735eb8197482e.eligible_events ................. [SKIP]\n06:26:37  7 of 10 SKIP relation dpe_run_58c735eb8197482e.event_timeline .................. [SKIP]\n06:26:37  8 of 10 SKIP relation dpe_run_58c735eb8197482e.quarantine ...................... [SKIP]\n06:26:37  9 of 10 SKIP relation dpe_run_58c735eb8197482e.incident_measures ............... [SKIP]\n06:26:37  10 of 10 SKIP relation dpe_run_58c735eb8197482e.record_dispositions ............ [SKIP]\n06:26:37  \n06:26:37  Finished running 10 table models in 0 hours 0 minutes and 9.88 seconds (9.88s).\n06:26:37  \n06:26:37  Completed with 2 errors, 0 partial successes, and 0 warnings:\n06:26:37  \n06:26:37  [ERROR]: in model stg_snapshots (models/stg_snapshots.sql)\n06:26:37    Database Error in model stg_snapshots (models/stg_snapshots.sql)\n  failed to fetch: HTTPConnectionPool(host='trino', port=8080): Max retries exceeded with url: /v1/statement/executing/20261023_062628_00846_cd95q/yf212edd25376082ec56a7e033079c2a14d1f4a4e/8 (Caused by NameResolutionError(\"HTTPConnection(host='trino', port=8080): Failed to resolve 'trino' ([Errno -2] Name or service not known)\"))\n  compiled code at /app/data/capacity-small-producer2500-100000/shared/dbt/58c735eb8197482ea6558c1db0513fb6/8018f1a28c904cd790bebaa1da0d5073/target/run/dpe_local/models/stg_snapshots.sql\n06:26:37  \n06:26:37    compiled code at /app/data/capacity-small-producer2500-100000/shared/dbt/58c735eb8197482ea6558c1db0513fb6/8018f1a28c904cd790bebaa1da0d5073/target/compiled/dpe_local/models/stg_snapshots.sql\n06:26:37  \n06:26:37  [ERROR]: in model stg_events (models/stg_events.sql)\n06:26:37    Database Error in model stg_events (models/stg_events.sql)\n  failed to fetch: HTTPConnectionPool(host='trino', port=8080): Max retries exceeded with url: /v1/statement/executing/20261023_062628_00845_cd95q/y7db5aa85669cf23b2c771e9a0501605ac7ed7c53/9 (Caused by NameResolutionError(\"HTTPConnection(host='trino', port=8080): Failed to resolve 'trino' ([Errno -2] Name or service not known)\"))\n  compiled code at /app/data/capacity-small-producer2500-100000/shared/dbt/58c735eb8197482ea6558c1db0513fb6/8018f1a28c904cd790bebaa1da0d5073/target/run/dpe_local/models/stg_events.sql\n06:26:37  \n06:26:37    compiled code at /app/data/capacity-small-producer2500-100000/shared/dbt/58c735eb8197482ea6558c1db0513fb6/8018f1a28c904cd790bebaa1da0d5073/target/compiled/dpe_local/models/stg_events.sql\n06:26:37  \n06:26:37  Done. PASS=1 WARN=0 ERROR=2 SKIP=7 NO-OP=0 REUSED=0 TOTAL=10\n",
+      "modeled_cost_status": "complete_declared_planning_scenarios; cloud measurements incomplete",
+      "oom_killed_containers": [
+        "dpe-local-trino-1"
+      ],
+      "peak_sampled_producer_rss_bytes": 190169088,
+      "performance_status": null,
+      "resource_evidence": "data/capacity-small-producer2500-100000/observations/resource_summary.json",
+      "restart": {
+        "status": "not_assessed"
+      },
+      "revision": "5b75688ea2ea2531687edf720bd58a7f7234418156e0bb76afd655f8ee5b286d",
+      "run_results_sha256": "25d35e0e5283159c9a3b36a0c621722762253c44e99615897dcc2baaeab975ea",
+      "runs": 1,
+      "status": "failed",
+      "workspace": "data/capacity-small-producer2500-100000"
+    },
+    {
+      "count": 100000,
+      "criteria_sha256": "79b708deebf1f61f7e6a7cd175592d7a3acb26e93b83d381e15ea96cf01aaafe",
+      "disposition_audit": {
+        "status": "not_assessed"
+      },
+      "error": "dbt failed; log: /app/data/capacity-native6g-deliveries-full/trino/dbt/dc909ebfbcf64fa48e016a0a97d75bb5/044f8596d7324f2d91a8a6c2ab3d178f/console.log\n07:49:31  Running with dbt=1.12.6\nINFO:trino.auth:keyring module not found. OAuth2 token will not be stored in keyring.\nINFO:trino.auth:keyring module not found. OAuth2 token will not be stored in keyring.\n07:49:31  Registered adapter: trino=1.10.6\n07:49:31  Unable to do partial parsing because saved manifest not found. Starting full parse.\n07:49:32  Found 14 models, 6 data tests, 3 sources, 502 macros\n07:49:32  \n07:49:32  Concurrency: 2 threads (target='local')\n07:49:32  \n07:49:32  [WARNING]: SSL certificate validation is disabled by default. It is legacy behavior which will be changed in future releases. It is strongly advised to enable `require_certificate_validation` flag or explicitly set `cert` configuration to `True` for security reasons. You may receive an error after that if your SSL setup is incorrect.\nYou may opt into the new behavior sooner by setting `flags.require_certificate_validation` to `True` in `dbt_project.yml`.\nVisit https://docs.getdbt.com/reference/global-configs/behavior-changes for more information.\n07:49:32  1 of 3 START sql table model dpe_run_dc909ebfbcf64fa4.incident_daily_contributions  [RUN]\n07:49:38  1 of 3 ERROR creating sql table model dpe_run_dc909ebfbcf64fa4.incident_daily_contributions  [ERROR in 6.14s]\n07:49:38  2 of 3 SKIP relation dpe_run_dc909ebfbcf64fa4.gold_service_daily_metrics ....... [SKIP]\n07:49:38  3 of 3 SKIP test not_null_gold_service_daily_metrics_date ...................... [SKIP]\n07:49:38  \n07:49:38  Finished running 2 table models, 1 test in 0 hours 0 minutes and 6.25 seconds (6.25s).\n07:49:38  \n07:49:38  Completed with 1 error, 0 partial successes, and 0 warnings:\n07:49:38  \n07:49:38  [ERROR]: in model incident_daily_contributions (models/incident_daily_contributions.sql)\n07:49:38    Database Error in model incident_daily_contributions (models/incident_daily_contributions.sql)\n  TrinoQueryError(type=INSUFFICIENT_RESOURCES, name=EXCEEDED_LOCAL_MEMORY_LIMIT, message=\"Query exceeded per-node memory limit of 768MB [Allocated: 767.53MB, Delta: 1.14MB, Top Consumers: {HashAggregationOperator=703.79MB, HashBuilderOperator=28.06MB, LocalExchange=22.20MB}]\", query_id=20261023_073338_01498_jxe9e)\n  compiled code at /app/data/capacity-native6g-deliveries-full/trino/dbt/dc909ebfbcf64fa48e016a0a97d75bb5/044f8596d7324f2d91a8a6c2ab3d178f/target/run/dpe_local/models/incident_daily_contributions.sql\n07:49:38  \n07:49:38    compiled code at /app/data/capacity-native6g-deliveries-full/trino/dbt/dc909ebfbcf64fa48e016a0a97d75bb5/044f8596d7324f2d91a8a6c2ab3d178f/target/compiled/dpe_local/models/incident_daily_contributions.sql\n07:49:38  \n07:49:38  Done. PASS=0 WARN=0 ERROR=1 SKIP=2 NO-OP=0 REUSED=0 TOTAL=3\n",
+      "modeled_cost_status": "complete_declared_planning_scenarios; cloud measurements incomplete",
+      "oom_killed_containers": [],
+      "peak_sampled_producer_rss_bytes": 1232093184,
+      "performance_status": null,
+      "resource_evidence": "data/capacity-native6g-deliveries-full/observations/resource_summary.json",
+      "restart": {
+        "evidence": "data/capacity-native6g-deliveries-full/restart.json",
+        "restart_status": "passed",
+        "sha256": "15faccbbd3b354504e2e99b51b7e881535f3366ec19713ccfadbf13c4c053ab7",
+        "status": "passed"
+      },
+      "revision": "a468f01df15c8927d8b6be5bc8c615bc728727ef1332ff478fadb931ff9b7227",
+      "run_results_sha256": "967ac59b8e1fabf1ce802584b6f64b3280239b8e850c38f046d86dc41829fa0e",
+      "runs": 15,
+      "status": "failed",
+      "workspace": "data/capacity-native6g-deliveries-full"
+    },
+    {
+      "count": 100000,
+      "criteria_sha256": "0df95d473db540506d03b6d7de3bf9602261858b5ebd7beb3ff499359897b91a",
+      "disposition_audit": {
+        "evidence": "data/capacity-query1g-deliveries-full/disposition_audit.json",
+        "sha256": "0082ead3cd1b79f29bf3870e20d47e1acff22aff20f1e357bfb08ca1f30e2134",
+        "status": "failed"
+      },
+      "error": null,
+      "modeled_cost_status": "complete_declared_planning_scenarios; cloud measurements incomplete",
+      "oom_killed_containers": [],
+      "peak_sampled_producer_rss_bytes": 1232818176,
+      "performance_status": "passed",
+      "resource_evidence": "data/capacity-query1g-deliveries-full/observations/resource_summary.json",
+      "restart": {
+        "evidence": "data/capacity-query1g-deliveries-full/restart.json",
+        "restart_status": "passed",
+        "sha256": "9b25615fd712f2036dbbb0553de7709424f09a4cf77667bb0e2bea15d0d790cf",
+        "status": "passed"
+      },
+      "revision": "886bd69e0879bed34f55d5b1aec047f02cb204eaaa93f0c7283894ae6aebdd5d",
+      "run_results_sha256": "be3f3008d5da01cfbb80b17c4f32f70232f6844eaef03b66fdabb4f5889bd286",
+      "runs": 16,
+      "status": "passed",
+      "workspace": "data/capacity-query1g-deliveries-full"
+    },
+    {
+      "count": 10000,
+      "criteria_sha256": "79b708deebf1f61f7e6a7cd175592d7a3acb26e93b83d381e15ea96cf01aaafe",
+      "disposition_audit": {
+        "status": "not_assessed"
+      },
+      "error": null,
+      "modeled_cost_status": "complete_declared_planning_scenarios; cloud measurements incomplete",
+      "oom_killed_containers": [],
+      "peak_sampled_producer_rss_bytes": 249524224,
+      "performance_status": "not_assessed",
+      "resource_evidence": "data/capacity-custom-native6g-10000/observations/resource_summary.json",
+      "restart": {
+        "evidence": "data/capacity-custom-native6g-10000/restart.json",
+        "restart_status": "passed",
+        "sha256": "2f5608f1ded91c41aa4b39c7766989d85b4e9bee5e520ae52aeac91503a938a2",
+        "status": "passed"
+      },
+      "revision": "a468f01df15c8927d8b6be5bc8c615bc728727ef1332ff478fadb931ff9b7227",
+      "run_results_sha256": "5f9f8514bfa2f121c70a34a50e315477101aae6322e56169b6709cd9db0fbb94",
+      "runs": 28,
+      "status": "passed",
+      "workspace": "data/capacity-custom-native6g-10000"
+    },
+    {
+      "count": 100000,
+      "criteria_sha256": "79b708deebf1f61f7e6a7cd175592d7a3acb26e93b83d381e15ea96cf01aaafe",
+      "disposition_audit": {
+        "evidence": "data/capacity-small-native6g-100000/disposition_audit.json",
+        "sha256": "457a56dd313e789b978299664c2d9fca643c5ea280b82c57eb3f559f0e0e0134",
+        "status": "passed"
+      },
+      "error": null,
+      "modeled_cost_status": "complete_declared_planning_scenarios; cloud measurements incomplete",
+      "oom_killed_containers": [],
+      "peak_sampled_producer_rss_bytes": 1198268416,
+      "performance_status": "passed",
+      "resource_evidence": "data/capacity-small-native6g-100000/observations/resource_summary.json",
+      "restart": {
+        "evidence": "data/capacity-small-native6g-100000/restart.json",
+        "restart_status": "passed",
+        "sha256": "9d3c57f2d94d6a707e0ea10e16958276c459b2b80741b6379716c67d5629699b",
+        "status": "passed"
+      },
+      "revision": "a468f01df15c8927d8b6be5bc8c615bc728727ef1332ff478fadb931ff9b7227",
+      "run_results_sha256": "89b5258dc59c7c0f053c4ead4446cbd8256e2731b3757e7c912366b652f172b6",
+      "runs": 28,
+      "status": "passed",
+      "workspace": "data/capacity-small-native6g-100000"
+    },
+    {
+      "count": 100000,
+      "criteria_sha256": "0df95d473db540506d03b6d7de3bf9602261858b5ebd7beb3ff499359897b91a",
+      "disposition_audit": {
+        "evidence": "data/capacity-ruleids-deliveries-full/disposition_audit.json",
+        "sha256": "1b3a97b0d63afdea27283af39b0c181824743e500b2605e5a405b21211906828",
+        "status": "passed"
+      },
+      "error": null,
+      "modeled_cost_status": "complete_declared_planning_scenarios; cloud measurements incomplete",
+      "oom_killed_containers": [],
+      "peak_sampled_producer_rss_bytes": 1234649088,
+      "performance_status": "passed",
+      "resource_evidence": "data/capacity-ruleids-deliveries-full/observations/resource_summary.json",
+      "restart": {
+        "evidence": "data/capacity-ruleids-deliveries-full/restart.json",
+        "restart_status": "passed",
+        "sha256": "d08826a55c8bff71ad85a4a0ca92f3ab7ffd4ff3860127504141d77cc8521148",
+        "status": "passed"
+      },
+      "revision": "e7215b38c2ab5fba7b96d420a87a7b6e8626d2813e263d99182cc0c9fbb31dd7",
+      "run_results_sha256": "482b3caa7d33b21fedeb6e98a43f6df72ec453fd691e12cdb91c3e3aebfe84c6",
+      "runs": 16,
+      "status": "passed",
+      "workspace": "data/capacity-ruleids-deliveries-full"
+    },
+    {
+      "count": 100000,
+      "criteria_sha256": "0df95d473db540506d03b6d7de3bf9602261858b5ebd7beb3ff499359897b91a",
+      "disposition_audit": {
+        "evidence": "data/capacity-ruleids-deliveries-targeted/disposition_audit.json",
+        "sha256": "f9da0820a90b1f0f4e6be1e6af71514c110b39e80781db94db3a8671907c8e17",
+        "status": "passed"
+      },
+      "error": null,
+      "modeled_cost_status": "complete_declared_planning_scenarios; cloud measurements incomplete",
+      "oom_killed_containers": [],
+      "peak_sampled_producer_rss_bytes": 1226805248,
+      "performance_status": "passed",
+      "resource_evidence": "data/capacity-ruleids-deliveries-targeted/observations/resource_summary.json",
+      "restart": {
+        "evidence": "data/capacity-ruleids-deliveries-targeted/restart.json",
+        "restart_status": "passed",
+        "sha256": "95933bb24b4080c316a83a944f885761902240bcb739f49a08e9b3393af1e86d",
+        "status": "passed"
+      },
+      "revision": "e7215b38c2ab5fba7b96d420a87a7b6e8626d2813e263d99182cc0c9fbb31dd7",
+      "run_results_sha256": "66f388617ce9d6bb6d483297ed62c57f6402ffaaa60a32568392c59d31806b7d",
+      "runs": 6,
+      "status": "passed",
+      "workspace": "data/capacity-ruleids-deliveries-targeted"
+    }
+  ],
+  "primary_small_performance": [
+    {
+      "concurrency": 1,
+      "configuration_id": "unspecified",
+      "cost_basis": "local_measured_usage",
+      "engine": "spark",
+      "fully_allocated_cost": null,
+      "input_manifest_checksum": "aa1b904b8c1f589348ceadfd6462d96897b16c99328b176fe25bc05bc6ed26fe",
+      "marginal_cost": null,
+      "max_seconds": 8.612343149000026,
+      "median_seconds": 8.584668482000097,
+      "min_seconds": 8.277162518999944,
+      "ranking_status": "eligible_local_only",
+      "repetitions": 3,
+      "size": "small",
+      "strategy": "full",
+      "successful_repetitions": 3,
+      "variant": "initial",
+      "workers": 1,
+      "workload_id": "APPLICATION_OVERHEAD"
+    },
+    {
+      "concurrency": 1,
+      "configuration_id": "unspecified",
+      "cost_basis": "local_measured_usage",
+      "engine": "trino",
+      "fully_allocated_cost": null,
+      "input_manifest_checksum": "aa1b904b8c1f589348ceadfd6462d96897b16c99328b176fe25bc05bc6ed26fe",
+      "marginal_cost": null,
+      "max_seconds": 87.663027,
+      "median_seconds": 87.663027,
+      "min_seconds": 87.663027,
+      "ranking_status": "insufficient_repetitions",
+      "repetitions": 1,
+      "size": "small",
+      "strategy": "full",
+      "successful_repetitions": 1,
+      "variant": "initial",
+      "workers": 1,
+      "workload_id": "PREPARATION"
+    },
+    {
+      "concurrency": 1,
+      "configuration_id": "unspecified",
+      "cost_basis": "local_measured_usage",
+      "engine": "spark",
+      "fully_allocated_cost": null,
+      "input_manifest_checksum": "aa1b904b8c1f589348ceadfd6462d96897b16c99328b176fe25bc05bc6ed26fe",
+      "marginal_cost": null,
+      "max_seconds": 3.080551051999919,
+      "median_seconds": 2.996027500000082,
+      "min_seconds": 2.97623889099998,
+      "ranking_status": "eligible_local_only",
+      "repetitions": 3,
+      "size": "small",
+      "strategy": "full",
+      "successful_repetitions": 3,
+      "variant": "initial",
+      "workers": 1,
+      "workload_id": "W1"
+    },
+    {
+      "concurrency": 1,
+      "configuration_id": "unspecified",
+      "cost_basis": "local_measured_usage",
+      "engine": "trino",
+      "fully_allocated_cost": null,
+      "input_manifest_checksum": "aa1b904b8c1f589348ceadfd6462d96897b16c99328b176fe25bc05bc6ed26fe",
+      "marginal_cost": null,
+      "max_seconds": 0.14933025099992392,
+      "median_seconds": 0.1100536630001443,
+      "min_seconds": 0.1022389810000277,
+      "ranking_status": "eligible_local_only",
+      "repetitions": 3,
+      "size": "small",
+      "strategy": "full",
+      "successful_repetitions": 3,
+      "variant": "initial",
+      "workers": 1,
+      "workload_id": "W1"
+    },
+    {
+      "concurrency": 1,
+      "configuration_id": "unspecified",
+      "cost_basis": "local_measured_usage",
+      "engine": "spark",
+      "fully_allocated_cost": null,
+      "input_manifest_checksum": "aa1b904b8c1f589348ceadfd6462d96897b16c99328b176fe25bc05bc6ed26fe",
+      "marginal_cost": null,
+      "max_seconds": 3.47037583000008,
+      "median_seconds": 3.2194970109999304,
+      "min_seconds": 3.1747145070000897,
+      "ranking_status": "eligible_local_only",
+      "repetitions": 3,
+      "size": "small",
+      "strategy": "full",
+      "successful_repetitions": 3,
+      "variant": "initial",
+      "workers": 1,
+      "workload_id": "W2"
+    },
+    {
+      "concurrency": 1,
+      "configuration_id": "unspecified",
+      "cost_basis": "local_measured_usage",
+      "engine": "trino",
+      "fully_allocated_cost": null,
+      "input_manifest_checksum": "aa1b904b8c1f589348ceadfd6462d96897b16c99328b176fe25bc05bc6ed26fe",
+      "marginal_cost": null,
+      "max_seconds": 1.2157839259998582,
+      "median_seconds": 1.139402106000034,
+      "min_seconds": 0.9384895639999513,
+      "ranking_status": "eligible_local_only",
+      "repetitions": 3,
+      "size": "small",
+      "strategy": "full",
+      "successful_repetitions": 3,
+      "variant": "initial",
+      "workers": 1,
+      "workload_id": "W2"
+    },
+    {
+      "concurrency": 1,
+      "configuration_id": "unspecified",
+      "cost_basis": "local_measured_usage",
+      "engine": "spark",
+      "fully_allocated_cost": null,
+      "input_manifest_checksum": "aa1b904b8c1f589348ceadfd6462d96897b16c99328b176fe25bc05bc6ed26fe",
+      "marginal_cost": null,
+      "max_seconds": 3.342403159000014,
+      "median_seconds": 3.3140058420000287,
+      "min_seconds": 3.0846744370001034,
+      "ranking_status": "eligible_local_only",
+      "repetitions": 3,
+      "size": "small",
+      "strategy": "full",
+      "successful_repetitions": 3,
+      "variant": "initial",
+      "workers": 1,
+      "workload_id": "W3"
+    },
+    {
+      "concurrency": 1,
+      "configuration_id": "unspecified",
+      "cost_basis": "local_measured_usage",
+      "engine": "trino",
+      "fully_allocated_cost": null,
+      "input_manifest_checksum": "aa1b904b8c1f589348ceadfd6462d96897b16c99328b176fe25bc05bc6ed26fe",
+      "marginal_cost": null,
+      "max_seconds": 2.2684798530001444,
+      "median_seconds": 2.1805702039999915,
+      "min_seconds": 2.128147782000042,
+      "ranking_status": "eligible_local_only",
+      "repetitions": 3,
+      "size": "small",
+      "strategy": "full",
+      "successful_repetitions": 3,
+      "variant": "initial",
+      "workers": 1,
+      "workload_id": "W3"
+    },
+    {
+      "concurrency": 1,
+      "configuration_id": "unspecified",
+      "cost_basis": "local_measured_usage",
+      "engine": "spark",
+      "fully_allocated_cost": null,
+      "input_manifest_checksum": "aa1b904b8c1f589348ceadfd6462d96897b16c99328b176fe25bc05bc6ed26fe",
+      "marginal_cost": null,
+      "max_seconds": 136.7621104509999,
+      "median_seconds": 136.02581996499998,
+      "min_seconds": 133.4860268519999,
+      "ranking_status": "eligible_local_only",
+      "repetitions": 3,
+      "size": "small",
+      "strategy": "full",
+      "successful_repetitions": 3,
+      "variant": "initial",
+      "workers": 1,
+      "workload_id": "W4"
+    },
+    {
+      "concurrency": 1,
+      "configuration_id": "unspecified",
+      "cost_basis": "local_measured_usage",
+      "engine": "trino",
+      "fully_allocated_cost": null,
+      "input_manifest_checksum": "aa1b904b8c1f589348ceadfd6462d96897b16c99328b176fe25bc05bc6ed26fe",
+      "marginal_cost": null,
+      "max_seconds": 120.58954446300004,
+      "median_seconds": 117.817921823,
+      "min_seconds": 117.78953837999984,
+      "ranking_status": "eligible_local_only",
+      "repetitions": 3,
+      "size": "small",
+      "strategy": "full",
+      "successful_repetitions": 3,
+      "variant": "initial",
+      "workers": 1,
+      "workload_id": "W4"
+    }
+  ],
+  "primary_small_performance_status": "passed",
+  "primary_small_resources": {
+    "collector_wall_seconds_sum": 507.2096750799974,
+    "containers": [
+      {
+        "container": "dpe-local-benchmark-coordinator-1",
+        "maximum_sampled_cpu_percent": 105.92,
+        "memory_limit_bytes": 2684354560,
+        "peak_sampled_memory_bytes": 1187558457,
+        "sampled_cpu_seconds": 502.32528881950003,
+        "samples": 241
+      },
+      {
+        "container": "dpe-local-trino-1",
+        "maximum_sampled_cpu_percent": 385.93,
+        "memory_limit_bytes": 6442450944,
+        "peak_sampled_memory_bytes": 4027605581,
+        "sampled_cpu_seconds": 465.9242409662,
+        "samples": 241
+      },
+      {
+        "container": "dpe-local-spark-gateway-1",
+        "maximum_sampled_cpu_percent": 365.96,
+        "memory_limit_bytes": 3221225472,
+        "peak_sampled_memory_bytes": 2477122387,
+        "sampled_cpu_seconds": 592.2159180338002,
+        "samples": 241
+      },
+      {
+        "container": "dpe-local-airflow-1",
+        "maximum_sampled_cpu_percent": 13.71,
+        "memory_limit_bytes": 1610612736,
+        "peak_sampled_memory_bytes": 1137092591,
+        "sampled_cpu_seconds": 37.057420771599986,
+        "samples": 241
+      },
+      {
+        "container": "dpe-local-catalog-1",
+        "maximum_sampled_cpu_percent": 19.25,
+        "memory_limit_bytes": 1342177280,
+        "peak_sampled_memory_bytes": 637848780,
+        "sampled_cpu_seconds": 12.741012988500005,
+        "samples": 241
+      },
+      {
+        "container": "dpe-local-postgres-1",
+        "maximum_sampled_cpu_percent": 3.21,
+        "memory_limit_bytes": 536870912,
+        "peak_sampled_memory_bytes": 91089797,
+        "sampled_cpu_seconds": 8.6268929098,
+        "samples": 241
+      },
+      {
+        "container": "dpe-local-telemetry-1",
+        "maximum_sampled_cpu_percent": 6.74,
+        "memory_limit_bytes": 268435456,
+        "peak_sampled_memory_bytes": 35473326,
+        "sampled_cpu_seconds": 15.323994049499998,
+        "samples": 241
+      },
+      {
+        "container": "dpe-local-objectstore-1",
+        "maximum_sampled_cpu_percent": 203.56,
+        "memory_limit_bytes": 1610612736,
+        "peak_sampled_memory_bytes": 1333587345,
+        "sampled_cpu_seconds": 305.500913931,
+        "samples": 241
+      }
+    ],
+    "jvm": {
+      "collector_seconds_sum": 21.316516993001017,
+      "limits": [
+        "NMT reserved/committed, heap used and OS RSS are distinct quantities; maxima may occur at different times.",
+        "HotSpot NMT does not account for every third-party native allocation. No complete off-heap attribution is claimed.",
+        "Sampling can miss peaks; retain command timestamps, return codes and collection overhead."
+      ],
+      "nmt_categories": {
+        "Arena Chunk": {
+          "peak_committed_bytes": 100495360,
+          "peak_reserved_bytes": 100495360
+        },
+        "Class": {
+          "peak_committed_bytes": 57886720,
+          "peak_reserved_bytes": 1080117248
+        },
+        "Code": {
+          "peak_committed_bytes": 135143424,
+          "peak_reserved_bytes": 304607232
+        },
+        "Compiler": {
+          "peak_committed_bytes": 46856192,
+          "peak_reserved_bytes": 46856192
+        },
+        "GC": {
+          "peak_committed_bytes": 97862656,
+          "peak_reserved_bytes": 97955840
+        },
+        "GCCardSet": {
+          "peak_committed_bytes": 159744,
+          "peak_reserved_bytes": 159744
+        },
+        "Internal": {
+          "peak_committed_bytes": 3567616,
+          "peak_reserved_bytes": 3567616
+        },
+        "Java Heap": {
+          "peak_committed_bytes": 2147483648,
+          "peak_reserved_bytes": 2147483648
+        },
+        "Metaspace": {
+          "peak_committed_bytes": 192299008,
+          "peak_reserved_bytes": 203898880
+        },
+        "Module": {
+          "peak_committed_bytes": 421888,
+          "peak_reserved_bytes": 421888
+        },
+        "Native Memory Tracking": {
+          "peak_committed_bytes": 14782464,
+          "peak_reserved_bytes": 14782464
+        },
+        "Object Monitors": {
+          "peak_committed_bytes": 297984,
+          "peak_reserved_bytes": 297984
+        },
+        "Other": {
+          "peak_committed_bytes": 77302784,
+          "peak_reserved_bytes": 77302784
+        },
+        "Safepoint": {
+          "peak_committed_bytes": 8192,
+          "peak_reserved_bytes": 8192
+        },
+        "Serviceability": {
+          "peak_committed_bytes": 17408,
+          "peak_reserved_bytes": 17408
+        },
+        "String Deduplication": {
+          "peak_committed_bytes": 1024,
+          "peak_reserved_bytes": 1024
+        },
+        "Symbol": {
+          "peak_committed_bytes": 25520128,
+          "peak_reserved_bytes": 25520128
+        },
+        "Synchronization": {
+          "peak_committed_bytes": 6972416,
+          "peak_reserved_bytes": 6972416
+        },
+        "Thread": {
+          "peak_committed_bytes": 66379776,
+          "peak_reserved_bytes": 1140592640
+        },
+        "Tracing": {
+          "peak_committed_bytes": 140288,
+          "peak_reserved_bytes": 140288
+        }
+      },
+      "sampled_maxima": {
+        "heap_committed_bytes": 2147483648,
+        "heap_reserved_bytes": 2147483648,
+        "heap_used_bytes": 1792507904,
+        "nmt_total_committed_bytes": 2909467648,
+        "nmt_total_reserved_bytes": 5169792000,
+        "os_process_rss_bytes": 3941490688
+      },
+      "samples": 65,
+      "status": "observed"
+    },
+    "limits": [
+      "Sample maxima are not exact peaks; Docker memory values rounded by Docker stats.",
+      "CPU seconds integrate sampled container CPU%; distinct from measured engine task/query CPU.",
+      "Storage byte-hours use left-sample interpolation; retention is separately assumed in cloud models.",
+      "Namespace classification does not prove all objects are referenced by Iceberg; no garbage collection authorized or performed.",
+      "Complete native-memory attribution, billable ADLS request counts, transfer meters and recurring hands-on labor unavailable; partial JVM summaries are separate when collected."
+    ],
+    "oom_killed_containers": [],
+    "peak_sampled_producer_rss_bytes": 1198268416,
+    "sample_count": 241,
+    "sampling_gap_seconds": {
+      "maximum": 4.264856,
+      "median": 4.106809
+    },
+    "status": "observed"
+  },
+  "recommendation": "incomplete",
+  "restart": {
+    "path": "data/capacity-ruleids-service-restart.json",
+    "sha256": "7b1e50526d644292e671a7275f948abe39d584a2f077651b3918f39f6e8ce4da",
+    "status": "passed"
+  },
+  "scope": "local capacity and retail planning; original Azure POC incomplete",
+  "smoke": {
+    "fixtures_per_engine": 54,
+    "path": "data/capacity-ruleids-smoke/verification.json",
+    "sha256": "495f5f6010b0d70980cc5f798fd89c9fe4957bf496c47b6110b870bd18723b25",
+    "status": "passed"
+  },
+  "source_images": [
+    {
+      "build_image": "37f8a018adc3",
+      "immutable_image_id": "sha256:37f8a018adc345b9cb236ce4786612123216927700abb65dac41f51354077122",
+      "implementation_revision": "1a6e5d8265f9dff365bec84533aa546fca2cff1fb22e6d1a3418d90fbd707976",
+      "source_snapshot": "data/capacity-source-snapshots/1a6e5d8265f9dff365bec84533aa546fca2cff1fb22e6d1a3418d90fbd707976"
+    },
+    {
+      "build_image": "cc83f69614ac",
+      "immutable_image_id": "sha256:cc83f69614ac345c1ad567b4101d0e50464dd52283b0b2fc5aeee83b6180cee3",
+      "implementation_revision": "4ba679d9bbc11c64b55251d5c275cbf7fc7905edf3ce8cf0613fb0b50cb8f356",
+      "source_snapshot": "data/capacity-source-snapshots/4ba679d9bbc11c64b55251d5c275cbf7fc7905edf3ce8cf0613fb0b50cb8f356"
+    },
+    {
+      "build_image": "70d60c3cc3b7",
+      "immutable_image_id": "sha256:70d60c3cc3b746e8692c366ebe9f430b7a27d266030d9774ec339c0b0f12126d",
+      "implementation_revision": "9914aecc01119c6bd541fe72b76b580703395c042b8503de2e193c21baaf70b0",
+      "source_snapshot": "data/capacity-source-snapshots/9914aecc01119c6bd541fe72b76b580703395c042b8503de2e193c21baaf70b0"
+    },
+    {
+      "build_image": "4198da3f7fa2",
+      "immutable_image_id": "sha256:4198da3f7fa2f1abf7553d45005d4d966caca7edbd7704be973834968e78ac98",
+      "implementation_revision": "3358b394e79f1ee0182984ebe4a69e95c2d877bd0a011046fff791dfc797bc61",
+      "source_snapshot": "data/capacity-source-snapshots/3358b394e79f1ee0182984ebe4a69e95c2d877bd0a011046fff791dfc797bc61"
+    },
+    {
+      "build_image": "cc7c8b709122",
+      "immutable_image_id": "sha256:cc7c8b709122726e7747fc6d3b466549fe873531079375ac1e2c009387e9ae99",
+      "implementation_revision": "5b75688ea2ea2531687edf720bd58a7f7234418156e0bb76afd655f8ee5b286d",
+      "source_snapshot": "data/capacity-source-snapshots/5b75688ea2ea2531687edf720bd58a7f7234418156e0bb76afd655f8ee5b286d"
+    },
+    {
+      "build_image": "cb9de14e47e8",
+      "immutable_image_id": "sha256:cb9de14e47e8bf739830772e603ec09e5fb249a800c6624c361226911d3cbc1a",
+      "implementation_revision": "a468f01df15c8927d8b6be5bc8c615bc728727ef1332ff478fadb931ff9b7227",
+      "source_snapshot": "data/capacity-source-snapshots/a468f01df15c8927d8b6be5bc8c615bc728727ef1332ff478fadb931ff9b7227"
+    },
+    {
+      "build_image": "8fa205f26cdf",
+      "immutable_image_id": "sha256:8fa205f26cdf3b6f73b9f09672ae5a6f7771048794df361ffddc1d6d52429fd3",
+      "implementation_revision": "886bd69e0879bed34f55d5b1aec047f02cb204eaaa93f0c7283894ae6aebdd5d",
+      "source_snapshot": "data/capacity-source-snapshots/886bd69e0879bed34f55d5b1aec047f02cb204eaaa93f0c7283894ae6aebdd5d"
+    },
+    {
+      "build_image": "524d32ec7fbd",
+      "immutable_image_id": "sha256:524d32ec7fbd352cc7d9d177292a33fefd47d863871e8e97ab51b7d0af908b7f",
+      "implementation_revision": "e7215b38c2ab5fba7b96d420a87a7b6e8626d2813e263d99182cc0c9fbb31dd7",
+      "source_snapshot": "data/capacity-source-snapshots/e7215b38c2ab5fba7b96d420a87a7b6e8626d2813e263d99182cc0c9fbb31dd7"
+    }
+  ],
+  "targeted_edges": {
+    "path": "data/capacity-ruleids-targeted-edges/scenarios.json",
+    "sha256": "c732137bcb890809a3bc656464824c321c6c8d88ac07a5bf1bbdf1aeb205fbaa"
+  },
+  "unit_tests": {
+    "count": 93,
+    "path": "data/capacity-unit-final.log",
+    "sha256": "ce8c62f2b288c9878e2dfba6e12b4c9a27441c42f7953d213b1557c9a19d830c",
+    "status": "passed"
+  }
+}

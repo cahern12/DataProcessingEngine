@@ -32,7 +32,7 @@ docker-compose -f infra/local/compose.yaml run --rm runner \
   lake-verify --workspace data/lake-acceptance-next --count 1000
 ```
 
-It verifies table create/insert/update/merge operations, Parquet file metadata, dbt execution/tests, all 53 independent fixtures, 1,000 initial incidents, a delta producing 1,100 incidents, both publication failpoints, replay, and comparison with a full reference rebuild. Original files are archived into the local object store; Bronze rows retain batch/file/row provenance. Generated evidence remains in the mounted `data/` directory.
+It verifies table create/insert/update/merge operations, Parquet file metadata, dbt execution/tests, all 54 independent fixtures, 1,000 initial incidents, a delta producing 1,100 incidents, both publication failpoints, replay, and comparison with a full reference rebuild. Original files are archived into the local object store; Bronze rows retain batch/file/row provenance. Generated evidence remains in the mounted `data/` directory.
 
 The pipeline is a full-history SQL implementation at this milestone. Targeted incremental processing, extended histories/rules, and the complete operator command set remain phases 4–6 of plan 05.
 

@@ -23,7 +23,7 @@ from dpe.validation import check_fixtures, output_checksum
 
 class RuleTests(unittest.TestCase):
     def test_independent_expected_results(self):
-        self.assertEqual(check_fixtures(), {"fixtures": 53, "status": "passed"})
+        self.assertEqual(check_fixtures(), {"fixtures": 54, "status": "passed"})
 
     def test_historical_backlog_moves_with_assignment(self):
         case = copy.deepcopy(read_json(ROOT / "synthetic/fixtures/rule_cases.v1.json")["cases"][0])

@@ -1,5 +1,6 @@
 import tempfile
 import unittest
+from unittest.mock import patch
 from pathlib import Path
 from dpe.bounded_io import sources
 from dpe.common import DATASETS,read_json
@@ -9,6 +10,21 @@ from dpe.lakehouse import compare_rows
 
 
 class RepresentativeTests(unittest.TestCase):
+    def test_fixture_rejects_missing_duplicate_rule_even_when_counts_and_gold_match(self):
+        from dpe.engines import spark
+        case=next(c for c in read_json('synthetic/fixtures/rule_cases.v1.json')['cases']
+                  if c['name']=='duplicate_reference_rows_keep_rule_id')
+        result={'outputs':{'incident_resolution':[dict(case['expected_incident'],case_id=case['name'])],
+                           'service_daily_metrics':[dict(r,case_id=case['name']) for r in case.get('expected_daily',[])]},
+                'quarantine':[],'reconciliation':[{'case_id':case['name'],'dataset':'users','ordinal':i,
+                    'disposition':'duplicate','rule_id':'BR-002'} for i in range(case['expected_duplicate_count'])]}
+        result['reconciliation'][0]['rule_id']=None
+        with tempfile.TemporaryDirectory() as directory,patch.object(spark,'read_json',return_value={'cases':[case]}),patch.object(spark,'execute',return_value=result):
+            with self.assertRaisesRegex(AssertionError,'duplicate must retain BR-002'):
+                spark.fixtures(Path(directory))
+            result['reconciliation'][0]['rule_id']='BR-002'
+            self.assertEqual(spark.fixtures(Path(directory))['status'],'passed')
+
     def test_delivery_cases_have_independently_known_changes_and_exact_parent_lineage(self):
         with tempfile.TemporaryDirectory() as directory:
             cases=deliveries(Path(directory),100);paths=[];previous=None;parent=None

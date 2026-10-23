@@ -18,5 +18,6 @@ from incidents i left join first_error q on q.case_id=i.case_id and q.incident_i
 union all
 select case_id,dataset,ordinal,cast(null as varchar),
   if(row_number() over(partition by case_id,dataset,payload order by ordinal)>1,'duplicate','accepted'),
-  cast(null as varchar),cast(null as varchar)
+  if(row_number() over(partition by case_id,dataset,payload order by ordinal)>1,'BR-002',cast(null as varchar)),
+  cast(null as varchar)
 from {{ source('bronze','raw_records') }} where dataset not in ('incident_snapshots','incident_events')
