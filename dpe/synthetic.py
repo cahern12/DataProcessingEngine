@@ -201,7 +201,7 @@ def generate(destination, profile="smoke", count=None, config_path=None, mode=No
                 for row in events:
                     writer.add("incident_events", row)
         else:
-            for index in range(max(1, int(count * config["delta_fraction"]))):
+            for index in range(max(0 if config.get("allow_empty_delta", False) else 1, int(count * config["delta_fraction"]))):
                 snapshots, events = incident(config, index)
                 last = snapshots[-1]
                 change_time = timestamp(config["cutoff"]) + timedelta(hours=1)
@@ -227,7 +227,7 @@ def generate(destination, profile="smoke", count=None, config_path=None, mode=No
                 writer.add("incident_events", {"event_id": last["incident_id"] + "-LATE", "incident_id": last["incident_id"],
                                                "event_time": iso(timestamp(config["cutoff"]) - timedelta(hours=1)),
                                                "source_sequence": seq + 1, "event_type": "comment", "actor_id": "USR-0000"})
-            for index in range(count, count + max(1, int(count * config["new_fraction"]))):
+            for index in range(count, count + max(0 if config.get("allow_empty_delta", False) else 1, int(count * config["new_fraction"]))):
                 snapshots, events = incident(config, index, new=True)
                 for row in snapshots:
                     writer.add("incident_snapshots", row)
@@ -237,7 +237,7 @@ def generate(destination, profile="smoke", count=None, config_path=None, mode=No
                     "parent_batch_id": result[0]["batch_id"] if result else None,
                     "cutoff": config["cutoff"] if kind == "initial" else config["delta_cutoff"],
                     "report_start": config["report_start"], "dataset_version": config["dataset_version"],
-                    "rule_version": config["rule_version"], "generator_version": __version__, "seed": config["seed"],
+                    "rule_version": config["rule_version"], "generator_version": __version__ + ("+empty-delta-v2" if config.get("allow_empty_delta") else ""), "seed": config["seed"],
                     "configuration": dict(config, incident_count=count, profile=profile),
                     "files": writer.finish()}
         write_json(root / "manifest.json", manifest)

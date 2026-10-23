@@ -1,0 +1,68 @@
+{
+  "type": "object",
+  "required": [
+    "logical_run_id",
+    "attempt_id",
+    "workload_id",
+    "engine",
+    "input_manifest_checksum",
+    "status",
+    "started_at",
+    "finished_at",
+    "logical_input_bytes",
+    "runtime_seconds",
+    "output_rows"
+  ],
+  "properties": {
+    "logical_run_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "attempt_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "workload_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "engine": {
+      "type": "string",
+      "minLength": 1
+    },
+    "input_manifest_checksum": {
+      "type": "string",
+      "minLength": 1
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "passed",
+        "failed"
+      ]
+    },
+    "started_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "finished_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "logical_input_bytes": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "runtime_seconds": {
+      "type": "number",
+      "minimum": 0
+    },
+    "output_rows": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    }
+  },
+  "additionalProperties": true
+}

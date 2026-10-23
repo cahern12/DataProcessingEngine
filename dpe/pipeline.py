@@ -23,7 +23,7 @@ FAILPOINTS = ("after_ingestion", "after_silver", "between_gold_writes", "before_
 
 def revision():
     hasher = hashlib.sha256()
-    for folder, glob in (("dpe", "*.py"), ("rules", "*"), ("contracts", "**/*.json")):
+    for folder, glob in (("dpe", "**/*.py"), ("rules", "*"), ("contracts", "**/*.json")):
         for path in sorted((ROOT / folder).glob(glob)):
             if path.is_file():
                 hasher.update(str(path.relative_to(ROOT)).encode())

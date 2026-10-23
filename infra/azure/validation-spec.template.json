@@ -1,0 +1,46 @@
+{
+  "version": "v1",
+  "status": "not_authorized_not_deployed",
+  "subscription_id": null,
+  "region": null,
+  "currency": "USD",
+  "maximum_experiment_spend": "300",
+  "maximum_environment_hours": 24,
+  "retention_days": 7,
+  "skus": null,
+  "business_limits": "benchmarks/specs/acceptance.poc.v1.json",
+  "required_roles": [
+    "ADLS Gen2",
+    "AKS",
+    "Iceberg REST catalog and persistent backend",
+    "Airflow",
+    "dbt runner",
+    "Trino",
+    "comparative Spark",
+    "monitoring"
+  ],
+  "attribution": [
+    "dedicated resource scope",
+    "resource IDs and experiment tags",
+    "node/pod interval mapping",
+    "one billing basis",
+    "versioned allocations",
+    "settled cost exports"
+  ],
+  "predeployment_checks": [
+    "authorized subscription/region/budget",
+    "measured-compatible connector versions",
+    "capacity/quota",
+    "managed identities",
+    "publication coordinator concurrency semantics",
+    "shutdown and retained-publication policy"
+  ],
+  "validation": [
+    "Trino and Spark ADLS cross-reads/writes",
+    "old publication pins and stale-parent refusal",
+    "full required workload and worker/concurrency matrix",
+    "Medium/Large distributed recovery",
+    "billing reconciliation and standing cost"
+  ],
+  "shutdown": "Stop experiment workloads at the approved deadline, export evidence and reconcile costs, retain protected snapshots for the approved interval, then remove the dedicated POC resources. No automatic cloud commands are included in this template."
+}

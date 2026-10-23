@@ -65,12 +65,61 @@ def main():
     consumer.add_argument("--dataset", choices=["incident_resolution", "service_daily_metrics"], required=True)
     consumer.add_argument("--limit", type=int, default=10)
     consumer.add_argument("--publication", help="Pin multiple reads to the same publication ID")
+    sequence=commands.add_parser("generate-sequence",help="Generate versioned 30/60/90-day deliveries")
+    sequence.add_argument("--out",type=Path,required=True);sequence.add_argument("--days",type=int,choices=[30,60,90],default=30)
+    sequence.add_argument("--count",type=int,default=1000);sequence.add_argument("--seed",type=int,default=42);sequence.add_argument("--config",type=Path)
+    cost=commands.add_parser("cost-report",help="Calculate imported usage/rates and explicit allocations")
+    cost.add_argument("--usage",type=Path,required=True);cost.add_argument("--rates",type=Path);cost.add_argument("--out",type=Path,required=True)
+    imported=commands.add_parser("cost-import",help="Import explicitly mapped cost-detail CSV")
+    imported.add_argument("--csv",type=Path,required=True);imported.add_argument("--mapping",type=Path,required=True);imported.add_argument("--out",type=Path,required=True)
+    for name in ("cost-demo","poc-status","spark-compat","spark-fixtures","poc-verify"):
+        command=commands.add_parser(name);command.add_argument("--workspace",type=Path,required=True)
+    spark_run=commands.add_parser("spark-run",help="Full Spark pipeline through the common Gold publication contract")
+    spark_run.add_argument("batch",type=Path);spark_run.add_argument("--workspace",type=Path,required=True)
+    spark_run.add_argument("--fail-at",choices=["between_gold_writes","before_publish"])
+    poc=commands.add_parser("poc-benchmark",help="Paired local Trino/Spark workloads and explicit cost reports")
+    poc.add_argument("--workspace",type=Path,required=True);poc.add_argument("--count",type=int,default=1000)
+    poc.add_argument("--repeats",type=int,default=3);poc.add_argument("--engines",nargs='+',choices=['trino','spark'],default=['trino','spark'])
+    calibration=commands.add_parser("poc-calibrate",help="Generate a tier and assess the frozen local input budget without processing it")
+    calibration.add_argument("--workspace",type=Path,required=True)
+    calibration.add_argument("--count",type=int,default=100000)
     args = parser.parse_args()
     from .ingestion import validate_batch
     from .pipeline import query, run
     from .synthetic import generate
     from .validation import benchmark, check_fixtures
-    if args.command == "generate":
+    if args.command == "generate-sequence":
+        from .sequences import generate_sequence
+        result=generate_sequence(args.out,args.days,args.count,args.seed,args.config)
+    elif args.command == "cost-report":
+        from .costing import report
+        result=report(args.usage,args.out,args.rates)
+    elif args.command == "cost-import":
+        from .cost_import import import_details
+        result=import_details(args.csv,args.mapping,args.out)
+    elif args.command == "cost-demo":
+        from .economics_demo import demo
+        result=demo(args.workspace)
+    elif args.command == "poc-status":
+        from .benchmark_reports import scorecard
+        from .common import read_json
+        prior=read_json(args.workspace/'run_results.json') if (args.workspace/'run_results.json').exists() else {}
+        result=scorecard(args.workspace,prior.get('runs'),prior.get('findings'))
+    elif args.command == "poc-calibrate":
+        from .benchmark_calibration import calibrate
+        result=calibrate(args.workspace,args.count)
+    elif args.command == "poc-benchmark":
+        from .benchmark_runner import run as benchmark_run
+        result=benchmark_run(args.workspace,args.count,args.repeats,tuple(args.engines))
+    elif args.command in ("spark-compat","spark-fixtures","spark-run"):
+        from .engines import spark
+        if args.command=="spark-compat":result=spark.compatibility(args.workspace)
+        elif args.command=="spark-fixtures":result=spark.fixtures(args.workspace)
+        else:result=spark.run(args.batch,args.workspace,args.fail_at)
+    elif args.command == "poc-verify":
+        from .poc_validation import verify
+        result=verify(args.workspace)
+    elif args.command == "generate":
         result = generate(args.out, args.profile, args.count, args.config, args.mode, args.seed)
     elif args.command == "validate":
         result = validate_batch(args.batch)

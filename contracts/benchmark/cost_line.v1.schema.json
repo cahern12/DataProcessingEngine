@@ -1,0 +1,72 @@
+{
+  "type": "object",
+  "required": [
+    "line_id",
+    "charge_id",
+    "resource_id",
+    "meter_id",
+    "component",
+    "classification",
+    "window_id",
+    "source_ref",
+    "quantity",
+    "unit",
+    "rate_id"
+  ],
+  "properties": {
+    "line_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "charge_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "resource_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "meter_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "component": {
+      "type": "string",
+      "minLength": 1
+    },
+    "classification": {
+      "enum": [
+        "marginal",
+        "standing"
+      ]
+    },
+    "window_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "source_ref": {
+      "type": "string",
+      "minLength": 1
+    },
+    "quantity": {
+      "type": [
+        "string",
+        "number",
+        "null"
+      ]
+    },
+    "unit": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "rate_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  },
+  "additionalProperties": true
+}

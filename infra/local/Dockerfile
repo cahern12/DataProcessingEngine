@@ -8,5 +8,6 @@ COPY contracts /app/contracts
 COPY synthetic /app/synthetic
 COPY transformations /app/transformations
 COPY benchmarks /app/benchmarks
+COPY orchestration /app/orchestration
 COPY infra/local /app/infra/local
 CMD ["python", "-m", "dpe", "--help"]

@@ -1,0 +1,8 @@
+{
+  "version":"v1",
+  "image":"apache/spark:3.5.5-python3@sha256:39321d67b23e2e0953f81b60778f74bf40c40a18dfb0e881e6a38593af60afa1",
+  "jars":[
+    {"url":"https://repo.maven.apache.org/maven2/org/apache/iceberg/iceberg-spark-runtime-3.5_2.12/1.8.1/iceberg-spark-runtime-3.5_2.12-1.8.1.jar","sha256":"a42f6e3f89943ddc67d35738f822396970d0c83d5688c7614099a810aeabf9e0"},
+    {"url":"https://repo.maven.apache.org/maven2/org/apache/iceberg/iceberg-aws-bundle/1.8.1/iceberg-aws-bundle-1.8.1.jar","sha256":"31aeb0880fbdcf9b240326cc0a90a108159c3420a6c0e38bc70d3ade7ea97dd1"}
+  ]
+}

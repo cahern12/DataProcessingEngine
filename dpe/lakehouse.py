@@ -120,6 +120,10 @@ def sql_revision():
     for path in sorted(PROJECT.rglob("*")):
         if path.is_file() and path.suffix in (".sql", ".yml") and path.name!=".user.yml":
             hasher.update(str(path.relative_to(PROJECT)).encode()); hasher.update(path.read_bytes())
+    for folder in (ROOT / "transformations/spark", ROOT / "orchestration"):
+        for path in sorted(folder.rglob("*")):
+            if path.is_file() and path.suffix in (".sql", ".py", ".json"):
+                hasher.update(str(path.relative_to(ROOT)).encode()); hasher.update(path.read_bytes())
     for path in [ROOT / "requirements-local.lock", *sorted((ROOT / "infra/local").rglob("*"))]:
         if path.is_file() and path.suffix!=".md":
             hasher.update(str(path.relative_to(ROOT)).encode()); hasher.update(path.read_bytes())

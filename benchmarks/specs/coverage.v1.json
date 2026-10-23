@@ -1,0 +1,555 @@
+{
+  "version": "v1",
+  "requirements": [
+    {
+      "id": "H1",
+      "owner_role": "architecture",
+      "verdict": "inconclusive",
+      "experiments": [
+        "spark-compat",
+        "poc-verify"
+      ],
+      "evidence": [
+        "docs/plan/10-poc_benchmark_and_economics_execution.md"
+      ],
+      "reason": "Azure ADLS and distributed publication coordinator remain untested",
+      "acceptance": "benchmarks/specs/acceptance.poc.v1.json",
+      "name": "Azure engine independence"
+    },
+    {
+      "id": "H2",
+      "owner_role": "architecture",
+      "verdict": "inconclusive",
+      "experiments": [
+        "poc-benchmark W1-W4"
+      ],
+      "evidence": [
+        "docs/plan/10-poc_benchmark_and_economics_execution.md"
+      ],
+      "reason": "S/M/L, scale, operating effort and reconciled cost are missing",
+      "acceptance": "benchmarks/specs/acceptance.poc.v1.json",
+      "name": "dbt + Trino viability"
+    },
+    {
+      "id": "H3",
+      "owner_role": "architecture",
+      "verdict": "inconclusive",
+      "experiments": [
+        "poc-benchmark W2-W4"
+      ],
+      "evidence": [
+        "docs/plan/10-poc_benchmark_and_economics_execution.md"
+      ],
+      "reason": "Smoke timings cannot establish material cost/performance benefit at required sizes",
+      "acceptance": "benchmarks/specs/acceptance.poc.v1.json",
+      "name": "Spark workload fit"
+    },
+    {
+      "id": "H4",
+      "owner_role": "architecture",
+      "verdict": "inconclusive",
+      "experiments": [
+        "spark-fixtures",
+        "poc-verify"
+      ],
+      "evidence": [
+        "docs/plan/10-poc_benchmark_and_economics_execution.md"
+      ],
+      "reason": "Local portability is measurable; full matrix and Azure equivalence remain open",
+      "acceptance": "benchmarks/specs/acceptance.poc.v1.json",
+      "name": "Governed cross-engine equivalence"
+    },
+    {
+      "id": "H5",
+      "owner_role": "architecture",
+      "verdict": "inconclusive",
+      "experiments": [
+        "cost-demo",
+        "cost-import",
+        "cost-report"
+      ],
+      "evidence": [
+        "docs/plan/10-poc_benchmark_and_economics_execution.md"
+      ],
+      "reason": "Arithmetic validation is separate from measured/reconciled Azure charges",
+      "acceptance": "benchmarks/specs/acceptance.poc.v1.json",
+      "name": "Defensible workload economics"
+    },
+    {
+      "id": "G1",
+      "owner_role": "poc-review",
+      "verdict": "not_assessed",
+      "experiments": [
+        "poc-verify"
+      ],
+      "evidence": [
+        "docs/plan/10-poc_benchmark_and_economics_execution.md"
+      ],
+      "reason": "Local synthetic BSG; Azure/source-pattern boundary remains open",
+      "acceptance": "benchmarks/specs/acceptance.poc.v1.json",
+      "name": "End-to-end processing"
+    },
+    {
+      "id": "G2",
+      "owner_role": "poc-review",
+      "verdict": "not_assessed",
+      "experiments": [
+        "spark-compat",
+        "poc-verify"
+      ],
+      "evidence": [
+        "docs/plan/10-poc_benchmark_and_economics_execution.md"
+      ],
+      "reason": "Common pinned consumer works locally; Azure contract remains untested",
+      "acceptance": "benchmarks/specs/acceptance.poc.v1.json",
+      "name": "Processing abstraction"
+    },
+    {
+      "id": "G3",
+      "owner_role": "poc-review",
+      "verdict": "not_assessed",
+      "experiments": [
+        "spark-fixtures",
+        "poc-verify"
+      ],
+      "evidence": [
+        "docs/plan/10-poc_benchmark_and_economics_execution.md"
+      ],
+      "reason": "Fixtures and Smoke do not cover every required scale cell",
+      "acceptance": "benchmarks/specs/acceptance.poc.v1.json",
+      "name": "Correctness and trust"
+    },
+    {
+      "id": "G4",
+      "owner_role": "poc-review",
+      "verdict": "not_assessed",
+      "experiments": [
+        "poc-verify",
+        "verify_poc_restart"
+      ],
+      "evidence": [
+        "docs/plan/10-poc_benchmark_and_economics_execution.md"
+      ],
+      "reason": "Medium/Large distributed faults, detection and bounded recovery remain open",
+      "acceptance": "benchmarks/specs/acceptance.poc.v1.json",
+      "name": "Repeatability and recovery"
+    },
+    {
+      "id": "G5",
+      "owner_role": "poc-review",
+      "verdict": "not_assessed",
+      "experiments": [
+        "poc-benchmark",
+        "poc-calibrate"
+      ],
+      "evidence": [
+        "docs/plan/10-poc_benchmark_and_economics_execution.md"
+      ],
+      "reason": "Required sizes, workers, concurrency and sampled saturation remain open",
+      "acceptance": "benchmarks/specs/acceptance.poc.v1.json",
+      "name": "Performance and scale"
+    },
+    {
+      "id": "G6",
+      "owner_role": "poc-review",
+      "verdict": "not_assessed",
+      "experiments": [
+        "cost-report"
+      ],
+      "evidence": [
+        "docs/plan/10-poc_benchmark_and_economics_execution.md"
+      ],
+      "reason": "Local bills unavailable; Azure metering/allocation/reconciliation remain open",
+      "acceptance": "benchmarks/specs/acceptance.poc.v1.json",
+      "name": "Transparent economics"
+    },
+    {
+      "id": "G7",
+      "owner_role": "poc-review",
+      "verdict": "not_assessed",
+      "experiments": [
+        "poc_scorecard"
+      ],
+      "evidence": [
+        "docs/plan/10-poc_benchmark_and_economics_execution.md"
+      ],
+      "reason": "Mandatory evidence is incomplete; no production recommendation yet",
+      "acceptance": "benchmarks/specs/acceptance.poc.v1.json",
+      "name": "Technology fit"
+    },
+    {
+      "id": "D1",
+      "owner_role": "platform",
+      "verdict": "not_assessed",
+      "experiments": [
+        "infra/azure/validation-spec.template.json"
+      ],
+      "evidence": [
+        "docs/plan/10-poc_benchmark_and_economics_execution.md"
+      ],
+      "reason": "Implementation artifact is available locally; complete Azure/required-matrix decision evidence remains open",
+      "acceptance": "benchmarks/specs/acceptance.poc.v1.json",
+      "name": "Azure POC environment"
+    },
+    {
+      "id": "D2",
+      "owner_role": "platform",
+      "verdict": "not_assessed",
+      "experiments": [
+        "generate",
+        "generate-sequence"
+      ],
+      "evidence": [
+        "docs/plan/10-poc_benchmark_and_economics_execution.md"
+      ],
+      "reason": "Implementation artifact is available locally; complete Azure/required-matrix decision evidence remains open",
+      "acceptance": "benchmarks/specs/acceptance.poc.v1.json",
+      "name": "Representative BSG datasets"
+    },
+    {
+      "id": "D3",
+      "owner_role": "platform",
+      "verdict": "not_assessed",
+      "experiments": [
+        "transformations",
+        "orchestration"
+      ],
+      "evidence": [
+        "docs/plan/10-poc_benchmark_and_economics_execution.md"
+      ],
+      "reason": "Implementation artifact is available locally; complete Azure/required-matrix decision evidence remains open",
+      "acceptance": "benchmarks/specs/acceptance.poc.v1.json",
+      "name": "Version controlled pipelines"
+    },
+    {
+      "id": "D4",
+      "owner_role": "platform",
+      "verdict": "not_assessed",
+      "experiments": [
+        "poc-verify"
+      ],
+      "evidence": [
+        "docs/plan/10-poc_benchmark_and_economics_execution.md"
+      ],
+      "reason": "Implementation artifact is available locally; complete Azure/required-matrix decision evidence remains open",
+      "acceptance": "benchmarks/specs/acceptance.poc.v1.json",
+      "name": "Quality/reconciliation"
+    },
+    {
+      "id": "D5",
+      "owner_role": "platform",
+      "verdict": "not_assessed",
+      "experiments": [
+        "run_results.json",
+        "telemetry"
+      ],
+      "evidence": [
+        "docs/plan/10-poc_benchmark_and_economics_execution.md"
+      ],
+      "reason": "Implementation artifact is available locally; complete Azure/required-matrix decision evidence remains open",
+      "acceptance": "benchmarks/specs/acceptance.poc.v1.json",
+      "name": "Execution/lineage metadata"
+    },
+    {
+      "id": "D6",
+      "owner_role": "platform",
+      "verdict": "not_assessed",
+      "experiments": [
+        "cost_performance.csv",
+        "economics"
+      ],
+      "evidence": [
+        "docs/plan/10-poc_benchmark_and_economics_execution.md"
+      ],
+      "reason": "Implementation artifact is available locally; complete Azure/required-matrix decision evidence remains open",
+      "acceptance": "benchmarks/specs/acceptance.poc.v1.json",
+      "name": "Performance/cost benchmarks"
+    },
+    {
+      "id": "D7",
+      "owner_role": "platform",
+      "verdict": "not_assessed",
+      "experiments": [
+        "poc-benchmark"
+      ],
+      "evidence": [
+        "docs/plan/10-poc_benchmark_and_economics_execution.md"
+      ],
+      "reason": "Implementation artifact is available locally; complete Azure/required-matrix decision evidence remains open",
+      "acceptance": "benchmarks/specs/acceptance.poc.v1.json",
+      "name": "Trino/Spark comparison"
+    },
+    {
+      "id": "D8",
+      "owner_role": "platform",
+      "verdict": "not_assessed",
+      "experiments": [
+        "poc-verify",
+        "verify_poc_restart"
+      ],
+      "evidence": [
+        "docs/plan/10-poc_benchmark_and_economics_execution.md"
+      ],
+      "reason": "Implementation artifact is available locally; complete Azure/required-matrix decision evidence remains open",
+      "acceptance": "benchmarks/specs/acceptance.poc.v1.json",
+      "name": "Failure/recovery findings"
+    },
+    {
+      "id": "D9",
+      "owner_role": "platform",
+      "verdict": "not_assessed",
+      "experiments": [
+        "docs/plan/10-poc_benchmark_and_economics_execution.md"
+      ],
+      "evidence": [
+        "docs/plan/10-poc_benchmark_and_economics_execution.md"
+      ],
+      "reason": "Implementation artifact is available locally; complete Azure/required-matrix decision evidence remains open",
+      "acceptance": "benchmarks/specs/acceptance.poc.v1.json",
+      "name": "Operational complexity"
+    },
+    {
+      "id": "D10",
+      "owner_role": "platform",
+      "verdict": "not_assessed",
+      "experiments": [
+        "docs/plan/10-poc_benchmark_and_economics_execution.md"
+      ],
+      "evidence": [
+        "docs/plan/10-poc_benchmark_and_economics_execution.md"
+      ],
+      "reason": "Implementation artifact is available locally; complete Azure/required-matrix decision evidence remains open",
+      "acceptance": "benchmarks/specs/acceptance.poc.v1.json",
+      "name": "Architecture findings"
+    },
+    {
+      "id": "D11",
+      "owner_role": "platform",
+      "verdict": "not_assessed",
+      "experiments": [
+        "poc_scorecard.json"
+      ],
+      "evidence": [
+        "docs/plan/10-poc_benchmark_and_economics_execution.md"
+      ],
+      "reason": "Implementation artifact is available locally; complete Azure/required-matrix decision evidence remains open",
+      "acceptance": "benchmarks/specs/acceptance.poc.v1.json",
+      "name": "Production recommendation"
+    },
+    {
+      "id": "E1",
+      "owner_role": "finops",
+      "verdict": "not_assessed",
+      "experiments": [
+        "workload_costs.csv"
+      ],
+      "evidence": [
+        "docs/plan/10-poc_benchmark_and_economics_execution.md"
+      ],
+      "reason": "Implementation artifact is available locally; complete Azure/required-matrix decision evidence remains open",
+      "acceptance": "benchmarks/specs/acceptance.poc.v1.json",
+      "name": "Workload and logical TB cost"
+    },
+    {
+      "id": "E2",
+      "owner_role": "finops",
+      "verdict": "not_assessed",
+      "experiments": [
+        "technology_costs.csv"
+      ],
+      "evidence": [
+        "docs/plan/10-poc_benchmark_and_economics_execution.md"
+      ],
+      "reason": "Implementation artifact is available locally; complete Azure/required-matrix decision evidence remains open",
+      "acceptance": "benchmarks/specs/acceptance.poc.v1.json",
+      "name": "Engine and technology cost"
+    },
+    {
+      "id": "E3",
+      "owner_role": "finops",
+      "verdict": "not_assessed",
+      "experiments": [
+        "platform_costs.csv"
+      ],
+      "evidence": [
+        "docs/plan/10-poc_benchmark_and_economics_execution.md"
+      ],
+      "reason": "Implementation artifact is available locally; complete Azure/required-matrix decision evidence remains open",
+      "acceptance": "benchmarks/specs/acceptance.poc.v1.json",
+      "name": "Standing platform cost"
+    },
+    {
+      "id": "E4",
+      "owner_role": "finops",
+      "verdict": "not_assessed",
+      "experiments": [
+        "demand_sensitivity.csv"
+      ],
+      "evidence": [
+        "docs/plan/10-poc_benchmark_and_economics_execution.md"
+      ],
+      "reason": "Implementation artifact is available locally; complete Azure/required-matrix decision evidence remains open",
+      "acceptance": "benchmarks/specs/acceptance.poc.v1.json",
+      "name": "Volume/frequency curves"
+    },
+    {
+      "id": "E5",
+      "owner_role": "finops",
+      "verdict": "not_assessed",
+      "experiments": [
+        "cost_performance.csv",
+        "matrix.csv"
+      ],
+      "evidence": [
+        "docs/plan/10-poc_benchmark_and_economics_execution.md"
+      ],
+      "reason": "Implementation artifact is available locally; complete Azure/required-matrix decision evidence remains open",
+      "acceptance": "benchmarks/specs/acceptance.poc.v1.json",
+      "name": "Worker/concurrency curves"
+    },
+    {
+      "id": "E6",
+      "owner_role": "finops",
+      "verdict": "not_assessed",
+      "experiments": [
+        "poc_scorecard.json"
+      ],
+      "evidence": [
+        "docs/plan/10-poc_benchmark_and_economics_execution.md"
+      ],
+      "reason": "Implementation artifact is available locally; complete Azure/required-matrix decision evidence remains open",
+      "acceptance": "benchmarks/specs/acceptance.poc.v1.json",
+      "name": "Placement comparison"
+    },
+    {
+      "id": "E7",
+      "owner_role": "finops",
+      "verdict": "not_assessed",
+      "experiments": [
+        "billing_reconciliation.json"
+      ],
+      "evidence": [
+        "docs/plan/10-poc_benchmark_and_economics_execution.md"
+      ],
+      "reason": "Implementation artifact is available locally; complete Azure/required-matrix decision evidence remains open",
+      "acceptance": "benchmarks/specs/acceptance.poc.v1.json",
+      "name": "Billing reconciliation"
+    }
+  ],
+  "economic_outputs": [
+    "per_run",
+    "per_logical_tb",
+    "per_engine",
+    "per_technology",
+    "standing_platform",
+    "volume_curve",
+    "worker_curve"
+  ],
+  "enterprise_requirements": [
+    {
+      "id": "BR-01",
+      "status": "partial",
+      "scope": "informational longer-term applicability; not a new POC gate",
+      "name": "Decoupled consumption",
+      "reason": "Local contract/evidence exists; enterprise deployment not validated"
+    },
+    {
+      "id": "BR-02",
+      "status": "partial",
+      "scope": "informational longer-term applicability; not a new POC gate",
+      "name": "Stable curated contracts",
+      "reason": "Local contract/evidence exists; enterprise deployment not validated"
+    },
+    {
+      "id": "BR-03",
+      "status": "partial",
+      "scope": "informational longer-term applicability; not a new POC gate",
+      "name": "Standard source onboarding",
+      "reason": "Local contract/evidence exists; enterprise deployment not validated"
+    },
+    {
+      "id": "BR-04",
+      "status": "partial",
+      "scope": "informational longer-term applicability; not a new POC gate",
+      "name": "Standard BSG lifecycle",
+      "reason": "Local contract/evidence exists; enterprise deployment not validated"
+    },
+    {
+      "id": "BR-05",
+      "status": "partial",
+      "scope": "informational longer-term applicability; not a new POC gate",
+      "name": "Quality/reconciliation",
+      "reason": "Local contract/evidence exists; enterprise deployment not validated"
+    },
+    {
+      "id": "BR-06",
+      "status": "partial",
+      "scope": "informational longer-term applicability; not a new POC gate",
+      "name": "End-to-end lineage",
+      "reason": "Local contract/evidence exists; enterprise deployment not validated"
+    },
+    {
+      "id": "BR-07",
+      "status": "future",
+      "scope": "informational longer-term applicability; not a new POC gate",
+      "name": "Freshness/availability/recovery SLOs",
+      "reason": "Longer-term requirement outside this local POC milestone"
+    },
+    {
+      "id": "BR-08",
+      "status": "future",
+      "scope": "informational longer-term applicability; not a new POC gate",
+      "name": "Workload economics",
+      "reason": "Longer-term requirement outside this local POC milestone"
+    },
+    {
+      "id": "BR-09",
+      "status": "future",
+      "scope": "informational longer-term applicability; not a new POC gate",
+      "name": "Independent processing scaling",
+      "reason": "Longer-term requirement outside this local POC milestone"
+    },
+    {
+      "id": "BR-10",
+      "status": "partial",
+      "scope": "informational longer-term applicability; not a new POC gate",
+      "name": "Retry/replay/restart",
+      "reason": "Local contract/evidence exists; enterprise deployment not validated"
+    },
+    {
+      "id": "BR-11",
+      "status": "future",
+      "scope": "informational longer-term applicability; not a new POC gate",
+      "name": "Enterprise security/retention",
+      "reason": "Longer-term requirement outside this local POC milestone"
+    },
+    {
+      "id": "BR-12",
+      "status": "partial",
+      "scope": "informational longer-term applicability; not a new POC gate",
+      "name": "Open format flexibility",
+      "reason": "Local contract/evidence exists; enterprise deployment not validated"
+    },
+    {
+      "id": "BR-13",
+      "status": "partial",
+      "scope": "informational longer-term applicability; not a new POC gate",
+      "name": "Routine automation",
+      "reason": "Local contract/evidence exists; enterprise deployment not validated"
+    },
+    {
+      "id": "BR-14",
+      "status": "partial",
+      "scope": "informational longer-term applicability; not a new POC gate",
+      "name": "Product delivery lead time",
+      "reason": "Local contract/evidence exists; enterprise deployment not validated"
+    },
+    {
+      "id": "BR-15",
+      "status": "future",
+      "scope": "informational longer-term applicability; not a new POC gate",
+      "name": "Future CDC/streaming",
+      "reason": "Longer-term requirement outside this local POC milestone"
+    }
+  ]
+}

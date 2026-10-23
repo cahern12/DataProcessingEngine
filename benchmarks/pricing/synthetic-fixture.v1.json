@@ -1,0 +1,56 @@
+{
+  "version": "v1",
+  "currency": "USD",
+  "basis": "modeled_cloud",
+  "provider": "synthetic-test-only",
+  "region": "fictional",
+  "effective_from": "2026-01-01T00:00:00Z",
+  "effective_to": "2027-01-01T00:00:00Z",
+  "source": "independently authored arithmetic fixtures; not Azure prices",
+  "rates": [
+    {
+      "id": "compute_hour",
+      "unit": "node_hour",
+      "tiers": [
+        {
+          "start": "0",
+          "price": "2"
+        }
+      ]
+    },
+    {
+      "id": "storage_gbh",
+      "unit": "GB_hour",
+      "tiers": [
+        {
+          "start": "0",
+          "price": "0.001"
+        }
+      ]
+    },
+    {
+      "id": "requests",
+      "unit": "request",
+      "tiers": [
+        {
+          "start": "0",
+          "price": "0.000001"
+        }
+      ]
+    },
+    {
+      "id": "tiered",
+      "unit": "GB",
+      "tiers": [
+        {
+          "start": "0",
+          "price": "1"
+        },
+        {
+          "start": "10",
+          "price": "0.5"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,528 @@
+{
+  "acceptance": {
+    "path": "data/poc-verification-final/verification.json",
+    "revision": "b9b5b648bde3d90cc9b530ba5245ff910223e1c371cc9f910b60fff4a87c8ab9",
+    "sha256": "825d58dca3a2de9f2a5cfd420681f51f72c3f425a7ae1a55aa6a822aa6e8c835",
+    "status": "passed"
+  },
+  "airflow_task_attempts": [
+    {
+      "dag_id": "dpe_benchmarks",
+      "end_date": "2026-10-23 03:26:18.002067",
+      "run_id": "plan09-local-final",
+      "start_date": "2026-10-23 03:26:17.931306",
+      "state": "failed",
+      "task_id": "execute",
+      "try_number": 2
+    },
+    {
+      "dag_id": "dpe_benchmarks",
+      "end_date": "2026-10-23 03:26:18.260349",
+      "run_id": "plan09-local-final",
+      "start_date": "2026-10-23 03:26:18.260349",
+      "state": "upstream_failed",
+      "task_id": "validate",
+      "try_number": 0
+    },
+    {
+      "dag_id": "dpe_benchmarks",
+      "end_date": "2026-10-23 03:32:34.524041",
+      "run_id": "plan09-local-verified",
+      "start_date": "2026-10-23 03:29:16.051178",
+      "state": "success",
+      "task_id": "execute",
+      "try_number": 1
+    },
+    {
+      "dag_id": "dpe_benchmarks",
+      "end_date": "2026-10-23 03:32:35.348239",
+      "run_id": "plan09-local-verified",
+      "start_date": "2026-10-23 03:32:35.284692",
+      "state": "success",
+      "task_id": "validate",
+      "try_number": 1
+    }
+  ],
+  "capacity": {
+    "budget_bytes": 67108864,
+    "compressed_bytes": null,
+    "compression_reason": "source calibration only; no Iceberg write performed",
+    "count": 100000,
+    "engine_execution": "not_run",
+    "evidence": "data/poc-small-calibration/source/initial/manifest.json",
+    "files": 64,
+    "generation_seconds": 5.780676750000566,
+    "logical_input_bytes": 113412943,
+    "manifest_sha256": "aa1b904b8c1f589348ceadfd6462d96897b16c99328b176fe25bc05bc6ed26fe",
+    "processing_status": "resource_limited",
+    "reason": "Conservative raw-input budget for full-history Python validation and concurrent local services; no engine capacity claim.",
+    "rows_by_dataset": {
+      "assignment_groups": 10,
+      "incident_events": 394788,
+      "incident_snapshots": 200000,
+      "services": 20,
+      "sla_targets": 4,
+      "users": 100
+    }
+  },
+  "comparisons": [
+    {
+      "count": 1000,
+      "criteria_sha256": "fa64f10f6baf577aca295676b7ca5e85d2e55db41b244f843481a3321c3707cf",
+      "orchestration": {
+        "dag_id": "dpe_benchmarks",
+        "dag_run_id": "plan09-local-verified",
+        "kind": "airflow",
+        "task_id": "execute"
+      },
+      "path": "data/poc-airflow-verified/run_results.json",
+      "repetitions": 3,
+      "revision": "4f1b2a5564f93a1fb51b8fb8376120c542195b683e0d11edd49aff3ce9a248e5",
+      "sha256": "4a22f7743a5b9d33a565af22ed9043f2dadbff39460d93c39b757d6e4bcdfad4"
+    }
+  ],
+  "completed_query_events": {
+    "missing": [],
+    "persisted_completed_events": 245,
+    "referenced_query_ids": 245,
+    "scope": "Query IDs referenced by run/preparation/full-Trino/dbt artifacts; unreferenced metadata/consumer queries excluded",
+    "status": "passed"
+  },
+  "concurrency": {
+    "gate_status": "not_assessed: exploratory local size; required Medium and cross-engine evidence missing",
+    "path": "data/poc-local-concurrency/concurrency.json",
+    "summary": [
+      {
+        "concurrency": 1,
+        "cost_status": "unpriced local usage",
+        "fully_allocated_cost": null,
+        "median_attempt_completion_seconds": 1.0589916669996455,
+        "median_throughput_per_second": 0.9435662098626452,
+        "repetitions": 3
+      },
+      {
+        "concurrency": 2,
+        "cost_status": "unpriced local usage",
+        "fully_allocated_cost": null,
+        "median_attempt_completion_seconds": 0.8244164784991881,
+        "median_throughput_per_second": 2.2654439553469525,
+        "repetitions": 3
+      },
+      {
+        "concurrency": 4,
+        "cost_status": "unpriced local usage",
+        "fully_allocated_cost": null,
+        "median_attempt_completion_seconds": 1.0469109789992217,
+        "median_throughput_per_second": 3.590748078477897,
+        "repetitions": 3
+      }
+    ]
+  },
+  "consumer_recovery": {
+    "differences": [],
+    "platform": "full-000-spark",
+    "recovered_at": "2026-10-23T03:41:14.788638+00:00",
+    "scope": "Consumer/data durability after restoring OOM-killed Trino; failed benchmark remains failed",
+    "status": "passed"
+  },
+  "cost_basis": "local_measured_usage",
+  "failed_airflow_accounting_run": {
+    "cause": "non-terminating equal Decimal weight rounding; fixed using exact decimal units with regression coverage",
+    "coordinator_job_count": 1,
+    "path": "data/poc-airflow-final/run_results.json",
+    "status": "failed"
+  },
+  "failed_comparisons": [
+    {
+      "attempts": 6,
+      "count": 10000,
+      "error": "failed to execute: HTTPConnectionPool(host='trino', port=8080): Max retries exceeded with url: /v1/statement (Caused by NameResolutionError(\"HTTPConnection(host='trino', port=8080): Failed to resolve 'trino' ([Errno -2] Name or service not known)\"))",
+      "path": "data/poc-custom-10000/run_results.json",
+      "ranking_status": "ineligible: incomplete comparison",
+      "revision": "4f1b2a5564f93a1fb51b8fb8376120c542195b683e0d11edd49aff3ce9a248e5",
+      "sha256": "f55b1542fe9fcd7d6a065d9d852a00de89d3053d7a5f8dc8635f35cd6c694e10",
+      "status": "failed"
+    }
+  ],
+  "matrix_cells": 89,
+  "matrix_status_counts": {
+    "failed": 0,
+    "not_assessed": 89,
+    "passed": 0
+  },
+  "minimum_python_tests": {
+    "count": 64,
+    "evidence": "data/poc-unit-minimum-python.log",
+    "sha256": "a043212f618fd553510d71cbf2883263a79c89dd500995af9b2274a49fab56bb",
+    "status": "passed",
+    "version": "3.9.6"
+  },
+  "monetary_costs": "unavailable",
+  "oom_state": {
+    "Dead": false,
+    "Error": "",
+    "ExitCode": 137,
+    "FinishedAt": "2026-10-23T03:36:31.041221016Z",
+    "Health": {
+      "FailingStreak": 1,
+      "Log": [
+        {
+          "End": "2026-10-22T21:35:19.855919242-06:00",
+          "ExitCode": 0,
+          "Output": "{\"nodeId\":\"7ba0c2989ee0\",\"state\":\"ACTIVE\",\"nodeVersion\":{\"version\":\"484\"},\"environment\":\"docker\",\"coordinator\":true,\"coordinatorId\":\"yr76p\",\"starting\":false,\"uptime\":\"31.83m\"}",
+          "Start": "2026-10-22T21:35:17.852465026-06:00"
+        },
+        {
+          "End": "2026-10-22T21:35:25.467098438-06:00",
+          "ExitCode": 0,
+          "Output": "{\"nodeId\":\"7ba0c2989ee0\",\"state\":\"ACTIVE\",\"nodeVersion\":{\"version\":\"484\"},\"environment\":\"docker\",\"coordinator\":true,\"coordinatorId\":\"yr76p\",\"starting\":false,\"uptime\":\"31.93m\"}",
+          "Start": "2026-10-22T21:35:24.869469219-06:00"
+        },
+        {
+          "End": "2026-10-22T21:35:31.311363483-06:00",
+          "ExitCode": 0,
+          "Output": "{\"nodeId\":\"7ba0c2989ee0\",\"state\":\"ACTIVE\",\"nodeVersion\":{\"version\":\"484\"},\"environment\":\"docker\",\"coordinator\":true,\"coordinatorId\":\"yr76p\",\"starting\":false,\"uptime\":\"32.03m\"}",
+          "Start": "2026-10-22T21:35:30.478991167-06:00"
+        },
+        {
+          "End": "2026-10-22T21:35:37.223013772-06:00",
+          "ExitCode": 0,
+          "Output": "{\"nodeId\":\"7ba0c2989ee0\",\"state\":\"ACTIVE\",\"nodeVersion\":{\"version\":\"484\"},\"environment\":\"docker\",\"coordinator\":true,\"coordinatorId\":\"yr76p\",\"starting\":false,\"uptime\":\"32.12m\"}",
+          "Start": "2026-10-22T21:35:36.322768297-06:00"
+        },
+        {
+          "End": "2026-10-22T21:36:12.289739208-06:00",
+          "ExitCode": -1,
+          "Output": "timed out starting health check for container 7ba0c2989ee01e23665e2e7333e8ef7d7b16c1cf0212af5d4db22d2c3e974aff",
+          "Start": "2026-10-22T21:35:42.237162711-06:00"
+        }
+      ],
+      "Status": "unhealthy"
+    },
+    "OOMKilled": true,
+    "Paused": false,
+    "Pid": 0,
+    "Restarting": false,
+    "Running": false,
+    "StartedAt": "2026-10-23T03:03:26.931914159Z",
+    "Status": "exited"
+  },
+  "performance": [
+    {
+      "concurrency": 1,
+      "cost_basis": "local_measured_usage",
+      "engine": "spark",
+      "fully_allocated_cost": null,
+      "marginal_cost": null,
+      "max_seconds": 4.247152371000993,
+      "median_seconds": 3.9868140120015596,
+      "min_seconds": 3.8569801560042833,
+      "ranking_status": "eligible_local_only",
+      "repetitions": 3,
+      "size": "smoke",
+      "strategy": "full",
+      "successful_repetitions": 3,
+      "workers": 1,
+      "workload_id": "APPLICATION_OVERHEAD"
+    },
+    {
+      "concurrency": 1,
+      "cost_basis": "local_measured_usage",
+      "engine": "trino",
+      "fully_allocated_cost": null,
+      "marginal_cost": null,
+      "max_seconds": 26.834027,
+      "median_seconds": 26.834027,
+      "min_seconds": 26.834027,
+      "ranking_status": "insufficient_repetitions",
+      "repetitions": 1,
+      "size": "smoke",
+      "strategy": "full",
+      "successful_repetitions": 1,
+      "workers": 1,
+      "workload_id": "PREPARATION"
+    },
+    {
+      "concurrency": 1,
+      "cost_basis": "local_measured_usage",
+      "engine": "spark",
+      "fully_allocated_cost": null,
+      "marginal_cost": null,
+      "max_seconds": 3.344170271000621,
+      "median_seconds": 3.330754415001138,
+      "min_seconds": 2.9437821520004945,
+      "ranking_status": "eligible_local_only",
+      "repetitions": 3,
+      "size": "smoke",
+      "strategy": "full",
+      "successful_repetitions": 3,
+      "workers": 1,
+      "workload_id": "W1"
+    },
+    {
+      "concurrency": 1,
+      "cost_basis": "local_measured_usage",
+      "engine": "trino",
+      "fully_allocated_cost": null,
+      "marginal_cost": null,
+      "max_seconds": 0.030622996000602143,
+      "median_seconds": 0.025225497000064934,
+      "min_seconds": 0.02233562199762673,
+      "ranking_status": "eligible_local_only",
+      "repetitions": 3,
+      "size": "smoke",
+      "strategy": "full",
+      "successful_repetitions": 3,
+      "workers": 1,
+      "workload_id": "W1"
+    },
+    {
+      "concurrency": 1,
+      "cost_basis": "local_measured_usage",
+      "engine": "spark",
+      "fully_allocated_cost": null,
+      "marginal_cost": null,
+      "max_seconds": 1.8691429919999791,
+      "median_seconds": 1.743459145000088,
+      "min_seconds": 1.7167558799992548,
+      "ranking_status": "eligible_local_only",
+      "repetitions": 3,
+      "size": "smoke",
+      "strategy": "full",
+      "successful_repetitions": 3,
+      "workers": 1,
+      "workload_id": "W2"
+    },
+    {
+      "concurrency": 1,
+      "cost_basis": "local_measured_usage",
+      "engine": "trino",
+      "fully_allocated_cost": null,
+      "marginal_cost": null,
+      "max_seconds": 0.1359684400013066,
+      "median_seconds": 0.12458902400248917,
+      "min_seconds": 0.11198731799959205,
+      "ranking_status": "eligible_local_only",
+      "repetitions": 3,
+      "size": "smoke",
+      "strategy": "full",
+      "successful_repetitions": 3,
+      "workers": 1,
+      "workload_id": "W2"
+    },
+    {
+      "concurrency": 1,
+      "cost_basis": "local_measured_usage",
+      "engine": "spark",
+      "fully_allocated_cost": null,
+      "marginal_cost": null,
+      "max_seconds": 0.5357569650004734,
+      "median_seconds": 0.5221607229977963,
+      "min_seconds": 0.4982590979998349,
+      "ranking_status": "eligible_local_only",
+      "repetitions": 3,
+      "size": "smoke",
+      "strategy": "full",
+      "successful_repetitions": 3,
+      "workers": 1,
+      "workload_id": "W3"
+    },
+    {
+      "concurrency": 1,
+      "cost_basis": "local_measured_usage",
+      "engine": "trino",
+      "fully_allocated_cost": null,
+      "marginal_cost": null,
+      "max_seconds": 0.08576919699771679,
+      "median_seconds": 0.08310894600072061,
+      "min_seconds": 0.0731744489967241,
+      "ranking_status": "eligible_local_only",
+      "repetitions": 3,
+      "size": "smoke",
+      "strategy": "full",
+      "successful_repetitions": 3,
+      "workers": 1,
+      "workload_id": "W3"
+    },
+    {
+      "concurrency": 1,
+      "cost_basis": "local_measured_usage",
+      "engine": "spark",
+      "fully_allocated_cost": null,
+      "marginal_cost": null,
+      "max_seconds": 28.18571134499871,
+      "median_seconds": 25.480239639997308,
+      "min_seconds": 23.493952253000316,
+      "ranking_status": "eligible_local_only",
+      "repetitions": 3,
+      "size": "smoke",
+      "strategy": "full",
+      "successful_repetitions": 3,
+      "workers": 1,
+      "workload_id": "W4"
+    },
+    {
+      "concurrency": 1,
+      "cost_basis": "local_measured_usage",
+      "engine": "trino",
+      "fully_allocated_cost": null,
+      "marginal_cost": null,
+      "max_seconds": 22.27783149500101,
+      "median_seconds": 20.458589065001433,
+      "min_seconds": 20.184466478000104,
+      "ranking_status": "eligible_local_only",
+      "repetitions": 3,
+      "size": "smoke",
+      "strategy": "full",
+      "successful_repetitions": 3,
+      "workers": 1,
+      "workload_id": "W4"
+    }
+  ],
+  "pinned_compatibility": {
+    "cross_engine_status": "passed",
+    "engine_version": "3.5.5",
+    "implementation_revision": "d04b46d9883be192d28abc3d2e4916b9643f9edc6db5658adfce008b3f88cb4b",
+    "java_version": "11.0.26",
+    "python_version": "3.8.10 (default, Feb  4 2025, 15:02:54) \n[GCC 9.4.0]",
+    "settings": {
+      "driver_memory": "2g",
+      "iceberg_vectorization": false,
+      "shuffle_partitions": "2",
+      "time_zone": "UTC"
+    },
+    "status": "passed"
+  },
+  "recommendation": "incomplete",
+  "resource_sampling": [
+    {
+      "boundary": "Docker reported usage; sample maxima, not exact RSS/kernel peaks or billable capacity",
+      "collector_seconds": 106.62894611899999,
+      "containers": {
+        "dpe-local-airflow-1": {
+          "sampled_cpu_percent_max": 59.69,
+          "sampled_memory_max_bytes": 1107027821
+        },
+        "dpe-local-benchmark-coordinator-1": {
+          "sampled_cpu_percent_max": 103.74,
+          "sampled_memory_max_bytes": 236768461
+        },
+        "dpe-local-catalog-1": {
+          "sampled_cpu_percent_max": 23.76,
+          "sampled_memory_max_bytes": 423834419
+        },
+        "dpe-local-objectstore-1": {
+          "sampled_cpu_percent_max": 80.09,
+          "sampled_memory_max_bytes": 236873318
+        },
+        "dpe-local-postgres-1": {
+          "sampled_cpu_percent_max": 4.45,
+          "sampled_memory_max_bytes": 69656904
+        },
+        "dpe-local-spark-gateway-1": {
+          "sampled_cpu_percent_max": 332.0,
+          "sampled_memory_max_bytes": 1378684502
+        },
+        "dpe-local-telemetry-1": {
+          "sampled_cpu_percent_max": 8.89,
+          "sampled_memory_max_bytes": 40223375
+        },
+        "dpe-local-trino-1": {
+          "sampled_cpu_percent_max": 215.14,
+          "sampled_memory_max_bytes": 2335388467
+        }
+      },
+      "path": "data/poc-airflow-resource-final.jsonl",
+      "sampled_container_memory_sum_max_bytes": 5439007753,
+      "samples": 51,
+      "sha256": "37cc77a04e445bbbab6ffe2ce923c3a5c61c5588b5936da09f0ac7fbacb6eb20"
+    },
+    {
+      "boundary": "Docker reported usage; sample maxima, not exact RSS/kernel peaks or billable capacity",
+      "collector_seconds": 151.53041691099997,
+      "containers": {
+        "dpe-local-airflow-1": {
+          "sampled_cpu_percent_max": 51.48,
+          "sampled_memory_max_bytes": 1093069177
+        },
+        "dpe-local-benchmark-coordinator-1": {
+          "sampled_cpu_percent_max": 26.2,
+          "sampled_memory_max_bytes": 107374182
+        },
+        "dpe-local-catalog-1": {
+          "sampled_cpu_percent_max": 55.33,
+          "sampled_memory_max_bytes": 451516826
+        },
+        "dpe-local-objectstore-1": {
+          "sampled_cpu_percent_max": 154.08,
+          "sampled_memory_max_bytes": 393320858
+        },
+        "dpe-local-postgres-1": {
+          "sampled_cpu_percent_max": 12.83,
+          "sampled_memory_max_bytes": 84190167
+        },
+        "dpe-local-runner-run-14f70bde78f0": {
+          "sampled_cpu_percent_max": 98.4,
+          "sampled_memory_max_bytes": 476577792
+        },
+        "dpe-local-spark-gateway-1": {
+          "sampled_cpu_percent_max": 362.23,
+          "sampled_memory_max_bytes": 1644972474
+        },
+        "dpe-local-telemetry-1": {
+          "sampled_cpu_percent_max": 33.79,
+          "sampled_memory_max_bytes": 50782536
+        },
+        "dpe-local-trino-1": {
+          "sampled_cpu_percent_max": 220.92,
+          "sampled_memory_max_bytes": 3191160701
+        }
+      },
+      "path": "data/poc-custom-resource-samples.jsonl",
+      "sampled_container_memory_sum_max_bytes": 5741020709,
+      "samples": 39,
+      "sha256": "951dd8c22e3119a35781e08cde24f7a2494c93c7622c5f5bf5defd64f0996373"
+    }
+  ],
+  "restart": {
+    "publications": [
+      {
+        "engine": "trino",
+        "publication_id": "121ee6d50736ce0f278446e940e897bc5a46259db676aa1fca04df6016c8b924",
+        "status": "passed"
+      },
+      {
+        "engine": "trino",
+        "publication_id": "2eadbc8b5afd8ea07c8e2ae13a734937e5713eb3196a47477d8a7fa9d6a1c5fc",
+        "status": "passed"
+      },
+      {
+        "engine": "spark",
+        "publication_id": "05449f2092f7a2f3b1509aa6c8b7719d7132e71dbd63001bc45e9e0ace7e928a",
+        "status": "passed"
+      },
+      {
+        "engine": "spark",
+        "publication_id": "4b7b9e8899c65d2858fba57153a5136bd54bf1d94d1789df2bb82646fad1f5b0",
+        "status": "passed"
+      }
+    ],
+    "status": "passed"
+  },
+  "scope": "local only; original Azure POC incomplete",
+  "synthetic_cost_arithmetic": {
+    "basis": "modeled_cloud",
+    "per_engine_fully_allocated": {
+      "spark": "9.0",
+      "trino": "9.0"
+    },
+    "scope_total": "18",
+    "warning": "Fictional rates and quantities; not platform cost estimates"
+  },
+  "unit_tests": {
+    "count": 64,
+    "evidence": "data/poc-unit-final.log",
+    "sha256": "3b72e1bffa164c2079301a6269482b3b3b8006dedc1c9bfddc5ace33ecda94fd",
+    "status": "passed"
+  }
+}

@@ -1,8 +1,8 @@
 # Enterprise Data Processing POC
 
-A runnable local foundation for the platform in [the requirements](docs/plan/01-enterprise_data_processing_poc_validation_plan.md) and [build plan](docs/plan/03-initial_platform_build_plan.md). It includes fictional ITSM data, our own business rules, a Python/SQLite reference harness, and an optional dbt/Trino/Iceberg processing path.
+A runnable local foundation for the platform in [the requirements](docs/plan/01-enterprise_data_processing_poc_validation_plan.md) and [build plan](docs/plan/03-initial_platform_build_plan.md). It includes fictional ITSM data, our own business rules, a Python/SQLite reference harness, a dbt/Trino/Iceberg processing path, and optional Spark/Airflow benchmark services.
 
-The local lakehouse uses RustFS object storage, a Nessie Iceberg REST catalog backed by PostgreSQL, Trino, and dbt. Azure, Airflow, and Spark are not deployed. Cloud performance, Azure storage compatibility, and economics remain unmeasured.
+The local lakehouse uses RustFS object storage, a Nessie Iceberg REST catalog backed by PostgreSQL, Trino, and dbt. Optional local Spark and Airflow services support cross-engine comparisons. Azure is not deployed; cloud performance, Azure storage compatibility, and actual cloud charges remain unmeasured.
 
 ## Run the local lakehouse
 
@@ -164,10 +164,40 @@ Other failpoints are `after_ingestion`, `after_silver`, and `before_publish`. Te
 python3 -m dpe benchmark --workspace data/benchmark-new --repeats 3
 ```
 
-This freezes the acceptance configuration before execution, repeats full processing into fresh databases, verifies equal output checksums, and writes `evidence.json`. Failed required runtime criteria preserve evidence and return a nonzero exit. [Local acceptance criteria](benchmarks/acceptance.local.v1.json) apply to the reference harness. OS caches are uncontrolled. Runtime and bytes/second are local development measurements; cloud cost fields remain `null`. Cloud capacity, cost limits, scale tests, and engine comparisons are deferred.
+This freezes the acceptance configuration before execution, repeats full processing into fresh databases, verifies equal output checksums, and writes `evidence.json`. Failed required runtime criteria preserve evidence and return a nonzero exit. [Local acceptance criteria](benchmarks/acceptance.local.v1.json) apply to the reference harness. OS caches are uncontrolled. Runtime and bytes/second are local development measurements; cloud cost fields remain `null`. This command measures only the reference harness. Use the comparative suite below for local Trino/Spark evidence; cloud capacity and billed economics remain open.
 
 See [the initial execution record](docs/plan/04-local_build_execution.md) and [the local improvement execution record](docs/plan/06-local_lakehouse_execution.md) for plan coverage and remaining work.
 
 Targeted processing is tracked in [07 — Targeted Incremental Processing Plan](docs/plan/07-targeted_incremental_processing_plan.md) and [08 — Targeted Incremental Execution](docs/plan/08-targeted_incremental_execution.md).
 
 The remaining original POC hypotheses, mandatory gates, benchmark matrix, and per-workload/per-technology cost reporting are assessed in [09 — POC Hypothesis, Benchmark, and Economics Validation Plan](docs/plan/09-poc_hypothesis_benchmark_and_economics_validation_plan.md). This plan separates local implementation work from later Azure validation and billing evidence.
+
+
+## Compare engines and report workload economics
+
+The [plan-09 execution record](docs/plan/10-poc_benchmark_and_economics_execution.md) records the local results and remaining POC gates. [Initial decision targets](benchmarks/specs/target_rationale.md) define runtime, recovery, cost, demand and scaling limits; these are POC targets, not production commitments.
+
+```sh
+make local-poc-build
+make local-poc-up
+make local-poc-verify POC_WORKSPACE=data/poc-check-new
+make local-poc-benchmark POC_WORKSPACE=data/poc-comparison-new
+```
+
+Use fresh workspaces. Verification runs both engines through the 53 independent fixtures, common Iceberg consumer, initial/delta publications, both publication failures, retry and replay. After restarting the storage/catalog/Trino services and waiting for health, run `make local-poc-restart-check POC_WORKSPACE=data/poc-check-new`.
+
+The comparison repeats isolated scan/filter, joins, windows and complete BSG processing three times per engine. Both read engines use identical Trino-prepared physical inputs. Preparation and Spark application overhead are separate report rows; W4 includes validation and consumer reads. Caches are uncontrolled and results describe this local resource envelope. Spark uses full rebuilds; targeted Trino remains a separately verified strategy.
+
+Each workspace contains frozen `specification.json`, `run_results.json`, `cost_performance.csv`, `matrix.csv`, and `poc_scorecard.json`. Under `economics/`, `workload_costs.csv` and `technology_costs.csv` expose marginal, allocated and total costs for every measured workload/component. **Local monetary amounts are unavailable**, with reasons and incomplete status. They are never presented as zero cloud charges. The required S/M/L, variant, failure, worker and concurrency cells remain visible even when unexecuted. A 64 MiB raw-input preflight bounds source materialization on the 6 GiB development environment; it cannot guarantee total memory headroom. A 10,000-incident comparison still OOM-killed Trino when the full local stack was active; its failed evidence is retained. A larger controlled resource profile is needed before larger-tier conclusions.
+
+Generate longer source histories and inspect a larger tier before processing:
+
+```sh
+python3 -m dpe generate-sequence --out data/history-90 --days 90 --count 1000
+python3 -m dpe poc-calibrate --workspace data/small-calibration-new --count 100000
+python3 -m dpe cost-demo --workspace data/cost-arithmetic-new
+```
+
+`cost-demo` uses **fictional rates and quantities** solely to verify arithmetic: nine component-hours at $2 total $18, allocated $9 to each engine. It is not a platform cost estimate. [The accounting guide](docs/guides/poc_benchmarks_and_economics.md) covers explicit usage/rate imports, actual versus amortized bills, demand scenarios, attribution and the Airflow path.
+
+Start optional Airflow with `make local-airflow-up`. Its UI is at `http://localhost:18081`; local credentials are generated by Airflow standalone. The manually triggered `dpe_benchmarks` DAG submits the same runner through private coordinator/gateway services. Airflow has no Docker socket. Trino completed-query events persist in `data/telemetry/trino-events/`; Spark event logs remain beside each application result. Neither diagnostic metric stream supplies Azure billable request counts.

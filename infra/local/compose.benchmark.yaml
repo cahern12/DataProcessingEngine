@@ -1,0 +1,83 @@
+services:
+  runner:
+    environment:
+      DPE_SPARK_ENDPOINT: http://spark-gateway:18111
+  spark:
+    profiles: [benchmark]
+    build:
+      context: ../..
+      dockerfile: infra/local/spark/Dockerfile
+    hostname: spark
+    environment:
+      AWS_ACCESS_KEY_ID: dpe-local
+      AWS_SECRET_ACCESS_KEY: local-dpe-only
+      AWS_REGION: us-east-1
+      DPE_TRINO_HOST: trino
+      DPE_TRINO_PORT: "8080"
+      DPE_S3_ENDPOINT: http://objectstore:9000
+    volumes:
+      - ../../data:/app/data
+    depends_on:
+      trino:
+        condition: service_healthy
+    mem_limit: 3g
+
+  spark-gateway:
+    profiles: [benchmark]
+    build:
+      context: ../..
+      dockerfile: infra/local/spark/Dockerfile
+    hostname: spark-gateway
+    entrypoint: [python3, /app/dpe/engines/spark_gateway.py]
+    environment:
+      AWS_ACCESS_KEY_ID: dpe-local
+      AWS_SECRET_ACCESS_KEY: local-dpe-only
+      AWS_REGION: us-east-1
+    ports: ["127.0.0.1:18111:18111"]
+    volumes: ["../../data:/app/data"]
+    mem_limit: 3g
+    healthcheck:
+      test: [CMD, python3, -c, "import urllib.request; urllib.request.urlopen('http://localhost:18111/health')"]
+      interval: 3s
+      retries: 30
+  benchmark-coordinator:
+    profiles: [benchmark]
+    build:
+      context: ../..
+      dockerfile: infra/local/Dockerfile
+    entrypoint: [python, -m, dpe.benchmark_service]
+    environment:
+      DPE_TRINO_HOST: trino
+      DPE_TRINO_PORT: "8080"
+      DPE_S3_ENDPOINT: http://objectstore:9000
+      DPE_SPARK_ENDPOINT: http://spark-gateway:18111
+    ports: ["127.0.0.1:18112:18112"]
+    volumes: ["../../data:/app/data"]
+    depends_on:
+      trino:
+        condition: service_healthy
+      spark-gateway:
+        condition: service_healthy
+    healthcheck:
+      test: [CMD, python, -c, "import urllib.request; urllib.request.urlopen('http://localhost:18112/health')"]
+      interval: 3s
+      retries: 30
+  airflow:
+    profiles: [orchestration]
+    image: apache/airflow:3.1.7-python3.12@sha256:6f90d58846735eae1305b292faa170fd15e3c02032d2bafa449495bfde86c794
+    command: standalone
+    environment:
+      AIRFLOW__CORE__LOAD_EXAMPLES: "false"
+      AIRFLOW__CORE__PARALLELISM: "2"
+      AIRFLOW__API__WORKERS: "1"
+      AIRFLOW__DAG_PROCESSOR__PARSING_PROCESSES: "1"
+      DPE_BENCHMARK_ENDPOINT: http://benchmark-coordinator:18112
+      DPE_DATA_ROOT: /app/data
+    ports: ["127.0.0.1:18081:8080"]
+    volumes:
+      - ../../orchestration/dags:/opt/airflow/dags:ro
+      - ../../data:/app/data:ro
+      - airflow-local:/opt/airflow
+    mem_limit: 1500m
+volumes:
+  airflow-local:

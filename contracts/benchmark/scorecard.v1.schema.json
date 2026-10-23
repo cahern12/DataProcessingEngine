@@ -1,0 +1,44 @@
+{
+  "type": "object",
+  "required": [
+    "hypotheses",
+    "gates",
+    "deliverables",
+    "economic_requirements",
+    "matrix",
+    "recommendation",
+    "cost_completeness"
+  ],
+  "properties": {
+    "hypotheses": {
+      "type": "array"
+    },
+    "gates": {
+      "type": "array"
+    },
+    "deliverables": {
+      "type": "array"
+    },
+    "economic_requirements": {
+      "type": "array"
+    },
+    "matrix": {
+      "type": "array"
+    },
+    "recommendation": {
+      "enum": [
+        "incomplete",
+        "Proceed",
+        "Proceed with Changes",
+        "Do Not Proceed"
+      ]
+    },
+    "cost_completeness": {
+      "enum": [
+        "complete",
+        "incomplete"
+      ]
+    }
+  },
+  "additionalProperties": true
+}

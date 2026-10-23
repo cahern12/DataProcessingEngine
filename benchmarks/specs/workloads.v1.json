@@ -1,0 +1,189 @@
+{
+  "version": "v1",
+  "tiers": {
+    "smoke": 1000,
+    "small": 100000,
+    "medium": 1000000,
+    "large": 10000000
+  },
+  "tiers_status": "provisional until calibration; never relabel Smoke as Small",
+  "workloads": [
+    {
+      "id": "W1",
+      "name": "scan_filter",
+      "sizes": [
+        "small",
+        "medium",
+        "large"
+      ],
+      "required_engines": [
+        "trino"
+      ],
+      "optional_engines": [
+        "spark"
+      ],
+      "correctness": "independent expected rows plus exact cross-engine comparison",
+      "source": "deterministic fictional ITSM v1",
+      "strategies": [
+        "full"
+      ],
+      "workers": [
+        1,
+        2,
+        4
+      ],
+      "concurrency": [
+        1,
+        2,
+        4
+      ]
+    },
+    {
+      "id": "W2",
+      "name": "multi_table_join",
+      "sizes": [
+        "small",
+        "medium",
+        "large"
+      ],
+      "required_engines": [
+        "trino",
+        "spark"
+      ],
+      "optional_engines": [],
+      "correctness": "independent expected rows plus exact cross-engine comparison",
+      "source": "deterministic fictional ITSM v1",
+      "strategies": [
+        "full"
+      ],
+      "workers": [
+        1,
+        2,
+        4
+      ],
+      "concurrency": [
+        1,
+        2,
+        4
+      ]
+    },
+    {
+      "id": "W3",
+      "name": "aggregation_window",
+      "sizes": [
+        "small",
+        "medium",
+        "large"
+      ],
+      "required_engines": [
+        "trino",
+        "spark"
+      ],
+      "optional_engines": [],
+      "correctness": "independent expected rows plus exact cross-engine comparison",
+      "source": "deterministic fictional ITSM v1",
+      "strategies": [
+        "full"
+      ],
+      "workers": [
+        1,
+        2,
+        4
+      ],
+      "concurrency": [
+        1,
+        2,
+        4
+      ]
+    },
+    {
+      "id": "W4",
+      "name": "bronze_silver_gold",
+      "sizes": [
+        "small",
+        "medium",
+        "large"
+      ],
+      "required_engines": [
+        "trino",
+        "spark"
+      ],
+      "optional_engines": [],
+      "correctness": "independent expected rows plus exact cross-engine comparison",
+      "source": "deterministic fictional ITSM v1",
+      "strategies": [
+        "full"
+      ],
+      "workers": [
+        1,
+        2,
+        4
+      ],
+      "concurrency": [
+        1,
+        2,
+        4
+      ]
+    },
+    {
+      "id": "W5",
+      "name": "failure_recovery",
+      "sizes": [
+        "medium",
+        "large"
+      ],
+      "required_engines": [
+        "trino",
+        "spark"
+      ],
+      "optional_engines": [],
+      "correctness": "independent expected rows plus exact cross-engine comparison",
+      "source": "deterministic fictional ITSM v1",
+      "strategies": [
+        "full"
+      ],
+      "workers": [
+        1,
+        2,
+        4
+      ],
+      "concurrency": [
+        1,
+        2,
+        4
+      ]
+    }
+  ],
+  "matrix_extensions": {
+    "representative_sizes": [
+      "medium"
+    ],
+    "scale_workloads": [
+      "W2",
+      "W4"
+    ],
+    "worker_levels": [
+      2,
+      4
+    ],
+    "concurrency_levels": [
+      2,
+      4
+    ],
+    "W4_variants": [
+      "sparse_delta",
+      "open_heavy_cutoff",
+      "late_correction",
+      "duplicate_only"
+    ],
+    "W5_faults": [
+      "worker_loss",
+      "control_plane_loss",
+      "catalog_unavailable",
+      "storage_unavailable",
+      "orchestration_retry",
+      "between_gold_writes",
+      "before_publish"
+    ]
+  }
+}
