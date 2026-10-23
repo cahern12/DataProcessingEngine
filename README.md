@@ -169,3 +169,5 @@ This freezes the acceptance configuration before execution, repeats full process
 See [the initial execution record](docs/plan/04-local_build_execution.md) and [the local improvement execution record](docs/plan/06-local_lakehouse_execution.md) for plan coverage and remaining work.
 
 Targeted processing is tracked in [07 — Targeted Incremental Processing Plan](docs/plan/07-targeted_incremental_processing_plan.md) and [08 — Targeted Incremental Execution](docs/plan/08-targeted_incremental_execution.md).
+
+The remaining original POC hypotheses, mandatory gates, benchmark matrix, and per-workload/per-technology cost reporting are assessed in [09 — POC Hypothesis, Benchmark, and Economics Validation Plan](docs/plan/09-poc_hypothesis_benchmark_and_economics_validation_plan.md). This plan separates local implementation work from later Azure validation and billing evidence.
