@@ -34,7 +34,7 @@ docker-compose -f infra/local/compose.yaml run --rm runner \
 
 It verifies table create/insert/update/merge operations, Parquet file metadata, dbt execution/tests, all 54 independent fixtures, 1,000 initial incidents, a delta producing 1,100 incidents, both publication failpoints, replay, and comparison with a full reference rebuild. Original files are archived into the local object store; Bronze rows retain batch/file/row provenance. Generated evidence remains in the mounted `data/` directory.
 
-The pipeline is a full-history SQL implementation at this milestone. Targeted incremental processing, extended histories/rules, and the complete operator command set remain phases 4–6 of plan 05.
+The platform supports targeted incremental processing and full-history SQL rebuilds. `lake-run` defaults to targeted processing; see [targeted processing](#targeted-processing) for its verification and recovery commands. The Python/SQLite reference path is documented in the [reference guide](reference_harness.md).
 
 ## Process individual batches
 
@@ -70,7 +70,7 @@ docker-compose -f infra/local/compose.yaml run --rm runner \
   --fail-at between_gold_writes
 ```
 
-If the delta has already committed, use a fresh workspace and publish its initial batch first. The failure command returns nonzero, stores attempt evidence, and leaves the previous active publication unchanged. Retry without `--fail-at` to publish the delta. `before_publish` is the other supported failure point.
+If the delta has already committed, use a fresh workspace and publish its initial batch first. The failure command returns nonzero, stores attempt evidence, and leaves the previous active publication unchanged. Retry without `--fail-at` to publish the delta. Both strategies also support `before_publish`; additional targeted failpoints are listed below.
 
 Verify persistence without removing volumes:
 
@@ -105,6 +105,8 @@ On Linux, use the available Python 3.12 executable for virtual-environment creat
 
 `lake-run` now defaults to `--strategy targeted`; keep `--strategy full` in a separate workspace for recovery/comparison. Code/policy changes require fresh workspaces. The reference SQLite strategy remains a full recomputation.
 
+Each delivery is validated and stored before candidate selection. Changed and time-dependent incidents select bucketed histories; affected daily groups are rebuilt with their unchanged contributors included. Complete-population quality checks, required validation and publication copying remain part of total processing IO/runtime.
+
 ```sh
 make local-build
 make local-incremental-verify LOCAL_WORKSPACE=data/incremental-next
@@ -123,3 +125,12 @@ make local-incremental-restart-check LOCAL_WORKSPACE=data/incremental-next
 Old snapshots of a mutated table fail through this catalog, so publications use isolated immutable tables. Unchanged rows are copied; storage grows with publication history and failed attempts until explicitly cleaned up. Snapshot IDs still pin each sealed table. See [ADR 003](../decisions/003-targeted-immutable-publications.md).
 
 Empty incident/event deliveries use explicit zero-byte JSONL files and zero row counts in the normal six-dataset manifest. Complete unchanged reference snapshots remain required. `lake-audit --workspace ...` separately validates all archived source bytes; normal targeted runs validate only incoming raw bytes and rely on pinned immutable prior delivery tables.
+
+`BatchWriter.finish()` creates the empty files for cutoff-only deliveries. The manifest still names the exact parent and new cutoff. Reference mutations, code/policy changes and reporting-start changes require a new version/workspace.
+
+Attempt evidence retains candidate IDs/reasons, affected groups, dispositions, complete-population quality counts, delivery snapshots and both Gold snapshots. Targeted failpoints are `after_input_persistence`, `during_selective_writes`, `between_gold_writes` and `before_publish`; checkpoints advance with the active publication. Audit full historical raw-byte integrity separately:
+
+```sh
+docker-compose -f infra/local/compose.yaml run --rm runner \
+  lake-audit --workspace data/lake-custom
+```

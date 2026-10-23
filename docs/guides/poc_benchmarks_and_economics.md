@@ -2,6 +2,8 @@
 
 Run commands from the repository root. This extends the [local lakehouse guide](local_lakehouse.md). The acceptance targets and required matrix are under `benchmarks/specs/`; the original Azure POC remains incomplete until its required evidence exists.
 
+This guide covers the original Smoke comparison, accounting interfaces and Airflow commands. Use the [capacity guide](local_capacity.md) for the current controlled resource profiles, repeated Small comparisons and captured public-retail scenarios.
+
 ## Reproduce local acceptance
 
 ```sh
@@ -54,13 +56,13 @@ python3 -m dpe cost-import --csv path/to/cost-details.csv --mapping path/to/mapp
 python3 -m dpe cost-report --usage data/imported-usage.json --out data/billing-report
 ```
 
-The arithmetic demo uses fabricated prices and quantities, explicitly labeled `modeled_cloud` and `synthetic-test-only`. Its $18 scope / $9 per engine checks conservation; it does not price the real platform. No retail price snapshot has been collected, and no Azure estimate or bill is implied by those numbers.
+The arithmetic demo uses fabricated prices and quantities, explicitly labeled `modeled_cloud` and `synthetic-test-only`. Its $18 scope / $9 per engine checks conservation; it does not price the real platform. Captured public-retail snapshots and platform planning scenarios are separate outputs described in the [capacity guide](local_capacity.md).
 
 `usage.json` contains logical runs, charge lines, shared pools and required components. Each line needs a unique line/charge/resource/meter/window identity, component, source reference, start/end and either explicit bill amount or quantity/unit/rate ID. A marginal line names its logical run; a standing line names a pool. Pool weights sum exactly to one, with a declared driver. Empty pools retain idle-only cost and prevent completeness. Retried/failed attempts belong to their logical run. A fixed warm VM's allocated compute is not necessarily incremental cash cost; `active_capacity` reports attributed active compute separately.
 
 Component owners are Trino, Spark, dbt, Airflow, catalog/backend, object storage, residual container infrastructure, monitoring, network and optional current-state reference. Assign each underlying charge once. Split shared-node charges using a documented capacity/allocation model and reconcile the split to the provider total. Do not charge the full node under both the engine and infrastructure. Iceberg/Parquet are formats; their consequences belong to storage/compute/maintenance meters.
 
-A normalized rate snapshot supplies `currency`, `basis`, `provider`, `region`, `effective_from`, `effective_to`, `source` and `rates` (ID, normalized unit and ascending progressive tiers with start/price). Preserve purchase model, meter/SKU IDs, retrieval time, source URL/file and hashes when preparing real prices. Apply unit conversions explicitly; CPU seconds cannot be bound directly to a node-hour rate. Rates outside the interval or with mismatched currency/unit/basis are rejected. Missing rates/quantities remain `null`; known zero is different from missing data. The checked-in synthetic rate catalog is a format/arithmetic example only. Use the [Azure Retail Prices API](https://learn.microsoft.com/en-us/rest/api/cost-management/retail-prices/azure-retail-prices) later for labeled public-price scenarios.
+A normalized rate snapshot supplies `currency`, `basis`, `provider`, `region`, `effective_from`, `effective_to`, `source` and `rates` (ID, normalized unit and ascending progressive tiers with start/price). Preserve purchase model, meter/SKU IDs, retrieval time, source URL/file and hashes when preparing real prices. Apply unit conversions explicitly; CPU seconds cannot be bound directly to a node-hour rate. Rates outside the interval or with mismatched currency/unit/basis are rejected. Missing rates/quantities remain `null`; known zero is different from missing data. The synthetic rate catalog is a format/arithmetic example only; captured public-price snapshots are under `benchmarks/pricing/`.
 
 The CSV importer requires explicit mappings, such as the following shape (replace every example identity and complete the scope):
 
