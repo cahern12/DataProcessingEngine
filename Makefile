@@ -1,4 +1,4 @@
-.PHONY: test fixtures demo local-up local-down local-build local-verify
+.PHONY: test fixtures demo local-up local-down local-build local-verify local-incremental-verify local-incremental-restart-check
 
 DOCKER_COMPOSE ?= docker-compose
 LOCAL_WORKSPACE ?= data/lake-check
@@ -23,3 +23,10 @@ local-build:
 
 local-verify:
 	$(DOCKER_COMPOSE) -f infra/local/compose.yaml run --rm runner lake-verify --workspace $(LOCAL_WORKSPACE)
+
+# Use a fresh workspace; freezes criteria before the real-stack experiment.
+local-incremental-verify:
+	$(DOCKER_COMPOSE) -f infra/local/compose.yaml run --rm --entrypoint python runner benchmarks/collect_query_io.py --workspace $(LOCAL_WORKSPACE)
+
+local-incremental-restart-check:
+	$(DOCKER_COMPOSE) -f infra/local/compose.yaml run --rm --entrypoint python runner benchmarks/verify_checkpoint_reads.py --workspace $(LOCAL_WORKSPACE)

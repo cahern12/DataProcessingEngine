@@ -1,0 +1,19 @@
+{
+  "version": "v1",
+  "baseline_commit": "3470c90",
+  "correctness": {"maximum_field_or_key_differences": 0},
+  "efficiency": {
+    "controlled_maximum_candidate_fraction": 0.03,
+    "controlled_maximum_processing_read_ratio_exclusive": 1.0,
+    "processing_stages": ["candidate_discovery", "history_selection", "incident_transformation", "daily_aggregation", "checkpoint_maintenance"],
+    "required_telemetry_coverage": 1.0,
+    "end_to_end_runtime_speedup_required": false
+  },
+  "workloads": {
+    "controlled": {"scenario_weights": {"resolved": 1.0, "open": 0.0, "hold": 0.0, "reopened": 0.0}, "delta_fraction": 0.01, "new_fraction": 0.0},
+    "open_heavy": {"scenario_weights": {"resolved": 0.1, "open": 0.5, "hold": 0.3, "reopened": 0.1}, "delta_fraction": 0.01, "new_fraction": 0.0}
+  },
+  "layout": {"format": "PARQUET", "delivery_partitioning": ["dataset", "bucket(record_incident,32)"], "publication": "isolated tables; retained rows copied"},
+  "local_resources": {"colima_cpus": 4, "colima_memory_gib": 6, "trino_heap_gib": 2, "dbt_threads": 2},
+  "measurement": "Physical coordinator IO includes discovery indexes; validation and retained-output copying reported separately and included in total. Full raw audit and independent comparisons are separate. No runtime speedup claim is required. All evidence persists before a failed gate raises."
+}

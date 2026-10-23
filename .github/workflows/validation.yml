@@ -12,16 +12,18 @@ jobs:
       - run: python -m unittest discover -s tests -v
   lakehouse:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 45
     steps:
       - uses: actions/checkout@v4
       - run: docker compose -f infra/local/compose.yaml up -d --wait postgres objectstore bucket-init catalog trino
       - run: docker compose -f infra/local/compose.yaml build runner
       - run: docker compose -f infra/local/compose.yaml run --rm runner lake-verify --workspace data/ci-verification --count 1000
+      - run: docker compose -f infra/local/compose.yaml run --rm --entrypoint python runner benchmarks/collect_query_io.py --workspace data/ci-incremental --count 1000
       - run: docker compose -f infra/local/compose.yaml restart postgres objectstore catalog trino
       - name: Wait for restarted services
         run: docker compose -f infra/local/compose.yaml up -d --wait postgres objectstore catalog trino
       - run: docker compose -f infra/local/compose.yaml run --rm runner lake-query --workspace data/ci-verification/platform --dataset incident_resolution --limit 1
+      - run: docker compose -f infra/local/compose.yaml run --rm --entrypoint python runner benchmarks/verify_checkpoint_reads.py --workspace data/ci-incremental
       - if: always()
         run: docker compose -f infra/local/compose.yaml logs --no-color > data/compose.log
       - if: always()

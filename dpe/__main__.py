@@ -47,12 +47,19 @@ def main():
     verify = commands.add_parser("lake-verify", help="Verify compatibility, fixtures, Smoke/delta, publication failures, and replay")
     verify.add_argument("--workspace", type=Path, required=True)
     verify.add_argument("--count", type=int, default=1000)
+    for name in ("lake-incremental-verify", "lake-incremental-restart-check"):
+        check = commands.add_parser(name, help="Verify targeted processing on the real local stack")
+        check.add_argument("--workspace", type=Path, required=True)
+        if name == "lake-incremental-verify": check.add_argument("--count", type=int, default=1000)
     lake = commands.add_parser("lake-run", help="Publish a batch through dbt/Trino/Iceberg")
     lake.add_argument("batch", type=Path)
     lake.add_argument("--workspace", type=Path, required=True)
+    lake.add_argument("--strategy", choices=["targeted", "full"], default="targeted")
     lake.add_argument("--api-url")
     lake.add_argument("--quality-policy", type=Path)
-    lake.add_argument("--fail-at", choices=["between_gold_writes", "before_publish"])
+    lake.add_argument("--fail-at", choices=["after_input_persistence", "during_selective_writes", "between_gold_writes", "before_publish"])
+    audit = commands.add_parser("lake-audit", help="Audit all committed raw source bytes separately")
+    audit.add_argument("--workspace", type=Path, required=True)
     consumer = commands.add_parser("lake-query", help="Read a contracted, snapshot-pinned Gold product")
     consumer.add_argument("--workspace", type=Path, required=True)
     consumer.add_argument("--dataset", choices=["incident_resolution", "service_daily_metrics"], required=True)
@@ -87,8 +94,19 @@ def main():
             result = lakehouse.compatibility(args.workspace)
         elif args.command == "lake-fixtures":
             result = lakehouse.fixture_check(args.workspace)
+        elif args.command == "lake-incremental-verify":
+            from .incremental_validation import verify
+            result = verify(args.workspace, args.count)
+        elif args.command == "lake-incremental-restart-check":
+            from .incremental_validation import restart_check
+            result = restart_check(args.workspace)
         elif args.command == "lake-run":
-            result = lakehouse.run(args.batch, args.workspace, args.fail_at, args.api_url, args.quality_policy)
+            from . import incremental
+            engine = incremental if args.strategy == "targeted" else lakehouse
+            result = engine.run(args.batch, args.workspace, args.fail_at, args.api_url, args.quality_policy)
+        elif args.command == "lake-audit":
+            from .incremental import audit
+            result = audit(args.workspace)
         elif args.command == "lake-verify":
             result = lakehouse.verify(args.workspace, args.count)
         else:

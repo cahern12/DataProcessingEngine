@@ -100,3 +100,26 @@ The reference harness records early failures in its attempts table and a sibling
 ```
 
 On Linux, use the available Python 3.12 executable for virtual-environment creation. The default client endpoints target localhost ports. Container execution uses the internal service addresses through Compose environment variables. Source archive paths are relative to the workspace so they can be resolved from either environment.
+
+## Targeted processing
+
+`lake-run` now defaults to `--strategy targeted`; keep `--strategy full` in a separate workspace for recovery/comparison. Code/policy changes require fresh workspaces. The reference SQLite strategy remains a full recomputation.
+
+```sh
+make local-build
+make local-incremental-verify LOCAL_WORKSPACE=data/incremental-next
+```
+
+This target runs `benchmarks/collect_query_io.py`, which starts the acceptance command and observes Trino statistics before query history expires. `verification.json` contains exact SQL/Python equivalence and frozen numeric gates; `file_io.json` contains per-stage file/cache/external reads, all attempt data-file inventories, and daily contributor expansion. Observer/inventory overhead is separate from measured processing. Cache conditions are uncontrolled, and physical scanned bytes can come from Trino's cache. `query_file_io.json` retains the underlying query counters.
+
+Restart and verify every committed parent/current product pair plus active delivery/state/disposition checkpoints:
+
+```sh
+docker-compose -f infra/local/compose.yaml restart postgres objectstore catalog trino
+docker-compose -f infra/local/compose.yaml up -d --wait postgres objectstore catalog trino
+make local-incremental-restart-check LOCAL_WORKSPACE=data/incremental-next
+```
+
+Old snapshots of a mutated table fail through this catalog, so publications use isolated immutable tables. Unchanged rows are copied; storage grows with publication history and failed attempts until explicitly cleaned up. Snapshot IDs still pin each sealed table. See [ADR 003](../decisions/003-targeted-immutable-publications.md).
+
+Empty incident/event deliveries use explicit zero-byte JSONL files and zero row counts in the normal six-dataset manifest. Complete unchanged reference snapshots remain required. `lake-audit --workspace ...` separately validates all archived source bytes; normal targeted runs validate only incoming raw bytes and rely on pinned immutable prior delivery tables.

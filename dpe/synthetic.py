@@ -48,7 +48,19 @@ class BatchWriter:
             except ValueError:
                 pass  # Malformed timestamp is an explicitly recorded fault scenario.
 
+    def empty(self, dataset):
+        if any(f["dataset"] == dataset for f in self.files):
+            return
+        path = dataset + "/part-00000.jsonl"
+        target = self.root / path
+        target.parent.mkdir(parents=True, exist_ok=True)
+        self.files.append({"dataset": dataset, "path": path, "format": "jsonl", "rows": 0,
+                           "min_source_time": None, "max_source_time": None,
+                           "stream": target.open("w", encoding="utf-8")})
+
     def finish(self):
+        for dataset in ("incident_snapshots", "incident_events"):
+            self.empty(dataset)
         for item in self.files:
             item["stream"].close()
             item.pop("stream")

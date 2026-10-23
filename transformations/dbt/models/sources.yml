@@ -5,6 +5,7 @@ sources:
     schema: "{{ var('raw_schema', target.schema) }}"
     tables:
       - name: raw_records
+      - name: affected_daily_groups
       - name: batch_context
 models:
   - name: compatibility_probe

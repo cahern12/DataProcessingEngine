@@ -143,3 +143,5 @@ Freeze numeric efficiency targets before measured runs. At minimum, the controll
 Add the next numbered execution record with implementation revision, dataset/configuration versions, chosen storage/checkpoint strategy, equivalence results, processing-efficiency evidence, and remaining limits. Update the README and CI with the implemented commands and regression checks. Clearly distinguish targeted execution from the full-rebuild comparison path.
 
 Do not change business semantics during this phase. Phase 5 remains responsible for longer synthetic histories, business-hour calendars, effective-dated SLA policies, and additional assignment rules. Azure, Airflow, Spark comparison, distributed control-plane behavior, and cloud economics remain separate validation work.
+
+Execution is recorded in [08 — Targeted Incremental Execution](08-targeted_incremental_execution.md), including the immutable-publication decision, regression coverage, measured work, and local limits.

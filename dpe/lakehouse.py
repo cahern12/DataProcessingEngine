@@ -55,6 +55,20 @@ def normalized(value):
     return value
 
 
+def query_telemetry(query_id):
+    """Persist coordinator statistics before its bounded query history expires."""
+    from urllib.request import Request, urlopen
+    url = "http://" + os.environ.get("DPE_TRINO_HOST", "127.0.0.1") + ":" + os.environ.get("DPE_TRINO_PORT", "18080")
+    try:
+        with urlopen(Request(url + "/v1/query/" + query_id, headers={"X-Trino-User": "dpe"}), timeout=10) as stream:
+            stats = json.load(stream)["queryStats"]
+        return {k: stats[k] for k in ("physicalInputDataSize", "physicalInputPositions", "processedInputDataSize",
+                "processedInputPositions", "physicalWrittenDataSize", "writtenPositions", "peakTotalMemoryReservation",
+                "spilledDataSize", "totalCpuTime", "elapsedTime")}
+    except Exception as error:
+        return {"unavailable": str(error)}
+
+
 class Client:
     def __init__(self):
         from trino.dbapi import connect
@@ -73,7 +87,9 @@ class Client:
             return [{column[0]: normalized(value) for column, value in zip(cursor.description or [], row)} for row in rows]
         finally:
             self.queries.append({"query_id": cursor.query_id, "sql_sha256": hashlib.sha256(sql.encode()).hexdigest(),
-                                 "runtime_seconds": round(time.perf_counter()-started, 6), "stats": cursor.stats})
+                                 "stage": getattr(self, "stage", "unclassified"),
+                                 "runtime_seconds": round(time.perf_counter()-started, 6), "stats": cursor.stats,
+                                 "telemetry": query_telemetry(cursor.query_id) if cursor.query_id else {}})
 
     def create_sources(self, schema, cases):
         schema = identifier(schema)
@@ -110,13 +126,16 @@ def sql_revision():
     return hasher.hexdigest()
 
 
-def dbt(schema, evidence, selection=None, exclude=None, command="build"):
+def dbt(schema, evidence, selection=None, exclude=None, command="build", variables=None):
+    started = time.perf_counter()
     executable = Path(sys.executable).parent / "dbt"
     executable = str(executable) if executable.exists() else shutil.which("dbt")
     if not executable:
         raise ValueError("dbt unavailable; use .venv/bin/python and requirements-local.lock")
+    extra_variables = variables or {}
     variables = {"raw_schema": identifier(schema), "business_rules": read_json(ROOT / "rules/business_rules.v1.json"),
                  "row_schemas": {name: SCHEMAS[name] for name in DATASETS}}
+    variables.update(extra_variables)
     import csv
     with (ROOT / "rules/sla_targets.v1.csv").open() as targets:
         variables["sla_targets"] = {row["priority"]: [int(row["response_minutes"]),int(row["resolution_minutes"])] for row in csv.DictReader(targets)}
@@ -136,16 +155,29 @@ def dbt(schema, evidence, selection=None, exclude=None, command="build"):
     (artifact_path / "console.log").write_text(process.stdout)
     if process.returncode:
         raise RuntimeError("dbt failed; log: " + str(artifact_path / "console.log") + "\n" + process.stdout[-5000:])
-    return {"invocation": invocation, "artifacts": str(artifact_path)}
+    result = {"invocation": invocation, "artifacts": str(artifact_path), "runtime_seconds": round(time.perf_counter()-started,6)}
+    run_results = artifact_path / "target/run_results.json"
+    if run_results.exists():
+        result["queries"] = []
+        for node in read_json(run_results)["results"]:
+            response = node.get("adapter_response", {})
+            query_id = response.get("query_id")
+            if query_id:
+                result["queries"].append({"node": node["unique_id"], "query_id": query_id,
+                                           "telemetry": query_telemetry(query_id)})
+    return result
 
 
 def build(client, schema, evidence, fail_at=None):
-    invocations = [dbt(schema, evidence, exclude=["gold_incident_resolution", "gold_service_daily_metrics", "compatibility_probe"], command="run")]
-    invocations.append(dbt(schema, evidence, selection=["gold_incident_resolution"]))
-    if fail_at == "between_gold_writes":
-        raise RuntimeError("injected failure: between_gold_writes")
-    invocations.append(dbt(schema, evidence, selection=["gold_service_daily_metrics"]))
-    invocations.append(dbt(schema, evidence, selection=["unique_gold_keys","valid_reference_data"], command="test"))
+    invocations = []
+    for options, stage in [
+        ({"exclude":["gold_incident_resolution","gold_service_daily_metrics","incident_daily_contributions","compatibility_probe"],"command":"run"}, "incident_transformation"),
+        ({"selection":["gold_incident_resolution"]}, "incident_transformation"),
+        ({"selection":["incident_daily_contributions","gold_service_daily_metrics"]}, "daily_aggregation"),
+        ({"selection":["unique_gold_keys","valid_reference_data"],"command":"test"}, "validation")]:
+        result = dbt(schema, evidence, **options); result["stage"] = stage; invocations.append(result)
+        if options.get("selection")==["gold_incident_resolution"] and fail_at=="between_gold_writes":
+            raise RuntimeError("injected failure: between_gold_writes")
     return invocations
 
 
@@ -353,6 +385,7 @@ def _run(batch, workspace, fail_at, api_url, policy_path):
             store.put_object(Bucket="raw",Key="api/"+attempt+"/"+page.name,Body=page.read_bytes())
         evidence["stage"]="bronze"
         client, schema = Client(), "dpe_run_" + attempt[:16]
+        client.stage = "history_selection"
         evidence["engine_version"]={"trino":client.sql("SELECT version() version")[0]["version"]}
         evidence["schema"] = schema
         client.create_sources(schema,[{"name":"__batch__","datasets":combined,"provenance":provenance,
@@ -360,6 +393,7 @@ def _run(batch, workspace, fail_at, api_url, policy_path):
         evidence["stage"]="dbt_transformation"
         evidence["dbt"] = build(client,schema,workspace / "dbt" / attempt,fail_at)
         evidence["stage"]="validation"
+        client.stage = "validation"
         quarantines = client.sql("SELECT * FROM lake."+schema+".quarantine")
         result = {"quarantined_incidents":{row["incident_id"]:[] for row in quarantines}}
         evidence["quality"] = enforce_quality(result,combined,policy)
