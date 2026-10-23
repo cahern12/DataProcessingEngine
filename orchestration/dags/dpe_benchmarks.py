@@ -11,17 +11,24 @@ ENDPOINT=os.environ.get('DPE_BENCHMARK_ENDPOINT','http://benchmark-coordinator:1
 @dag(dag_id='dpe_benchmarks',schedule=None,start_date=datetime(2026,1,1),catchup=False,max_active_runs=1,
      default_args={'retries':1,'retry_delay':timedelta(seconds=10)},tags=['local','poc'])
 def pipeline():
-    @task(execution_timeout=timedelta(hours=2))
-    def execute():
+    @task
+    def prepare():
         context=get_current_context();conf=context['dag_run'].conf or {}
         import hashlib
         workspace=conf.get('workspace','airflow-'+hashlib.sha256(context['run_id'].encode()).hexdigest()[:16])
         spec={'workspace':workspace,'count':conf.get('count',1000),'repeats':conf.get('repeats',3),
             'engines':conf.get('engines',['trino','spark']),
             'orchestration':{'kind':'airflow','dag_id':context['dag'].dag_id,'dag_run_id':context['run_id'],'task_id':'execute'}}
+        from pathlib import Path
+        criteria_path=Path('/app')/conf.get('acceptance','benchmarks/specs/acceptance.poc.v1.json')
+        with criteria_path.open() as stream:spec['criteria']=json.load(stream)
+        return spec
+    @task(execution_timeout=timedelta(hours=8))
+    def execute(spec):
+        workspace=spec['workspace']
         request=Request(ENDPOINT+'/jobs',data=json.dumps(spec,sort_keys=True).encode(),headers={'Content-Type':'application/json'})
         with urlopen(request,timeout=30) as stream:job=json.load(stream)
-        for _ in range(3600):
+        for _ in range(14400):
             with urlopen(ENDPOINT+'/jobs/'+job['job_id'],timeout=30) as stream:state=json.load(stream)
             if state['status']=='passed':return {'workspace':workspace,'job_id':job['job_id'],'result':state['result']}
             if state['status'] in ('failed','interrupted'):raise RuntimeError(json.dumps(state))
@@ -35,6 +42,6 @@ def pipeline():
         with open(root+'/'+result['workspace']+'/poc_scorecard.json') as stream:score=json.load(stream)
         if score['recommendation']!='incomplete':raise RuntimeError('local run incorrectly closes original POC')
         return {'benchmark_status':'passed','poc_recommendation':score['recommendation']}
-    validate(execute())
+    validate(execute(prepare()))
 
 pipeline()

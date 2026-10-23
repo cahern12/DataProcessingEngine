@@ -1,0 +1,5 @@
+services:
+  trino:
+    mem_limit: 4g
+    volumes:
+      - ./trino/config.capacity-v5.properties:/etc/trino/config.properties:ro

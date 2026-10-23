@@ -150,7 +150,11 @@ def metrics(attempt):
         stage['runtime_seconds'] += query.get('runtime_seconds',0)
         cpu = re.fullmatch(r'([0-9.]+)([a-z]+)', telemetry['totalCpuTime'])
         stage['cpu_seconds'] += float(cpu[1])*{'ns':1e-9,'us':1e-6,'ms':1e-3,'s':1,'m':60,'h':3600}[cpu[2]]
-        stage['peak_query_memory_bytes'] = max(stage['peak_query_memory_bytes'],size_bytes(telemetry['peakTotalMemoryReservation']))
+        peak=telemetry.get('peakTotalMemoryReservation')
+        if peak is None:
+            stage['peak_query_memory_bytes']=None
+            stage['peak_memory_status']='unavailable for one or more queries; completed-event user peak is not total query memory'
+        elif stage['peak_query_memory_bytes'] is not None:stage['peak_query_memory_bytes'] = max(stage['peak_query_memory_bytes'],size_bytes(peak))
         stage['spilled_bytes'] += size_bytes(telemetry['spilledDataSize'])
     for query in attempt.get('queries',[]): accumulate(query,query.get('stage','unclassified'))
     for invocation in attempt.get('dbt',[]):

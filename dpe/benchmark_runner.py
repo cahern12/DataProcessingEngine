@@ -54,32 +54,48 @@ def observed_usage(runs,window):
 
 def validate_outputs(platform,datasets,header):
     oracle=evaluate(datasets,header['cutoff'],header['report_start']);differences=[]
+    from .bounded_io import enabled,release
+    if enabled():
+        for name in list(oracle):
+            if name not in OUTPUTS:del oracle[name]
+        release()
     for name in OUTPUTS:differences+=compare_rows(name,oracle[name],consume(platform,name)['rows'])
     if differences:raise AssertionError('full rebuild differences: '+canonical(differences[:5]))
     return {'status':'passed','differences':[]}
 
 
-def run(workspace,count=1000,repeats=3,engines=('trino','spark'),orchestration=None):
+def _run(workspace,count=1000,repeats=3,engines=('trino','spark'),orchestration=None,acceptance_path=None):
     workspace=Path(workspace).resolve()
     if workspace.exists():raise ValueError('benchmark workspace exists; choose a fresh path')
     if repeats<1 or count<1:raise ValueError('positive count/repeats required')
     if set(engines)-{'trino','spark'}:raise ValueError('unsupported engine')
     workspace.mkdir(parents=True)
-    criteria=read_json(ROOT/'benchmarks/specs/acceptance.poc.v1.json')
+    from .experiment import acceptance,watchdog
+    from .experiment_observer import Observer
+    criteria=acceptance(acceptance_path)
     spec={'version':'v1','scope':'local comparative experiments; not an Azure cost/performance claim',
           'revision':sql_revision(),'criteria':criteria,'criteria_sha256':hashlib.sha256(canonical(criteria).encode()).hexdigest(),
           'count':count,'repeats':repeats,'engines':list(engines),'resources':criteria['resources'],
           'cache_policy':criteria['cache_policy'],'orchestration':orchestration or {'kind':'direct'},
           'started_at':iso(datetime.now(timezone.utc)),'size':'smoke' if count==1000 else 'small' if count==100000 else 'medium' if count==1000000 else 'large' if count==10000000 else 'custom'}
     write_json(workspace/'specification.json',spec)
-    pending=None
-    runs=[];result={'status':'running','specification':spec,'runs':runs,'findings':{}}
+    input_bytes=0;checked={'manifest_sha256':'unavailable'}
+    observer=Observer(workspace,criteria)
+    pending=('SOURCE','reference',time.perf_counter(),iso(datetime.now(timezone.utc)),workspace/'source')
+    runs=[];result={'status':'running','specification':spec,'runs':runs,'findings':{},'current_attempt':{'workload_id':'SOURCE','engine':'reference','started_at':spec['started_at']}}
     started=time.perf_counter()
     def persist():
-        write_json(workspace/'run_results.json',result)
-        performance(workspace,runs);scorecard(workspace,runs,result['findings'])
-        usage=observed_usage(runs,workspace.name);write_json(workspace/'usage.json',usage)
-        if runs:cost_report(workspace/'usage.json',workspace/'economics')
+        lakehouse.atomic_json(workspace/'run_results.json',result)
+        try:
+            performance(workspace,runs);scorecard(workspace,runs,result['findings'],criteria)
+            usage=observed_usage(runs,workspace.name);write_json(workspace/'usage.json',usage)
+            if runs:cost_report(workspace/'usage.json',workspace/'economics')
+        except Exception as error:
+            result.setdefault('reporting_errors',[]).append(str(error))
+            lakehouse.atomic_json(workspace/'run_results.json',result)
+    def current(workload,engine):
+        result['current_attempt']={'workload_id':workload,'engine':engine,'started_at':iso(datetime.now(timezone.utc))}
+        persist()
     def row(workload,engine,elapsed,artifact,details=None,start=None):
         item={'logical_run_id':uuid.uuid4().hex,'attempt_id':uuid.uuid4().hex,'workload_id':workload,'engine':engine,
             'output_rows':(details or {}).get('output_rows'),'engine_version':(details or {}).get('engine_version'),'strategy':'full','size':spec['size'],'workers':1,'concurrency':1,
@@ -88,20 +104,42 @@ def run(workspace,count=1000,repeats=3,engines=('trino','spark'),orchestration=N
             'status':'passed','quality_status':'passed','evidence':str(artifact),'details':details or {}}
         validate_schema(item,read_json(ROOT/'contracts/benchmark/run.v1.schema.json'))
         runs.append(item);persist();return item
+    persist()
     try:
+        observer.start()
+        if criteria.get('source_ingestion',{}).get('mode')=='parquet_add_files':
+            observer.mark('dependency_initialization')
+            import pyarrow
+            observer.mark('dependencies_ready')
+        observer.mark('source_generation')
         generate(workspace/'source',count=count)
         from .benchmark_calibration import assess
         preflight=assess(read_json(workspace/'source/initial/manifest.json'),criteria)
+        from .experiment import memory_admission
+        preflight['memory_admission']=memory_admission(criteria,preflight.get('logical_input_bytes',sum(f['bytes'] for f in read_json(workspace/'source/initial/manifest.json')['files'])),count)
+        if preflight['memory_admission']['status']=='resource_limited':preflight['processing_status']='resource_limited'
         write_json(workspace/'capacity_preflight.json',preflight)
-        if preflight['processing_status']!='eligible':raise ValueError('resource_limited: frozen local input budget exceeded; see capacity_preflight.json')
-        header,datasets,checked=load_batch(workspace/'source/initial')
+        if preflight['processing_status']!='eligible':raise ValueError('resource_limited: frozen input or calibrated memory budget exceeded; see capacity_preflight.json')
+        observer.mark('source_verification')
+        from .bounded_io import enabled,sources,release
+        if enabled():header,datasets,_,checked=sources([workspace/'source/initial'])
+        else:header,datasets,checked=load_batch(workspace/'source/initial')
         input_bytes=sum(f['bytes'] for f in header['files'])
         # A single frozen shared Silver dataset gives both read engines the same physical files.
-        preparation=lakehouse.run(workspace/'source/initial',workspace/'shared')
+        current('PREPARATION','trino');observer.mark('shared_preparation')
+        pending=('PREPARATION','trino',time.perf_counter(),iso(datetime.now(timezone.utc)),workspace/'shared')
+        with watchdog(criteria.get('operational_watchdogs_seconds',{}).get('full')):
+            preparation=lakehouse.run(workspace/'source/initial',workspace/'shared')
         shared_schema=preparation['schema']
         result['preparation']={'evidence':preparation,'scope':'shared input preparation, separate from isolated W1-W3 execution'}
         row('PREPARATION','trino',preparation['runtime_seconds'],workspace/'shared/active.json',{'boundary':'shared preparation; charged once separately'},preparation['started_at'])
+        pending=None;observer.mark('independent_read_expectations')
         expected_rows=expected(datasets,header['cutoff'])
+        if enabled():
+            for name,rows in expected_rows.items():write_json(workspace/'expected'/(name+'.json'),rows)
+            del rows
+            expected_rows=None;release()
+        def expected_read(name):return read_json(workspace/'expected'/(name+'.json')) if enabled() else expected_rows[name]
         schedule=[]
         for repeat in range(repeats):
             order=list(engines);random.Random(42+repeat).shuffle(order)
@@ -113,27 +151,38 @@ def run(workspace,count=1000,repeats=3,engines=('trino','spark'),orchestration=N
                     client=Client();version=client.sql('SELECT version() version')[0]['version']
                     for name,sql in queries(shared_schema).items():
                         pending=(name,engine,time.perf_counter(),iso(datetime.now(timezone.utc)),workspace/('read-%03d-trino-%s.json'%(repeat,name)))
-                        clock=iso(datetime.now(timezone.utc));begin=time.perf_counter();actual=client.sql(sql);elapsed=time.perf_counter()-begin
-                        if not equal(expected_rows[name],actual):raise AssertionError('isolated '+name+' Trino mismatch')
+                        current(name,engine);observer.mark('read-%03d-trino-%s'%(repeat,name))
+                        clock=iso(datetime.now(timezone.utc));begin=time.perf_counter()
+                        with watchdog(criteria.get('operational_watchdogs_seconds',{}).get('read')):actual=client.sql(sql)
+                        elapsed=time.perf_counter()-begin
+                        if not equal(expected_read(name),actual):raise AssertionError('isolated '+name+' Trino mismatch')
                         artifact=workspace/('read-%03d-trino-%s.json'%(repeat,name));write_json(artifact,{'rows':actual,'query':client.queries[-1],'sql':sql})
                         row(name,engine,elapsed,artifact,{'engine_version':version,'query':client.queries[-1],'output_rows':len(actual)},clock)
+                        if enabled():del actual;release()
                 else:
                     folder=workspace/('read-%03d-spark'%repeat)
                     pending=('W1-W3',engine,time.perf_counter(),iso(datetime.now(timezone.utc)),folder/'result.json')
-                    submitted=iso(datetime.now(timezone.utc));read_result=spark.execute({'action':'queries','queries':queries(shared_schema,'spark')},folder)
+                    current('W1-W3',engine);observer.mark('read-%03d-spark'%repeat)
+                    submitted=iso(datetime.now(timezone.utc))
+                    with watchdog(criteria.get('operational_watchdogs_seconds',{}).get('read',0)*3):
+                        read_result=spark.execute({'action':'queries','queries':queries(shared_schema,'spark'),'bounded_io':enabled(),'query_watchdog_seconds':criteria.get('operational_watchdogs_seconds',{}).get('read',0)},folder)
                     telemetry=spark_events(folder/'events')
                     for name,data in read_result['queries'].items():
-                        if not equal(expected_rows[name],data['rows']):raise AssertionError('isolated '+name+' Spark mismatch')
+                        if not equal(expected_read(name),data['rows']):raise AssertionError('isolated '+name+' Spark mismatch')
                         row(name,engine,data['runtime_seconds'],folder/'result.json',{'engine_version':read_result['engine_version'],
                             'output_rows':len(data['rows']),'application_id':read_result['application_id'],
                             'application_telemetry':telemetry,'telemetry_boundary':'shared Spark application across W1-W3; do not add its totals three times',
                             'submission_runtime_seconds':read_result['submission_runtime_seconds'],'finished_at':data['finished_at']},data['started_at'])
                     overhead=max(0,read_result['submission_runtime_seconds']-sum(q['runtime_seconds'] for q in read_result['queries'].values()))
                     row('APPLICATION_OVERHEAD',engine,overhead,folder/'result.json',{'boundary':'Spark submission/setup/shutdown; one share per application, not repeated per query'},submitted)
+                    if enabled():del read_result,data;release()
                 clock=iso(datetime.now(timezone.utc));begin=time.perf_counter();platform=workspace/('full-%03d-%s'%(repeat,engine))
                 pending=('W4',engine,time.perf_counter(),clock,platform)
-                full=(lakehouse.run if engine=='trino' else spark.run)(workspace/'source/initial',platform)
+                current('W4',engine);observer.mark('full-%03d-%s'%(repeat,engine))
+                with watchdog(criteria.get('operational_watchdogs_seconds',{}).get('full')):
+                    full=(lakehouse.run if engine=='trino' else spark.run)(workspace/'source/initial',platform)
                 execution_seconds=time.perf_counter()-begin
+                observer.mark('independent_full_validation-%03d-%s'%(repeat,engine))
                 validation=validate_outputs(platform,datasets,header)
                 elapsed=time.perf_counter()-begin
                 artifact=workspace/('full-%03d-%s.json'%(repeat,engine));write_json(artifact,full)
@@ -147,9 +196,12 @@ def run(workspace,count=1000,repeats=3,engines=('trino','spark'),orchestration=N
             'current_state_reference':'Python/SQLite is a correctness harness; organization current-state system not supplied',
             'capacity':'Actual engine worker/executor scaling and distributed W5 M/L remain not assessed',
             'business_limits':'adopted POC targets; Smoke cannot establish the larger-scale/Azure verdict'}
+        assessments=scorecard(workspace,runs,result['findings'],criteria)['local_run_assessments']
+        result['performance_status']='failed' if any(r['completion']['status']=='failed' for r in assessments) else 'passed' if any(r['completion']['status']=='passed' for r in assessments) else 'not_assessed'
+        result['correctness_status']='passed'
         result['status']='passed'
         if sql_revision()!=spec['revision']:raise ValueError('code changed during experiment; results not comparable')
-        return {'status':'passed','runs':len(runs),'report':str(workspace/'run_results.json'),'economics':str(workspace/'economics/cost_report.json'),'poc_verdict':'incomplete'}
+        return {'status':'passed','runs':len(runs),'report':str(workspace/'run_results.json'),'economics':str(workspace/'economics/cost_report.json'),'performance_status':result['performance_status'],'poc_verdict':'incomplete'}
     except Exception as error:
         if pending:
             workload,engine,begin,clock,artifact=pending
@@ -159,5 +211,24 @@ def run(workspace,count=1000,repeats=3,engines=('trino','spark'),orchestration=N
                 'logical_input_bytes':input_bytes,'input_manifest_checksum':checked['manifest_sha256'],'evidence':str(artifact),'error':str(error)})
         result.update(status='failed',error=str(error));raise
     finally:
+        observer.stop()
+        try:
+            from .capacity_reports import summarize
+            summarize(workspace)
+        except Exception as error:result.setdefault('reporting_errors',[]).append('resource summary: '+str(error))
         result['runtime_seconds']=time.perf_counter()-started
         persist()
+
+
+def run(workspace,count=1000,repeats=3,engines=('trino','spark'),orchestration=None,acceptance_path=None):
+    from .experiment import admission,acceptance
+    from .bounded_io import profile
+    workspace=Path(workspace).resolve()
+    if workspace.exists():raise ValueError('benchmark workspace exists; choose a fresh path')
+    try:
+        with admission(workspace),profile(acceptance(acceptance_path)):return _run(workspace,count,repeats,engines,orchestration,acceptance_path)
+    except RuntimeError as error:
+        if 'owns experiment admission' in str(error) and not workspace.exists():
+            workspace.mkdir(parents=True)
+            lakehouse.atomic_json(workspace/'run_results.json',{'status':'rejected','error':str(error),'runs':[]})
+        raise

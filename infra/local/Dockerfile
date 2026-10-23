@@ -2,6 +2,8 @@ FROM python:3.12.12-slim
 WORKDIR /app
 COPY requirements-local.lock /app/requirements-local.lock
 RUN pip install --no-cache-dir -r requirements-local.lock
+COPY requirements-parquet.lock /app/requirements-parquet.lock
+RUN pip install --no-cache-dir -r requirements-parquet.lock
 COPY dpe /app/dpe
 COPY rules /app/rules
 COPY contracts /app/contracts

@@ -44,11 +44,12 @@ def required_cells(specs):
                             yield cell
 
 
-def scorecard(output, runs=None, findings=None):
+def scorecard(output, runs=None, findings=None, criteria=None):
     output=Path(output);runs=runs or [];findings=findings or {}
     specs=read_json(ROOT/'benchmarks/specs/workloads.v1.json')
     coverage=read_json(ROOT/'benchmarks/specs/coverage.v1.json')
-    limits=read_json(ROOT/'benchmarks/specs/acceptance.poc.v1.json')
+    from .experiment import frozen
+    limits=criteria or frozen(output)
     matrix=[]
     for cell in required_cells(specs):
         matches=[r for r in runs if all(r.get(k, 'initial' if k=='variant' else 1 if k in ('workers','concurrency') else None)==v for k,v in cell.items() if k!='axis')]
@@ -56,7 +57,9 @@ def scorecard(output, runs=None, findings=None):
         unique={r.get('attempt_id',str(index)): r for index,r in enumerate(matches)}
         successful=[r for r in unique.values() if r['status']=='passed' and r.get('quality_status')=='passed']
         status='passed' if len(successful)>=limits['engineering_criteria']['repetitions'] else 'failed' if any(r['status']=='failed' for r in matches) else 'not_assessed'
-        matrix.append(dict(cell,status=status,successful_repetitions=len(successful),
+        cap=limits['business_limits']['runtime_seconds'].get(cell['workload_id'],{}).get(cell['size'])
+        performance_status='not_assessed' if not successful or cap is None else 'failed' if any(r.get('runtime_seconds',0)>cap for r in successful) else 'passed'
+        matrix.append(dict(cell,status=status,coverage_status=status,performance_status=performance_status,successful_repetitions=len(successful),
             reason=None if status=='passed' else 'Required controlled repetitions/variant/topology not executed; Smoke/custom evidence cannot fill this cell.',
             evidence=[r.get('evidence') for r in matches]))
     result={'version':'v1','hypotheses':[r for r in coverage['requirements'] if r['id'].startswith('H')],
@@ -79,12 +82,13 @@ def scorecard(output, runs=None, findings=None):
 def performance(output,runs):
     groups={}
     for run in runs:
-        key=(run['workload_id'],run['engine'],run['size'],run.get('strategy','full'),run.get('workers',1),run.get('concurrency',1))
+        key=(run['workload_id'],run['engine'],run['size'],run.get('strategy','full'),run.get('workers',1),run.get('concurrency',1),
+             run.get('variant','initial'),run.get('input_manifest_checksum','unspecified'),run.get('configuration_id','unspecified'))
         groups.setdefault(key,[]).append(run)
     rows=[]
     for key,values in sorted(groups.items()):
         good=[r['runtime_seconds'] for r in values if r['status']=='passed']
-        rows.append(dict(zip(('workload_id','engine','size','strategy','workers','concurrency'),key),
+        rows.append(dict(zip(('workload_id','engine','size','strategy','workers','concurrency','variant','input_manifest_checksum','configuration_id'),key),
             repetitions=len(values),successful_repetitions=len(good),median_seconds=statistics.median(good) if good else None,
             min_seconds=min(good) if good else None,max_seconds=max(good) if good else None,
             ranking_status='eligible_local_only' if len(good)>=3 else 'insufficient_repetitions',

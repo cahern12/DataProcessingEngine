@@ -54,3 +54,16 @@ local-poc-benchmark:
 
 local-poc-restart-check:
 	$(POC_COMPOSE) run --rm --entrypoint python runner benchmarks/verify_poc_restart.py --workspace $(POC_WORKSPACE)
+
+.PHONY: local-capacity-build local-capacity-up local-capacity-verify local-capacity-benchmark local-capacity-down
+POC_ACCEPTANCE ?= benchmarks/specs/acceptance.poc.v2.json
+local-capacity-build:
+	python3 infra/local/capacity.py build --acceptance $(POC_ACCEPTANCE)
+local-capacity-up:
+	python3 infra/local/capacity.py up --acceptance $(POC_ACCEPTANCE)
+local-capacity-verify:
+	python3 infra/local/capacity.py verify --workspace $(POC_WORKSPACE) --count $(POC_COUNT) --acceptance $(POC_ACCEPTANCE)
+local-capacity-benchmark:
+	python3 infra/local/capacity.py benchmark --workspace $(POC_WORKSPACE) --count $(POC_COUNT) --repeats $(POC_REPEATS) --acceptance $(POC_ACCEPTANCE)
+local-capacity-down:
+	python3 infra/local/capacity.py down

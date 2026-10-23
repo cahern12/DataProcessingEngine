@@ -1,0 +1,17 @@
+{
+  "api_version": "2023-01-01-preview",
+  "currency": "USD",
+  "filter": "serviceName eq 'NAT Gateway' and priceType eq 'Consumption'",
+  "pages": [
+    {
+      "path": "page-000.json",
+      "sha256": "44c0c7f3cea486a427153dc5872b249af8876dbee9e20b5a88799d0e43c06543",
+      "url": "https://prices.azure.com/api/retail/prices?api-version=2023-01-01-preview&currencyCode=%27USD%27&%24filter=serviceName+eq+%27NAT+Gateway%27+and+priceType+eq+%27Consumption%27"
+    }
+  ],
+  "provider": "Microsoft Azure public retail",
+  "records": 5,
+  "records_sha256": "51dd3486a86c83c426eb51cb3605c0265c163e0693018df31a961ddbab2444c9",
+  "retrieved_at": "2026-10-23T04:35:28.019769+00:00",
+  "warning": "Public retail scenario inputs; no negotiated invoice, cloud execution or billing reconciliation"
+}

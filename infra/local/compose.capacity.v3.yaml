@@ -1,0 +1,3 @@
+services:
+  trino:
+    mem_limit: 4g

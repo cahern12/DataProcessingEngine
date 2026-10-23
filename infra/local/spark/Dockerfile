@@ -13,6 +13,7 @@ COPY benchmarks /app/benchmarks
 COPY orchestration /app/orchestration
 COPY infra/local /app/infra/local
 COPY requirements-local.lock /app/requirements-local.lock
+COPY requirements-parquet.lock /app/requirements-parquet.lock
 ENV PYTHONPATH=/app
 ENV PYSPARK_PYTHON=python3
 ENTRYPOINT ["/opt/spark/bin/spark-submit","--driver-memory","2g","--conf","spark.driver.host=spark","--conf","spark.sql.shuffle.partitions=2","/app/dpe/engines/spark_job.py"]

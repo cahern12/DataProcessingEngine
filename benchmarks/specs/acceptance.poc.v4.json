@@ -1,0 +1,138 @@
+{
+  "version": "v4",
+  "baseline_commit": "3963645",
+  "scope": "bounded local source/provenance and Spark result transport, streamed serialization, 1000-row / 768-KiB estimated SQL batches; unchanged v1 business rules",
+  "engineering_criteria": {
+    "max_differences": 0,
+    "max_duplicate_keys": 0,
+    "max_reconciliation_difference": 0,
+    "repetitions": 3,
+    "billing_reconciliation_tolerance": "0.02"
+  },
+  "business_limits": {
+    "runtime_seconds": {
+      "W1": {
+        "small": 60,
+        "medium": 180,
+        "large": 600
+      },
+      "W2": {
+        "small": 120,
+        "medium": 600,
+        "large": 1800
+      },
+      "W3": {
+        "small": 120,
+        "medium": 600,
+        "large": 1800
+      },
+      "W4": {
+        "small": 180,
+        "medium": 900,
+        "large": 3600
+      }
+    },
+    "recovery_seconds": {
+      "medium": 900,
+      "large": 3600
+    },
+    "failure_detection_seconds": 120,
+    "marginal_cost_usd": {
+      "small": "0.50",
+      "medium": "2.00",
+      "large": "10.00"
+    },
+    "fully_allocated_cost_usd": {
+      "small": "2.00",
+      "medium": "5.00",
+      "large": "20.00"
+    },
+    "fully_allocated_cost_per_logical_tb_usd": "500.00",
+    "unit_cost_gate_minimum_logical_bytes": 10000000000,
+    "standing_monthly_cost_usd": "750.00",
+    "total_monthly_cost_usd": "1500.00",
+    "operator_hours_per_week": "2.00",
+    "max_manual_actions_per_recovery": 1,
+    "minimum_success_fraction": "0.99",
+    "scale_out": {
+      "workers_1_to_4_minimum_speedup": "2.0",
+      "maximum_cost_increase_ratio": "2.5"
+    },
+    "concurrency": {
+      "levels": [
+        1,
+        2,
+        4
+      ],
+      "minimum_four_way_throughput_ratio": "1.5",
+      "maximum_completion_time_ratio": "3.0"
+    }
+  },
+  "business_limits_status": "adopted initial POC decision targets under user authorization; not established production SLOs",
+  "cache_policy": "uncontrolled host/object cache; warmup and order recorded; no cold-cache claim",
+  "resources": {
+    "local_cpus": 4,
+    "local_memory_gib": 16,
+    "trino_heap_gib": 2,
+    "spark_driver_gib": 2,
+    "spark_executor_gib": null,
+    "spark_local_threads": 4,
+    "shape": "one engine process with 2 GiB JVM heap on same 4-CPU host; role/native/Python overhead measured separately",
+    "maximum_local_logical_input_bytes": 134217728,
+    "input_budget_reason": "128 MiB capacity-profile input admission; actual container and VM headroom are independently checked; no capacity guarantee",
+    "runtime_profile": "dpe-capacity",
+    "container_budget_gib": 15,
+    "vm_headroom_gib": 1,
+    "trino_container_gib": 4,
+    "runtime_overlay": "infra/local/compose.capacity.v3.yaml",
+    "budget_reason": "15 GiB sum of all ceilings; direct and coordinator producers cannot overlap under admission. Nominal 1 GiB reserve; actual runtime headroom observed independently.",
+    "producer_limit_gib": 1.5
+  },
+  "workload_mix": {
+    "accounting_days": 30,
+    "runs_per_day": 24,
+    "size_fractions": {
+      "small": "0.90",
+      "medium": "0.09",
+      "large": "0.01"
+    },
+    "sensitivity_runs_per_day": [
+      6,
+      24,
+      96
+    ],
+    "retention_days": 7,
+    "currency": "USD"
+  },
+  "material_spark_benefit": {
+    "minimum_fully_allocated_cost_reduction": "0.20",
+    "minimum_runtime_reduction": "0.30",
+    "must_meet_all_other_gates": true
+  },
+  "cloud_campaign_planning": {
+    "maximum_total_spend_usd": "300",
+    "maximum_environment_hours": 24,
+    "stage_maximum_spend_usd": "50",
+    "stage_maximum_hours": 6,
+    "authorization": "planning caps only; no cloud execution authorized"
+  },
+  "operational_watchdogs_seconds": {
+    "read": 300,
+    "full": 1800
+  },
+  "source_ingestion": {
+    "mode": "values",
+    "records_per_insert": 1000,
+    "bounded_io": true,
+    "maximum_insert_bytes": 786432
+  },
+  "observer": {
+    "required": true,
+    "interval_seconds": 2
+  },
+  "memory_admission": {
+    "minimum_count": 100000,
+    "reference_workspace": "data/capacity-custom-bounded-10000",
+    "safety_factor": 1.1
+  }
+}

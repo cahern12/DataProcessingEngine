@@ -24,7 +24,14 @@ def execute(spec,folder,fail_at=None,master='local[4]'):
         request=Request(endpoint.rstrip('/')+'/jobs',data=canonical({'relative_folder':str(relative.relative_to('data')),'spec':spec,'fail_at':fail_at,'master':master}).encode(),headers={'Content-Type':'application/json'})
         start=time.perf_counter()
         import json
-        with urlopen(request,timeout=1800) as stream:result=json.load(stream)
+        try:
+            with urlopen(request,timeout=1920) as stream:result=json.load(stream)
+        except BaseException:
+            try:
+                cancellation=Request(endpoint.rstrip('/')+'/cancel',data=canonical({'relative_folder':str(relative.relative_to('data'))}).encode(),headers={'Content-Type':'application/json'})
+                with urlopen(cancellation,timeout=20) as stream:stream.read()
+            except Exception:pass
+            raise
         result['submission_runtime_seconds']=time.perf_counter()-start
         if result['status']!='passed':raise RuntimeError('Spark failed: '+result.get('error','unknown'))
         if result['implementation_revision']!=sql_revision():raise ValueError('Spark image is stale; rebuild benchmark images')
@@ -82,7 +89,11 @@ def run(batch,workspace,fail_at=None):
         evidence={'started_at':__import__('datetime').datetime.now(__import__('datetime').timezone.utc).isoformat(),'status':'running','engine':'spark','attempt_id':attempt,'strategy':'full','revision':sql_revision()};atomic_json(path,evidence)
         try:
             if fail_at not in (None,'between_gold_writes','before_publish'):raise ValueError('unsupported Spark failpoint')
-            header,incoming,checked=load_batch(batch);policy=load_policy()
+            from ..bounded_io import enabled,sources,release
+            bounded=enabled()
+            if bounded:header,incoming,_,checked=sources([batch])
+            else:header,incoming,checked=load_batch(batch)
+            policy=load_policy()
             parent=next(committed_publications(workspace),None)
             identity=hashlib.sha256(canonical([checked['manifest_sha256'],evidence['revision'],policy,'spark-full']).encode()).hexdigest()
             for old in committed_publications(workspace):
@@ -99,23 +110,38 @@ def run(batch,workspace,fail_at=None):
             from ..lakehouse import object_store
             storage=object_store()
             for relative in archives:
-                source=safe_file(workspace,relative);h,d,c=load_batch(source)
+                source=safe_file(workspace,relative)
+                if bounded:h,d,_,c=sources([source])
+                else:h,d,c=load_batch(source)
                 if c['manifest_sha256']!=source.name:raise ValueError('archived source identity mismatch')
                 for entry in h['files']+[{'path':'manifest.json'}]:
                     file=safe_file(source,entry['path']);storage.put_object(Bucket='raw',Key=c['manifest_sha256']+'/'+entry['path'],Body=file.read_bytes(),Metadata={'sha256':digest(file)})
-                for k in DATASETS:
-                    combined[k]+=d[k]
-                    for file in [f for f in h['files'] if f['dataset']==k]:
-                        provenance[k]+=[{'batch_id':h['batch_id'],'source_file':file['path'],'source_row':n+1} for n in range(file['rows'])]
+                if not bounded:
+                    for k in DATASETS:
+                        combined[k]+=d[k]
+                        for file in [f for f in h['files'] if f['dataset']==k]:
+                            provenance[k]+=[{'batch_id':h['batch_id'],'source_file':file['path'],'source_row':n+1} for n in range(file['rows'])]
+            if bounded:
+                _,combined,provenance,_=sources([safe_file(workspace,a) for a in archives],verify=False)
+                del incoming
+                release()
             validate_references(combined)
-            result=execute({'cases':[{'name':'__batch__','datasets':combined,'provenance':provenance,'cutoff':header['cutoff'],'report_start':header['report_start']}]},workspace/'spark'/attempt,fail_at)
+            case={'name':'__batch__','cutoff':header['cutoff'],'report_start':header['report_start']}
+            if bounded:
+                from ..bounded_io import spool
+                case['raw_path']=spool(combined,provenance,workspace/'spark'/attempt/'raw.jsonl')
+            else:case.update(datasets=combined,provenance=provenance)
+            result=execute({'cases':[case],'bounded_result':bounded},workspace/'spark'/attempt,fail_at)
             evidence['spark']=result
             evidence['quality']=enforce_quality({'quarantined_incidents':{r['incident_id']:[] for r in result['quarantine']}},combined,policy)
             for name in DATASETS:
-                if len([r for r in result['reconciliation'] if r['dataset']==name])!=len(combined[name]):raise AssertionError('unbalanced Spark dispositions')
-            for name,rows in result['outputs'].items():
+                actual=sum(r['rows'] for r in result['reconciliation'] if r['dataset']==name) if bounded else len([r for r in result['reconciliation'] if r['dataset']==name])
+                if actual!=len(combined[name]):raise AssertionError('unbalanced Spark dispositions')
+            for name,value in result['outputs'].items():
+                rows=Client().sql('SELECT * FROM '+result['snapshots'][name]['table']+' FOR VERSION AS OF '+str(result['snapshots'][name]['snapshot_id'])) if bounded else value
                 for row in rows:validate_schema({k:v for k,v in row.items() if k!='case_id'},SCHEMAS[name])
                 compare_rows(name,rows,rows) # validates unique contracted keys
+                if bounded:del rows;release()
             if fail_at=='before_publish':raise RuntimeError('injected failure: before_publish')
             publication_id=hashlib.sha256(canonical([identity,parent['publication_id'] if parent else None]).encode()).hexdigest()
             publication=dict(publication_id=publication_id,identity=identity,batch_id=header['batch_id'],parent_publication_id=parent['publication_id'] if parent else None,

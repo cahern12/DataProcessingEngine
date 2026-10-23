@@ -56,29 +56,41 @@ def reference_hashes(incoming):
 
 def delivery(client, schema, manifest, incoming, parent, checksum):
     """Write only incoming bytes; attempts have disjoint immutable namespaces."""
-    target = 'lake.' + schema + '.delivery'
+    from .bounded_io import enabled
+    bounded=enabled();final='lake.'+schema+'.delivery'
+    target=final+'_input' if bounded else final
     client.sql('CREATE TABLE ' + target + '''(case_id varchar,dataset varchar,ordinal bigint,batch_id varchar,
         source_file varchar,source_row bigint,payload varchar,record_incident varchar,event_id varchar,
-        record_time varchar,record_valid boolean)
-        WITH (format='PARQUET',partitioning=ARRAY['dataset','bucket(record_incident,32)'])''')
+        record_time varchar,record_valid boolean)''' + (" WITH (format='PARQUET')" if bounded else " WITH (format='PARQUET',partitioning=ARRAY['dataset','bucket(record_incident,32)'])"))
     offsets = parent['input_checkpoint']['rows'] if parent else dict.fromkeys(DATASETS, 0)
-    buffer = []
-    for name in DATASETS:
-        origins = [(f['path'], n+1) for f in manifest['files'] if f['dataset'] == name for n in range(f['rows'])]
-        for n, record in enumerate(incoming[name]):
-            valid, normalized = True, record
-            try:
-                normalized = normalize(name, record)
-            except (ValueError, TypeError):
-                valid = False
-            clock = normalized.get('source_updated_at', normalized.get('event_time')) if valid else None
-            if isinstance(clock, datetime): clock = iso(clock)
-            incident = str(record.get('incident_id', '')).strip() if name in INCIDENTS else None
-            buffer.append(('__batch__', name, offsets[name]+n, manifest['batch_id'], *origins[n], canonical(record),
-                           incident, str(record.get('event_id', '')).strip() if name == 'incident_events' else None, clock, valid))
-            if len(buffer) == 500:
+    def records():
+        for name in DATASETS:
+            origins = ((f['path'], n+1) for f in manifest['files'] if f['dataset'] == name for n in range(f['rows']))
+            for n, record in enumerate(incoming[name]):
+                valid, normalized = True, record
+                try:
+                    normalized = normalize(name, record)
+                except (ValueError, TypeError):
+                    valid = False
+                clock = normalized.get('source_updated_at', normalized.get('event_time')) if valid else None
+                if isinstance(clock, datetime): clock = iso(clock)
+                incident = str(record.get('incident_id', '')).strip() if name in INCIDENTS else None
+                yield ('__batch__', name, offsets[name]+n, manifest['batch_id'], *next(origins), canonical(record),
+                       incident, str(record.get('event_id', '')).strip() if name == 'incident_events' else None, clock, valid)
+    if __import__('os').environ.get('DPE_INGEST_MODE')=='parquet_add_files':
+        from .parquet_landing import register,RAW_FIELDS
+        fields=RAW_FIELDS+[('record_incident','string'),('event_id','string'),('record_time','string'),('record_valid','bool_')]
+        register(client,target,(dict(zip([n for n,_ in fields],row)) for row in records()),fields)
+    else:
+        buffer=[]
+        for row in records():
+            buffer.append(row)
+            if len(buffer) == (int(__import__('os').environ.get('DPE_INSERT_ROWS','1000')) if bounded else 500):
                 insert(client, target, buffer); buffer = []
-    if buffer: insert(client, target, buffer)
+        if buffer: insert(client, target, buffer)
+    if bounded:
+        client.sql('CREATE TABLE '+final+" WITH (format='PARQUET',partitioning=ARRAY['dataset','bucket(record_incident,32)']) AS SELECT * FROM "+target)
+        target=final
     # Bucketed compact identity index detects event IDs moving to a different incident.
     client.sql('CREATE TABLE lake.' + schema + ".event_ids WITH (partitioning=ARRAY['bucket(event_id,32)']) AS SELECT DISTINCT event_id,record_incident FROM " + target + " WHERE dataset='incident_events'")
     result = ref(client, target)
@@ -218,7 +230,10 @@ def _run(batch, workspace, fail_at, api_url, policy_path):
     client = None
     try:
         if fail_at not in (None, *FAILPOINTS): raise ValueError('unsupported targeted failpoint')
-        manifest, incoming, checked = load_batch(batch, api_url, workspace/'api-landing'/attempt)
+        from .bounded_io import enabled,sources
+        bounded=enabled() and not api_url
+        if bounded:manifest,incoming,_,checked=sources([batch])
+        else:manifest, incoming, checked = load_batch(batch, api_url, workspace/'api-landing'/attempt)
         policy = load_policy(policy_path)
         identity = hashlib.sha256(canonical([checked['manifest_sha256'], evidence['revision'], policy, 'targeted']).encode()).hexdigest()
         parent = next(committed_publications(workspace), None)
@@ -243,10 +258,16 @@ def _run(batch, workspace, fail_at, api_url, policy_path):
         if not archive.exists():
             temporary = archive.with_name(archive.name+'.'+attempt+'.tmp')
             try:
-                shutil.copytree(batch, temporary); load_batch(temporary); temporary.rename(archive)
+                shutil.copytree(batch, temporary)
+                if bounded:
+                    from .ingestion import validate_batch
+                    validate_batch(temporary)
+                else:load_batch(temporary)
+                temporary.rename(archive)
             finally:
                 if temporary.exists(): shutil.rmtree(temporary)
-        archived_batch(archive)  # only the incoming delivery; historical audit is separate
+        if bounded:sources([archive])
+        else:archived_batch(archive)  # only the incoming delivery; historical audit is separate
         store = object_store()
         for file in manifest['files'] + [{'path':'manifest.json'}]:
             source = safe_file(archive, file['path'])
@@ -261,6 +282,7 @@ def _run(batch, workspace, fail_at, api_url, policy_path):
         evidence['schema'] = schema
         evidence['engine_version'] = {'trino':client.sql('SELECT version() version')[0]['version']}
         current = delivery(client, schema, manifest, incoming, parent, checked['manifest_sha256'])
+        if hasattr(client,'ingestion'):evidence['ingestion']=client.ingestion
         deliveries = (parent['input_checkpoint']['deliveries'] if parent else []) + [current]
         evidence['input_delivery'] = current
         if fail_at == 'after_input_persistence': raise RuntimeError('injected failure: '+fail_at)

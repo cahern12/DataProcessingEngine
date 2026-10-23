@@ -74,15 +74,19 @@ def main():
     imported.add_argument("--csv",type=Path,required=True);imported.add_argument("--mapping",type=Path,required=True);imported.add_argument("--out",type=Path,required=True)
     for name in ("cost-demo","poc-status","spark-compat","spark-fixtures","poc-verify"):
         command=commands.add_parser(name);command.add_argument("--workspace",type=Path,required=True)
+        if name in ("poc-status","poc-verify"):command.add_argument("--acceptance",type=Path)
+        if name=="poc-verify":command.add_argument("--count",type=int,default=1000)
     spark_run=commands.add_parser("spark-run",help="Full Spark pipeline through the common Gold publication contract")
     spark_run.add_argument("batch",type=Path);spark_run.add_argument("--workspace",type=Path,required=True)
     spark_run.add_argument("--fail-at",choices=["between_gold_writes","before_publish"])
     poc=commands.add_parser("poc-benchmark",help="Paired local Trino/Spark workloads and explicit cost reports")
     poc.add_argument("--workspace",type=Path,required=True);poc.add_argument("--count",type=int,default=1000)
+    poc.add_argument("--acceptance",type=Path);poc.add_argument("--orchestration-json",type=Path)
     poc.add_argument("--repeats",type=int,default=3);poc.add_argument("--engines",nargs='+',choices=['trino','spark'],default=['trino','spark'])
     calibration=commands.add_parser("poc-calibrate",help="Generate a tier and assess the frozen local input budget without processing it")
     calibration.add_argument("--workspace",type=Path,required=True)
     calibration.add_argument("--count",type=int,default=100000)
+    calibration.add_argument("--acceptance",type=Path)
     args = parser.parse_args()
     from .ingestion import validate_batch
     from .pipeline import query, run
@@ -104,13 +108,16 @@ def main():
         from .benchmark_reports import scorecard
         from .common import read_json
         prior=read_json(args.workspace/'run_results.json') if (args.workspace/'run_results.json').exists() else {}
-        result=scorecard(args.workspace,prior.get('runs'),prior.get('findings'))
+        from .experiment import frozen
+        result=scorecard(args.workspace,prior.get('runs'),prior.get('findings'),frozen(args.workspace,args.acceptance))
     elif args.command == "poc-calibrate":
         from .benchmark_calibration import calibrate
-        result=calibrate(args.workspace,args.count)
+        result=calibrate(args.workspace,args.count,args.acceptance)
     elif args.command == "poc-benchmark":
         from .benchmark_runner import run as benchmark_run
-        result=benchmark_run(args.workspace,args.count,args.repeats,tuple(args.engines))
+        from .common import read_json
+        orchestration=read_json(args.orchestration_json) if args.orchestration_json else None
+        result=benchmark_run(args.workspace,args.count,args.repeats,tuple(args.engines),orchestration,args.acceptance)
     elif args.command in ("spark-compat","spark-fixtures","spark-run"):
         from .engines import spark
         if args.command=="spark-compat":result=spark.compatibility(args.workspace)
@@ -118,7 +125,7 @@ def main():
         else:result=spark.run(args.batch,args.workspace,args.fail_at)
     elif args.command == "poc-verify":
         from .poc_validation import verify
-        result=verify(args.workspace)
+        result=verify(args.workspace,args.count,args.acceptance)
     elif args.command == "generate":
         result = generate(args.out, args.profile, args.count, args.config, args.mode, args.seed)
     elif args.command == "validate":

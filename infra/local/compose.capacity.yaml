@@ -1,0 +1,25 @@
+services:
+  trino:
+    mem_limit: 3g
+  spark:
+    mem_limit: 3g
+  spark-gateway:
+    mem_limit: 3g
+  airflow:
+    mem_limit: 1536m
+  catalog:
+    mem_limit: 1280m
+  postgres:
+    mem_limit: 512m
+  objectstore:
+    mem_limit: 1536m
+  benchmark-coordinator:
+    mem_limit: 1536m
+    environment:
+      DPE_RESOURCE_ENDPOINT: http://host.docker.internal:18113
+  runner:
+    mem_limit: 1536m
+    environment:
+      DPE_RESOURCE_ENDPOINT: http://host.docker.internal:18113
+  telemetry:
+    mem_limit: 256m

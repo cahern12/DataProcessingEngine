@@ -4,7 +4,7 @@ Usage is imported; local CPU time is never silently converted to a cloud bill.
 """
 import csv
 import hashlib
-from decimal import Decimal, InvalidOperation
+from decimal import Decimal, InvalidOperation, localcontext
 from pathlib import Path
 
 from .common import ROOT, canonical, digest, read_json, timestamp, write_json, validate_schema
@@ -37,7 +37,16 @@ def charge(quantity, rate):
                 for i,start in enumerate(starts)),Decimal(0))
 
 
-def calculate(usage, rates=None):
+def calculate(usage,rates=None):
+    # Usage quantities and exact 18-place pool weights can exceed the default
+    # 28-digit context when multiplied. Preserve finite monetary products and
+    # sums before comparing the independently grouped ledger/allocation totals.
+    with localcontext() as context:
+        context.prec=128
+        return _calculate(usage,rates)
+
+
+def _calculate(usage, rates=None):
     """One charge identity, one component; pools allocate exactly once per window."""
     basis=usage['cost_basis']
     if basis not in BASES: raise ValueError('unsupported cost basis')

@@ -66,6 +66,19 @@ def query_telemetry(query_id):
                 "processedInputPositions", "physicalWrittenDataSize", "writtenPositions", "peakTotalMemoryReservation",
                 "spilledDataSize", "totalCpuTime", "elapsedTime")}
     except Exception as error:
+        event=ROOT/'data/telemetry/trino-events'/(str(query_id)+'.json')
+        if event.exists():
+            try:
+                raw=read_json(event);stats=raw['statistics']
+                mapping={'physicalInputDataSize':'physicalInputBytes','physicalInputPositions':'physicalInputRows',
+                         'processedInputDataSize':'processedInputBytes','processedInputPositions':'processedInputRows',
+                         'physicalWrittenDataSize':'writtenBytes','writtenPositions':'writtenRows','spilledDataSize':'spilledBytes',
+                         'totalCpuTime':'cpuTime','elapsedTime':'wallTime'}
+                value={key:(str(stats[source])+'B' if key.endswith('DataSize') else format(stats[source],'.9f')+'s' if key.endswith('Time') else stats[source]) for key,source in mapping.items()}
+                value.update(peakTotalMemoryReservation=None,peakUserMemoryBytes=stats.get('peakUserMemoryBytes'),
+                             source='durable_completed_event',source_ref=str(event),unsupported=['query_peak_total_memory_reservation'],history_lookup_error=str(error))
+                return value
+            except Exception as event_error:return {'unavailable':str(error),'completed_event_error':str(event_error)}
         return {"unavailable": str(error)}
 
 
@@ -85,6 +98,11 @@ class Client:
             cursor.execute(sql)
             rows = cursor.fetchall()
             return [{column[0]: normalized(value) for column, value in zip(cursor.description or [], row)} for row in rows]
+        except BaseException:
+            try:
+                if cursor.query_id:cursor.cancel()
+            except Exception:pass
+            raise
         finally:
             self.queries.append({"query_id": cursor.query_id, "sql_sha256": hashlib.sha256(sql.encode()).hexdigest(),
                                  "stage": getattr(self, "stage", "unclassified"),
@@ -96,17 +114,30 @@ class Client:
         self.sql("CREATE SCHEMA IF NOT EXISTS lake." + schema)
         self.sql("CREATE TABLE lake." + schema + ".raw_records(case_id varchar,dataset varchar,ordinal bigint,batch_id varchar,source_file varchar,source_row bigint,payload varchar)")
         self.sql("CREATE TABLE lake." + schema + ".batch_context(case_id varchar,cutoff varchar,report_start varchar)")
-        rows = []
+        if os.environ.get('DPE_INGEST_MODE')=='parquet_add_files':
+            from .parquet_landing import register,raw_rows
+            for case in cases:self.sql('INSERT INTO lake.'+schema+'.batch_context VALUES ('+','.join(literal(case[k]) for k in ('name','cutoff','report_start'))+')')
+            register(self,'lake.'+schema+'.raw_records',raw_rows(cases))
+            return
+        rows = [];payload_bytes=0
+        batch_size=int(os.environ.get('DPE_INSERT_ROWS','200'))
+        byte_limit=int(os.environ.get('DPE_INSERT_BYTES','0'))
+        if batch_size<1 or byte_limit<0:raise ValueError('invalid source insertion bounds')
         for case in cases:
             self.sql("INSERT INTO lake." + schema + ".batch_context VALUES (" + ",".join(literal(case[k]) for k in ("name", "cutoff", "report_start")) + ")")
             for dataset, records in case["datasets"].items():
+                source=iter(case.get('provenance',{}).get(dataset,[]))
                 for number, record in enumerate(records):
-                    source = case.get("provenance", {}).get(dataset, [])
-                    origin = source[number] if source else {}
+                    origin=next(source,{})
+                    payload=canonical(record)
+                    row_bytes=len(payload.encode())+512
+                    if rows and byte_limit and payload_bytes+row_bytes>byte_limit:
+                        self._insert(schema,rows);rows=[];payload_bytes=0
                     rows.append((case["name"], dataset, number, origin.get("batch_id", case["name"]),
-                                 origin.get("source_file", "fixture"), origin.get("source_row", number+1), canonical(record)))
-                    if len(rows) == 200:
-                        self._insert(schema, rows); rows = []
+                                 origin.get("source_file", "fixture"), origin.get("source_row", number+1), payload))
+                    payload_bytes+=row_bytes
+                    if len(rows) == batch_size:
+                        self._insert(schema, rows); rows = [];payload_bytes=0
         if rows:
             self._insert(schema, rows)
 
@@ -124,8 +155,8 @@ def sql_revision():
         for path in sorted(folder.rglob("*")):
             if path.is_file() and path.suffix in (".sql", ".py", ".json"):
                 hasher.update(str(path.relative_to(ROOT)).encode()); hasher.update(path.read_bytes())
-    for path in [ROOT / "requirements-local.lock", *sorted((ROOT / "infra/local").rglob("*"))]:
-        if path.is_file() and path.suffix!=".md":
+    for path in [ROOT / "requirements-local.lock",ROOT / "requirements-parquet.lock", *sorted((ROOT / "infra/local").rglob("*"))]:
+        if path.is_file() and path.suffix not in (".md", ".pyc", ".pyo") and "__pycache__" not in path.parts:
             hasher.update(str(path.relative_to(ROOT)).encode()); hasher.update(path.read_bytes())
     return hasher.hexdigest()
 
@@ -336,7 +367,10 @@ def _run(batch, workspace, fail_at, api_url, policy_path):
     try:
         if fail_at not in (None,"between_gold_writes","before_publish"):
             raise ValueError("unsupported lakehouse failpoint")
-        manifest, incoming, checked = load_batch(batch, api_url, workspace / "api-landing" / attempt)
+        from .bounded_io import enabled,sources,release
+        bounded=enabled() and not api_url
+        if bounded:manifest,incoming,_,checked=sources([batch])
+        else:manifest, incoming, checked = load_batch(batch, api_url, workspace / "api-landing" / attempt)
         policy = load_policy(policy_path)
         policy_hash = hashlib.sha256(canonical(policy).encode()).hexdigest()
         identity = hashlib.sha256(canonical([checked["manifest_sha256"], evidence["revision"], policy_hash]).encode()).hexdigest()
@@ -363,28 +397,38 @@ def _run(batch, workspace, fail_at, api_url, policy_path):
             temporary = archived.with_name(archived.name+"."+attempt+".tmp")
             try:
                 shutil.copytree(batch, temporary)
-                load_batch(temporary)
+                if bounded:
+                    from .ingestion import validate_batch
+                    validate_batch(temporary)
+                else:load_batch(temporary)
                 temporary.rename(archived)
             finally:
                 if temporary.exists(): shutil.rmtree(temporary)
-        stored = archived_batch(archived)
-        if stored[2]["manifest_sha256"]!=checked["manifest_sha256"]:
+        stored = sources([archived]) if bounded else archived_batch(archived)
+        stored_check=stored[3] if bounded else stored[2]
+        if stored_check["manifest_sha256"]!=checked["manifest_sha256"]:
             raise ValueError("archived manifest mismatch")
         archives = (active["archives"] if active else []) + [str(archived.relative_to(workspace))]
+        if bounded:
+            del incoming,stored
+            release()
         combined = {name:[] for name in DATASETS}; provenance = {name:[] for name in DATASETS}
         store = object_store()
         from .common import safe_file
         for archive in archives:
             source=safe_file(workspace,archive)
-            header, records, validation = archived_batch(source)
+            if bounded:header,records,_,validation=sources([source])
+            else:header, records, validation = archived_batch(source)
             for entry in header["files"] + [{"path":"manifest.json"}]:
                 path = safe_file(source,entry["path"])
                 key = validation["manifest_sha256"] + "/" + entry["path"]
                 store.put_object(Bucket="raw",Key=key,Body=path.read_bytes(),Metadata={"sha256":digest(path)})
-            for name in DATASETS:
-                combined[name].extend(records[name])
-                for file in (f for f in header["files"] if f["dataset"]==name):
-                    provenance[name].extend({"batch_id":header["batch_id"],"source_file":file["path"],"source_row":n+1} for n in range(file["rows"]))
+            if not bounded:
+                for name in DATASETS:
+                    combined[name].extend(records[name])
+                    for file in (f for f in header["files"] if f["dataset"]==name):
+                        provenance[name].extend({"batch_id":header["batch_id"],"source_file":file["path"],"source_row":n+1} for n in range(file["rows"]))
+        if bounded:_,combined,provenance,_=sources([safe_file(workspace,a) for a in archives],verify=False)
         for page in (workspace / "api-landing" / attempt).glob("*.json"):
             store.put_object(Bucket="raw",Key="api/"+attempt+"/"+page.name,Body=page.read_bytes())
         evidence["stage"]="bronze"
@@ -394,6 +438,7 @@ def _run(batch, workspace, fail_at, api_url, policy_path):
         evidence["schema"] = schema
         client.create_sources(schema,[{"name":"__batch__","datasets":combined,"provenance":provenance,
                                       "cutoff":manifest["cutoff"],"report_start":manifest["report_start"]}])
+        if hasattr(client,'ingestion'):evidence['ingestion']=client.ingestion
         evidence["stage"]="dbt_transformation"
         evidence["dbt"] = build(client,schema,workspace / "dbt" / attempt,fail_at)
         evidence["stage"]="validation"

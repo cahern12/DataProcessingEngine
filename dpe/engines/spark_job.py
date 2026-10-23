@@ -54,12 +54,17 @@ def setup(spark,schema,cases):
     rows=[]; contexts=[]
     for case in cases:
         contexts.append((case['name'],case['cutoff'],case['report_start']))
-        for dataset,records in case['datasets'].items():
+        for dataset,records in case.get('datasets',{}).items():
             for ordinal,record in enumerate(records):
                 origins=case.get('provenance',{}).get(dataset,[])
                 origin=origins[ordinal] if origins else {}
                 rows.append((case['name'],dataset,ordinal,origin.get('batch_id',case['name']),origin.get('source_file','fixture'),origin.get('source_row',ordinal+1),canonical(record)))
-    spark.createDataFrame(rows,'case_id string,dataset string,ordinal long,batch_id string,source_file string,source_row long,payload string').writeTo('lake.'+schema+'.raw_records').using('iceberg').create()
+    raw_schema='case_id string,dataset string,ordinal long,batch_id string,source_file string,source_row long,payload string'
+    if any(c.get('raw_path') for c in cases):
+        if len(cases)!=1 or rows:raise ValueError('mixed Spark source input modes')
+        raw=spark.read.schema(raw_schema).json(cases[0]['raw_path'])
+    else:raw=spark.createDataFrame(rows,raw_schema)
+    raw.writeTo('lake.'+schema+'.raw_records').using('iceberg').create()
     spark.createDataFrame(contexts,'case_id string,cutoff string,report_start string').writeTo('lake.'+schema+'.batch_context').using('iceberg').create()
     spark.udf.register('normalized_record',normalized_record,'string');spark.udf.register('valid_record',valid_record,'boolean')
     raw=spark.table('lake.'+schema+'.raw_records')
@@ -124,14 +129,18 @@ def main():
             report['queries']={}
             for name,sql in spec['queries'].items():
                 query_start=time.perf_counter();query_started=datetime.now(timezone.utc).isoformat()
-                data=spark.sql(sql)
-                rows=[{k:normalized(v) for k,v in row.asDict().items()} for row in data.collect()]
+                from dpe.experiment import watchdog
+                with watchdog(spec.get('query_watchdog_seconds')):
+                    data=spark.sql(sql)
+                    rows=[{k:normalized(v) for k,v in row.asDict().items()} for row in (data.toLocalIterator() if spec.get('bounded_io') else data.collect())]
                 report['queries'][name]={'rows':rows,'started_at':query_started,'finished_at':datetime.now(timezone.utc).isoformat(),'runtime_seconds':time.perf_counter()-query_start,'plan':data._jdf.queryExecution().executedPlan().toString()}
         else:
             setup(spark,schema,spec['cases']);report['models']=build(spark,schema,args.fail_at)
-            report['outputs']={name:collect(spark,schema,'gold_'+name) for name in ('incident_resolution','service_daily_metrics')}
+            report['outputs']={name:({'rows':spark.table('lake.'+schema+'.gold_'+name).count()} if spec.get('bounded_result') else collect(spark,schema,'gold_'+name)) for name in ('incident_resolution','service_daily_metrics')}
             report['quarantine']=collect(spark,schema,'quarantine')
-            report['reconciliation']=collect(spark,schema,'record_dispositions')
+            if spec.get('bounded_result'):
+                report['reconciliation']=[dict(row.asDict()) for row in spark.sql('SELECT dataset,disposition,count(*) rows FROM lake.'+schema+'.record_dispositions GROUP BY 1,2').collect()]
+            else:report['reconciliation']=collect(spark,schema,'record_dispositions')
             report['snapshots']={name:{'table':'lake.'+schema+'.gold_'+name,'snapshot_id':spark.sql('SELECT snapshot_id FROM lake.'+schema+'.gold_'+name+'.snapshots ORDER BY committed_at DESC').first()[0]} for name in report['outputs']}
         report['status']='passed'
     except Exception as error:

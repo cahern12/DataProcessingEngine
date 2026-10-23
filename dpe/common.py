@@ -29,7 +29,9 @@ def read_json(path):
 
 def write_json(path, value):
     Path(path).parent.mkdir(parents=True, exist_ok=True)
-    Path(path).write_text(json.dumps(value, sort_keys=True, indent=2) + "\n")
+    with Path(path).open('w') as stream:
+        json.dump(value,stream,sort_keys=True,indent=2)
+        stream.write('\n')
 
 
 def timestamp(value):

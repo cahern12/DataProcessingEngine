@@ -13,12 +13,13 @@ def assess(manifest, criteria):
             'reason': 'Conservative raw-input budget for full-history Python validation and concurrent local services; no engine capacity claim.'}
 
 
-def calibrate(workspace, count=100000):
+def calibrate(workspace, count=100000, acceptance_path=None):
     workspace = Path(workspace)
     if workspace.exists():
         raise ValueError('calibration requires a fresh workspace')
     workspace.mkdir(parents=True)
-    criteria = read_json(ROOT/'benchmarks/specs/acceptance.poc.v1.json')
+    from .experiment import acceptance
+    criteria = acceptance(acceptance_path)
     write_json(workspace/'frozen_criteria.json', criteria)
     started = time.perf_counter()
     generate(workspace/'source', count=count)
